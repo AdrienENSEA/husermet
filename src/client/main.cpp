@@ -15,7 +15,7 @@ void testSFML() {
 using namespace std;
 using namespace state;
 
-int main(int argc,char* argv[])
+int main(int argc, char* argv[])
 {
     Exemple exemple;
     exemple.setX(53);
@@ -26,7 +26,7 @@ int main(int argc,char* argv[])
         }
     }
     else {
-        cout << "Veuillez mettre 'hello' en argument" << endl;
+        cout << "Veuillez ajouté 'hello' en argument" << endl;
     }
     return 0;
 }
