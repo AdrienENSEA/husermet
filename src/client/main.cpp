@@ -17,8 +17,8 @@ using namespace state;
 
 int main(int argc, char* argv[])
 {
-    Exemple exemple;
-    exemple.setX(53);
+    //Exemple exemple;
+    //exemple.setX(53);
  
     if (argc>1) {
         if (strncmp(argv[1],"hello",5)==0) {
@@ -28,5 +28,6 @@ int main(int argc, char* argv[])
     else {
         cout << "Veuillez ajouté 'hello' en argument" << endl;
     }
+    testSFML();
     return 0;
 }
