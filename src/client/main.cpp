@@ -19,15 +19,17 @@ int main(int argc, char* argv[])
 {
     //Exemple exemple;
     //exemple.setX(53);
- 
+	
     if (argc>1) {
-        if (strncmp(argv[1],"hello",5)==0) {
+        if (string(argv[1]) == "hello") {
             cout << "Bonjour tout le monde !" << endl;
         }
+	if (string(argv[1]) == "state") {
+		cout << "state" << endl;
+	}
     }
     else {
-        cout << "Veuillez ajouté 'hello' en argument" << endl;
+        cout << "Veuillez ajouté 'hello' ou 'state' en argument" << endl;
     }
-    testSFML();
     return 0;
 }
