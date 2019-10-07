@@ -1,6 +1,6 @@
 # plt
 
-USE 
+USE <br/>
 $ git clone https://github.com/Solanna13/plt
 $ cd plt
 $ mkdir build
