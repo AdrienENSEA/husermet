@@ -18,7 +18,7 @@ void Pokemon::setName (std::string new_name) {
 Object* Pokemon::getObject () {
 	return object;
 }
-void Pokemon::setObject ( Object* object) {
+void Pokemon::setObject ( Object object) {
 
 }
 int Pokemon::getPV () {

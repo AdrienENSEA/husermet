@@ -3,10 +3,10 @@
 namespace state {
 
 IdAttack Attack::getIdAttack () {
-    return idAttack;
+    return id_attack;
 }
 void Attack::setIdAttack (IdAttack id) {
-    idAttack = id;
+    id_attack = id;
 }
 std::string Attack::getName () {
     return name;
