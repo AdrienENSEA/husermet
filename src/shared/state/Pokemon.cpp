@@ -3,22 +3,22 @@
 
 namespace state {
 
-int Pokemon::getID () {
+IdPokemon Pokemon::getID () {
 	return id_pokemon;
 }
 void Pokemon::setID ( IdPokemon id) {
     id_pokemon = id;
 }
 std::string Pokemon::getName () {
-
+	return name;
 }
 void Pokemon::setName (std::string new_name) {
     name = new_name;
 }
-int Pokemon::getObject () {
-	return 0;
+Object* Pokemon::getObject () {
+	return object;
 }
-void Pokemon::setObject ( int object) {
+void Pokemon::setObject ( Object* object) {
 
 }
 int Pokemon::getPV () {
