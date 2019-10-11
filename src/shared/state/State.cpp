@@ -17,9 +17,6 @@ State::State(std::list <Team> battle, TypeWeather weather, TypeArena arena) {
 void State::changeTeam (int fighter, int position, Pokemon pokemon) {
     
 }
-void State::changeArena (int type_arena) {
-    
-}
 TypeArena State::getTypeArena () {
     return arena;
 }
