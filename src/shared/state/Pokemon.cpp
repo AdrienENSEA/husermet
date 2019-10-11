@@ -1,19 +1,24 @@
 #include "Pokemon.h"
-#include "StatsPokemon.h"
 
 namespace state {
+
+Pokemon::Pokemon (IdPokemon id_pokemon, std::string name, Object object, std::list <Attack> attacks, int ability, Type type, TypeState state, StatsPokemon stats_pokemon, int ev) {
+	this->id_pokemon = id_pokemon;
+    this->name = name;
+    this->object = &object;
+    this->attacks = attacks;
+    this->ability = ability;
+    this->type = type;
+    this->state = state;
+    this->stats_pokemon = stats_pokemon;
+    this->ev = ev;
+}
 
 IdPokemon Pokemon::getID () {
 	return id_pokemon;
 }
-void Pokemon::setID ( IdPokemon id) {
-    id_pokemon = id;
-}
 std::string Pokemon::getName () {
 	return name;
-}
-void Pokemon::setName (std::string new_name) {
-    name = new_name;
 }
 Object* Pokemon::getObject () {
 	return object;
@@ -21,14 +26,8 @@ Object* Pokemon::getObject () {
 void Pokemon::setObject ( Object object) {
 
 }
-int Pokemon::getPV () {
-	return stats_pokemon.pv;
-}
-void Pokemon::setPV (int x) {
-    stats_pokemon.pv = x;
-}
-int Pokemon::getAttack () {
-	return 0;
+std::list <Attack> Pokemon::getAttack () {
+	return attacks;
 }
 /// 	
 /// @param position		(???) 
