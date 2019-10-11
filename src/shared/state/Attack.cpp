@@ -2,7 +2,7 @@
 
 namespace state {
 
-Attack::Attack(IdAttack id_attack, std::string name, std::string descriptive_attack, Type type, StatsAttack stats_attack, ModifStatsPokemon stats_modif) {
+Attack::Attack (IdAttack id_attack, std::string name, std::string descriptive_attack, Type type, StatsAttack stats_attack, ModifStatsPokemon stats_modif) {
 	this->id_attack = id_attack;
 	this->name = name;
 	this->descriptive_attack = descriptive_attack;
