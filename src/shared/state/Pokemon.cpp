@@ -2,7 +2,7 @@
 
 namespace state {
 
-Pokemon::Pokemon (IdPokemon id_pokemon, std::string name, Object object, std::list <Attack> attacks, int ability, Type type, TypeState state, StatsPokemon stats_pokemon, int ev) {
+Pokemon::Pokemon (IdPokemon id_pokemon, std::string name, Object object, std::vector <Attack> attacks, int ability, std::vector <Type> type, TypeState state, StatsPokemon stats_pokemon, int ev) {
 	this->id_pokemon = id_pokemon;
     this->name = name;
     this->object = &object;
@@ -23,17 +23,32 @@ std::string Pokemon::getName () {
 Object* Pokemon::getObject () {
 	return object;
 }
-void Pokemon::setObject ( Object object) {
-
-}
-std::list <Attack> Pokemon::getAttack () {
+std::vector <Attack> Pokemon::getAttack () {
 	return attacks;
 }
+std::vector <Type> Pokemon::getType () {
+	return type;
+}
+TypeState Pokemon::getState () {
+	return state;
+}
+StatsPokemon Pokemon::getStats () {
+	return stats_pokemon;
+}
+int Pokemon::getEV () {
+	return ev;
+}
+void Pokemon::setName (std::string new_name) {
+	this->name = name;
+}
+void Pokemon::setObject ( Object object) {
+	this->object = &object;
+}
 /// 	
-/// @param position		(???) 
-/// @param attack		(???) 
+/// @param position		position de l'attaque a ajouter
+/// @param attack		attaque a ajouter dans la liste
 void Pokemon::setAttack (int position, Attack attack) {
-    std::list<Attack>::iterator it = attacks.begin();
+    std::vector<Attack>::iterator it = attacks.begin();
     advance(it, position-1); 
     attacks.insert(it, attack);
 }

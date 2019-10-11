@@ -10,25 +10,16 @@ Object::Object(IdObject id_object, std::string name, std::string descriptive_eff
     this->effect_state = effect_state;
     this->effect_type = effect_type;
 }
-/*
+
 IdObject Object::getIdObject () {
 	return id_object;
-}
-void Object::setIdObject (IdObject id) {
-	
 }
 std::string Object::getName () {
 	return name;
 }
-void Object::setName (std::string name) {
-	
-}
 std::string Object::getDescriptive () {
 	return descriptive_effect;
 }
-void Object::setDescriptive (std::string descriptive) {
-	
-}*/
 StatsPokemon Object::getEffectStats () {
 	return effect_stats;
 }

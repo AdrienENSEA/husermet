@@ -17,11 +17,26 @@ IdAttack Attack::getIdAttack () {
 std::string Attack::getName () {
 	return name;
 }
+std::string Attack::getDescriptive () {
+	return descriptive_attack;
+}
 Type Attack::getType () {
 	return type;
 }
+StatsAttack Attack::getStatsAttack () {
+	return stats_attack;
+}
+ModifStatsPokemon Attack::getStatsModif () {
+	return stats_modif;
+}
 void Attack::setType (Type type) {
 	this->type = type;
+} 
+void Attack::setStatsAttack (StatsAttack stats_attack) {
+	this->stats_attack = stats_attack;
+}
+void Attack::setStatsModif (ModifStatsPokemon stats_modif) {
+	this->stats_modif = stats_modif;
 }
 
 }

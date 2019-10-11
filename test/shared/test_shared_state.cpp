@@ -13,7 +13,7 @@ BOOST_AUTO_TEST_CASE(TestStaticAssert)
 BOOST_AUTO_TEST_CASE(TestState)
 {
   {
-    State s {};
+    State s;
     s.setTypeArena(SAND);
     s.setTypeWeather(RAIN);
     BOOST_CHECK_EQUAL(s.getTypeArena(), SAND);

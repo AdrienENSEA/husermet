@@ -7,13 +7,13 @@ State::State() {
 	weather = NONE_W;
 	arena = NONE_A;
 }
-/*
+
 State::State(std::list <Team> battle, TypeWeather weather, TypeArena arena) {
 	this->battle = battle;
 	this->weather = weather;
 	this->arena = arena;
 }
-*/
+
 void State::changeTeam (int fighter, int position, Pokemon pokemon) {
     
 }
@@ -25,9 +25,7 @@ void State::setTypeArena (TypeArena a) {
 }
 TypeWeather State::getTypeWeather () {
     return weather;
-}
-    /// 	
-    /// @param weather		(???) 
+} 
 void State::setTypeWeather (TypeWeather w) {
     weather = w;
 }

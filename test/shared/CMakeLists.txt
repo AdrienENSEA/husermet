@@ -1,6 +1,6 @@
 # List of test functions
 add_custom_test(shared_pokemon)
-#add_custom_test(shared_attack) erreur
+add_custom_test(shared_attack)
 add_custom_test(shared_state)
 add_custom_test(shared_object)
 
