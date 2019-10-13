@@ -16,9 +16,10 @@ BOOST_AUTO_TEST_CASE(TestPokemon)
   {
     StatsPokemon effect_stats = {0, 0, 0, 0, 0, 0};
     Object restes(RESTES, "Restes", "description", effect_stats, NORMAL, NONE);
-    std::list <Attack> attacks = {};
+    std::vector <Attack> attacks = {};
+    std::vector <Type> types = {};
     StatsPokemon stats_pokemon = {0, 0, 0, 0, 0, 0};
-    Pokemon groudon(GROUDON, "Groudon", restes , attacks, 1, NONE, NORMAL, stats_pokemon, 0);
+    Pokemon groudon(GROUDON, "Groudon", restes , attacks, 1, types, NORMAL, stats_pokemon, 0);
     BOOST_CHECK_EQUAL(groudon.getName(), "Groudon");
     BOOST_CHECK_EQUAL(groudon.getID(), GROUDON); 
   }
