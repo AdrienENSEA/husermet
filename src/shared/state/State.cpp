@@ -2,26 +2,26 @@
 
 namespace state {
 
+State::State (std::list <Team> battle, TypeWeather weather, TypeTerrain terrain) {
+	this->battle = battle;
+	this->weather = weather;
+	this->terrain = terrain;
+}
+
 State::State() {
 	battle = {};
 	weather = NONE_W;
-	arena = NONE_A;
-}
-
-State::State(std::list <Team> battle, TypeWeather weather, TypeArena arena) {
-	this->battle = battle;
-	this->weather = weather;
-	this->arena = arena;
+	terrain = NONE_C;
 }
 
 void State::changeTeam (int fighter, int position, Pokemon pokemon) {
     
 }
-TypeArena State::getTypeArena () {
-    return arena;
+TypeTerrain State::getTypeTerrain () {
+    return terrain;
 }
-void State::setTypeArena (TypeArena a) {
-    arena = a;
+void State::setTypeTerrain (TypeTerrain t) {
+    terrain = t;
 }
 TypeWeather State::getTypeWeather () {
     return weather;

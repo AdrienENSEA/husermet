@@ -2,6 +2,15 @@
 
 namespace state {
 
+Object::Object() {
+    id_object = NONE_O;
+    name = "name";
+    descriptive_effect = "descriptive_effect";
+    effect_stats = {0,0,0,0,0,0};
+    effect_state = NONE_S;
+    effect_type = NONE_T;
+}
+
 Object::Object(IdObject id_object, std::string name, std::string descriptive_effect, StatsPokemon effect_stats, TypeState effect_state, Type effect_type) {
     this->id_object = id_object;
     this->name = name;

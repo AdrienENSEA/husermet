@@ -14,9 +14,9 @@ BOOST_AUTO_TEST_CASE(TestState)
 {
   {
     State s;
-    s.setTypeArena(SAND);
+    s.setTypeTerrain(MISTY);
     s.setTypeWeather(RAIN);
-    BOOST_CHECK_EQUAL(s.getTypeArena(), SAND);
+    BOOST_CHECK_EQUAL(s.getTypeTerrain(), MISTY);
     BOOST_CHECK_EQUAL(s.getTypeWeather(), RAIN); 
   }
 }

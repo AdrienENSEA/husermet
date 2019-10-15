@@ -2,6 +2,19 @@
 
 namespace state {
 
+Pokemon::Pokemon () {
+	id_pokemon = NONE_P;
+    name = "name";
+    Object o;
+    object = &o;
+    attacks = {};
+    ability = 0;
+    type = {NONE_T};
+    state = NONE_S;
+    stats_pokemon = {0,0,0,0,0,0};
+    ev = 0;
+}
+
 Pokemon::Pokemon (IdPokemon id_pokemon, std::string name, Object object, std::vector <Attack> attacks, int ability, std::vector <Type> type, TypeState state, StatsPokemon stats_pokemon, int ev) {
 	this->id_pokemon = id_pokemon;
     this->name = name;
@@ -48,9 +61,13 @@ void Pokemon::setObject ( Object object) {
 /// @param position		position de l'attaque a ajouter
 /// @param attack		attaque a ajouter dans la liste
 void Pokemon::setAttack (int position, Attack attack) {
+    std::vector <Attack> attacks = getAttack();
+    attacks.at(position) = attack;
+/*
     std::vector<Attack>::iterator it = attacks.begin();
     advance(it, position-1); 
     attacks.insert(it, attack);
+*/
 }
 // Setters and Getters
 
