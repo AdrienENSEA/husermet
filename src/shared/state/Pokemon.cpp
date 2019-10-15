@@ -51,7 +51,7 @@ StatsPokemon Pokemon::getStats () {
 int Pokemon::getEV () {
 	return ev;
 }
-void Pokemon::setName (std::string new_name) {
+void Pokemon::setName (std::string name) {
 	this->name = name;
 }
 void Pokemon::setObject ( Object object) {
@@ -61,13 +61,10 @@ void Pokemon::setObject ( Object object) {
 /// @param position		position de l'attaque a ajouter
 /// @param attack		attaque a ajouter dans la liste
 void Pokemon::setAttack (int position, Attack attack) {
-    std::vector <Attack> attacks = getAttack();
-    attacks.at(position) = attack;
-/*
     std::vector<Attack>::iterator it = attacks.begin();
-    advance(it, position-1); 
+    advance(it, position); 
     attacks.insert(it, attack);
-*/
+
 }
 // Setters and Getters
 

@@ -26,7 +26,21 @@ BOOST_AUTO_TEST_CASE(TestObject)
     BOOST_CHECK_EQUAL(restes.getEffectStats().sp_attack, 0);
     BOOST_CHECK_EQUAL(restes.getEffectStats().sp_defense, 0);
     BOOST_CHECK_EQUAL(restes.getEffectStats().speed, 0);
+  }
 
+  {
+    Object orbe_toxique;
+    orbe_toxique.setEffectStats ({-1/8, 0, 0, 0, 0, 0});
+    orbe_toxique.setEffectState(POISONED);
+    orbe_toxique.setEffectType(NONE_T);
+    BOOST_CHECK_EQUAL(orbe_toxique.getEffectState(), POISONED); 
+    BOOST_CHECK_EQUAL(orbe_toxique.getEffectType(), NONE_T); 
+    BOOST_CHECK_EQUAL(orbe_toxique.getEffectStats().pv, -1/8);
+    BOOST_CHECK_EQUAL(orbe_toxique.getEffectStats().attack, 0);
+    BOOST_CHECK_EQUAL(orbe_toxique.getEffectStats().defense, 0);
+    BOOST_CHECK_EQUAL(orbe_toxique.getEffectStats().sp_attack, 0);
+    BOOST_CHECK_EQUAL(orbe_toxique.getEffectStats().sp_defense, 0);
+    BOOST_CHECK_EQUAL(orbe_toxique.getEffectStats().speed, 0);
   }
 }
 

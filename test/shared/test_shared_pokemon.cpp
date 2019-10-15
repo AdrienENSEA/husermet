@@ -21,12 +21,12 @@ BOOST_AUTO_TEST_CASE(TestPokemon)
     Attack a2(TOXIK, "Toxic", "desc", POISON, stats_attack, stats_modif);
     Attack a3(ABRI, "Abri", "desc", NORMAL, stats_attack, stats_modif);
     std::vector <Attack> attacks {a1, a2, a3};
-    Object restes(RESTES, "Restes", "description", effect_stats, NONE_S, NONE_T);
+    Object restes(ORBE_VIE, "Orbe vie", "description", effect_stats, NONE_S, NONE_T);
     StatsPokemon stats_pokemon = {0, 0, 0, 0, 0, 0};
     Pokemon groudon(GROUDON, "Groudon", restes , attacks, 1, type, NONE_S, stats_pokemon, 0);
     BOOST_CHECK_EQUAL(groudon.getName(), "Groudon");
     BOOST_CHECK_EQUAL(groudon.getID(), GROUDON);
-    //BOOST_CHECK_EQUAL(groudon.getObject(), restes);
+    BOOST_CHECK_EQUAL(groudon.getObject()->getName(), restes.getName());
     std::vector <Attack> a = groudon.getAttack();
     BOOST_CHECK(!a.empty());
     BOOST_CHECK_EQUAL(a.at(0).getIdAttack(), FRAPPE_ATLAS);
@@ -55,15 +55,26 @@ BOOST_AUTO_TEST_CASE(TestPokemon)
     BOOST_CHECK_EQUAL(groudon.getStats().sp_defense, 0);
     BOOST_CHECK_EQUAL(groudon.getStats().speed, 0);
     BOOST_CHECK_EQUAL(groudon.getEV(), 0);
-
   }
-/*
+
   {
-    Pokemon rayquaza {};
-    rayquaza.setPV(210);
-    BOOST_CHECK_LE(rayquaza.getPV(), 320); // Less than equal
-    BOOST_CHECK_GT(rayquaza.getPV(), 110); // Greater than equl
-  }*/
+    StatsPokemon effect_stats {0, 0, 0, 0, 0, 0};
+    StatsAttack stats_attack {0, 0, 0, 0, 0, 0};
+    ModifStatsPokemon stats_modif;
+    Attack a1(PIEGE_DE_ROC, "Piege de Roc", "desc", ROCK, stats_attack, stats_modif);
+    std::vector <Attack> attacks {a1};
+    Object ballon(BALLON, "Ballon", "description", effect_stats, NONE_S, FLYING);
+    Pokemon heatran;
+    heatran.setName("Heatran");
+    heatran.setObject(ballon);
+    heatran.setAttack(0, a1);
+    BOOST_CHECK_EQUAL(heatran.getName(), "Heatran");
+    std::vector <Attack> a = heatran.getAttack();
+    BOOST_CHECK(!a.empty());
+    BOOST_CHECK_EQUAL(a.at(0).getIdAttack(), PIEGE_DE_ROC);
+    BOOST_CHECK_EQUAL(a.at(0).getName(), "Piege de Roc");
+    BOOST_CHECK_EQUAL(heatran.getObject()->getIdObject(), BALLON);
+  }
 }
 
 /* vim: set sw=2 sts=2 et : */
