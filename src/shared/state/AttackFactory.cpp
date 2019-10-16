@@ -1,37 +1,43 @@
-#include "PokemonFactory.h"
+#include "AttackFactory.h"
 
 namespace state {
 
-AttackFactory::AttackFactory() {
 
-}
+Attack AttackFactory::createAttack(IdAttack id_attack) {
 
-Pokemon createAttack(IdAttack id_attack) {
-
-    Attack attack;
-
-    switch (id_pokemon) 
+    Attack* attack;
+    StatsAttack stats_attack;
+    ModifStatsPokemon stats_modif;
+    
+    switch (id_attack) 
     {
-        case GROUDON :
-            attack = new Pokemon groudon(GROUDON, "Groudon", none, attacks, 1, types, NORMAL, stats_pokemon, 0);
+        case E_COQUE :
+            stats_attack = {0, 0, 0, 0, 0, 0};
+            attack = new Attack(E_COQUE, "E COQUE", "Le lanceur récupère jusqu’à la moitié de ses PV max", NORMAL, stats_attack, stats_modif);
             break;
-        case KYOGRE :
+        case TOXIK :
             break;
-        case RAYQUAZA :
+        case ABRI :
             break;
-        case LEVEINARD :
+        case FRAPPE_ATLAS :
             break;
-        case VOLTORBE :
+        case CHANGE_ECLAIR :
             break;
-        case ECTOPLASMA :
+        case TONNERRE :
             break;
-        case LEVIATHAN :
+        case COUP_D_JUS :
             break;
-        case STAROSS :
+        case EXPLOSION :
             break;
-        case GARDEVOIR :
+        case RAYON_CHARGE :
             break;
+        case CAGE_ECLAIR :
+            break;
+        default:
+            break;
+    }
+    
+    return *attack;
 }
-
 
 }
