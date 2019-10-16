@@ -11,7 +11,7 @@ State::State (std::list <Team> battle, TypeWeather weather, TypeTerrain terrain)
 State::State() {
 	battle = {};
 	weather = NONE_W;
-	terrain = NONE_C;
+	terrain = NONE_G;
 }
 
 void State::changeTeam (int fighter, int position, Pokemon pokemon) {
