@@ -10,6 +10,7 @@ BOOST_AUTO_TEST_CASE(TestStaticAssert)
   BOOST_CHECK(1);
 }
 
+
 BOOST_AUTO_TEST_CASE(TestPokemon)
 {
   {
@@ -17,7 +18,7 @@ BOOST_AUTO_TEST_CASE(TestPokemon)
     StatsAttack stats_attack {0, 0, 0, 0, 0, 0};
     ModifStatsPokemon stats_modif;
     std::vector <Type> type {{GROUND}};
-    Attack a1(FRAPPE_ATLAS, "Frappe Atlas", "desc", FIGHTING, stats_attack, stats_modif);
+    Attack a1(FRAPPE_ATLAS, "Frappe Atlas", "desc", FIGHT, stats_attack, stats_modif);
     Attack a2(TOXIK, "Toxic", "desc", POISON, stats_attack, stats_modif);
     Attack a3(ABRI, "Abri", "desc", NORMAL, stats_attack, stats_modif);
     std::vector <Attack> attacks {a1, a2, a3};
@@ -63,7 +64,7 @@ BOOST_AUTO_TEST_CASE(TestPokemon)
     ModifStatsPokemon stats_modif;
     Attack a1(PIEGE_DE_ROC, "Piege de Roc", "desc", ROCK, stats_attack, stats_modif);
     std::vector <Attack> attacks {a1};
-    Object ballon(BALLON, "Ballon", "description", effect_stats, NONE_S, FLYING);
+    Object ballon(BALLON, "Ballon", "description", effect_stats, NONE_S, FLY);
     Pokemon heatran;
     heatran.setName("Heatran");
     heatran.setObject(ballon);
