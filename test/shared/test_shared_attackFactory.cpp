@@ -18,7 +18,7 @@ BOOST_AUTO_TEST_CASE(TestAttackFactory)
     Attack e_coque = AttackFactory::createAttack(E_COQUE);
     
     
-    //BOOST_CHECK_EQUAL(groudon.getName(), "Groudon");
+    BOOST_CHECK_EQUAL(e_coque.getName(), "E-Coque");
     ///BOOST_CHECK_EQUAL(groudon.getID(), GROUDON);
     //BOOST_CHECK_EQUAL(groudon.getObject(), restes);
     /*std::vector <Attack> a = groudon.getAttack();
