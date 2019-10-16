@@ -8,12 +8,23 @@ Attack AttackFactory::createAttack(IdAttack id_attack) {
     Attack* attack;
     StatsAttack stats_attack;
     ModifStatsPokemon stats_modif;
+    StatsPokemon stats_pokemon;
     
     switch (id_attack) 
     {
         case E_COQUE :
-            stats_attack = {0, 0, 0, 0, 0, 0};
-            attack = new Attack(E_COQUE, "E COQUE", "Le lanceur récupère jusqu’à la moitié de ses PV max", NORMAL, stats_attack, stats_modif);
+            stats_attack = {10, 0, 100, 0, 0, 0};
+            stats_modif.setRoundLeft(5);
+            stats_pokemon = {0, 0, 0, 0, 0, 0};
+            stats_modif.setModifStats(stats_pokemon);
+            attack = new Attack(E_COQUE, "E-Coque", "Le lanceur récupère jusqu’à la moitié de ses PV max", NORMAL, stats_attack, stats_modif);
+            break;
+        case DANSE_PLUIE :
+            stats_attack = {5, 0, 0, 0, 0, 4};
+            stats_modif.setRoundLeft(5);
+            stats_pokemon = {0, 0, 0, 0, 0, 0};
+            stats_modif.setModifStats(stats_pokemon);
+            attack = new Attack(DANSE_PLUIE, "Danse Pluie", "Invoque de fortes pluies qui durent cinq tours, augmentant la puissance des capacités de type Eau et baissant celle des capacités de type Feu", WATER, stats_attack, stats_modif);
             break;
         case TOXIK :
             break;

@@ -12,23 +12,22 @@ BOOST_AUTO_TEST_CASE(TestStaticAssert)
   BOOST_CHECK(1);
 }
 
-BOOST_AUTO_TEST_CASE(TestPokemonFactory)
+BOOST_AUTO_TEST_CASE(TestPokemonF)
 {
   {
-    //Pokemon groudon = PokemonFactory::createPokemon(GROUDON);
+    Pokemon groudon = PokemonFactory::createPokemon(GROUDON);
+    Pokemon kyogre = PokemonFactory::createPokemon(KYOGRE);
     
     
-    //BOOST_CHECK_EQUAL(groudon.getName(), "Groudon");
-    ///BOOST_CHECK_EQUAL(groudon.getID(), GROUDON);
-    //BOOST_CHECK_EQUAL(groudon.getObject(), restes);
-    /*std::vector <Attack> a = groudon.getAttack();
+    BOOST_CHECK_EQUAL(groudon.getName(), "Groudon");
+    BOOST_CHECK_EQUAL(groudon.getID(), GROUDON);
+    std::vector <Attack> a = groudon.getAttack();
     BOOST_CHECK(!a.empty());
-    BOOST_CHECK_EQUAL(a.at(0).getIdAttack(), FRAPPE_ATLAS);
-    BOOST_CHECK_EQUAL(a.at(0).getName(), "Frappe Atlas");
-    BOOST_CHECK_EQUAL(a.at(0).getDescriptive(), "desc");
-    BOOST_CHECK_EQUAL(a.at(0).getStatsAttack().pp, 0);
+    BOOST_CHECK_EQUAL(a.at(0).getIdAttack(), E_COQUE);
+    BOOST_CHECK_EQUAL(a.at(0).getName(), "E-Coque");
+    BOOST_CHECK_EQUAL(a.at(0).getStatsAttack().pp, 10);
     BOOST_CHECK_EQUAL(a.at(0).getStatsAttack().power, 0);
-    BOOST_CHECK_EQUAL(a.at(0).getStatsAttack().accuracy, 0);
+    BOOST_CHECK_EQUAL(a.at(0).getStatsAttack().accuracy, 100);
     BOOST_CHECK_EQUAL(a.at(0).getStatsAttack().category, 0);
     BOOST_CHECK_EQUAL(a.at(0).getStatsAttack().priority, 0);
     BOOST_CHECK_EQUAL(a.at(0).getStatsAttack().scope, 0);
@@ -42,13 +41,13 @@ BOOST_AUTO_TEST_CASE(TestPokemonFactory)
     BOOST_CHECK(!t.empty());
     BOOST_CHECK_EQUAL(t.at(0), GROUND);
     BOOST_CHECK_EQUAL(groudon.getState(), NONE_S);
-    BOOST_CHECK_EQUAL(groudon.getStats().pv, 0);
-    BOOST_CHECK_EQUAL(groudon.getStats().attack, 0);
-    BOOST_CHECK_EQUAL(groudon.getStats().defense, 0);
-    BOOST_CHECK_EQUAL(groudon.getStats().sp_attack, 0);
-    BOOST_CHECK_EQUAL(groudon.getStats().sp_defense, 0);
-    BOOST_CHECK_EQUAL(groudon.getStats().speed, 0);
-    BOOST_CHECK_EQUAL(groudon.getEV(), 0);*/
+    BOOST_CHECK_EQUAL(groudon.getStats().pv, 100);
+    BOOST_CHECK_EQUAL(groudon.getStats().attack, 150);
+    BOOST_CHECK_EQUAL(groudon.getStats().defense, 140);
+    BOOST_CHECK_EQUAL(groudon.getStats().sp_attack, 100);
+    BOOST_CHECK_EQUAL(groudon.getStats().sp_defense, 90);
+    BOOST_CHECK_EQUAL(groudon.getStats().speed, 90);
+    BOOST_CHECK_EQUAL(groudon.getEV(), 0);
 
   }
 /*
