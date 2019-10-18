@@ -9,3 +9,9 @@ $ cmake .. <br/>
 $ make <br/>
 $ cd ../bin <br/>
 $ ./client <br/>
+
+Pour exécuter les tests unitaires : 
+$ make unittest depuis le dossier build <br/>
+
+Pour vérifier la couverture de code : 
+$ make code-coverage depuis le dossier build <br/>
