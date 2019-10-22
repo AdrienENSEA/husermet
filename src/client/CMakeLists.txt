@@ -41,7 +41,7 @@ set(lib_render_target render_static)
 file(GLOB_RECURSE render_sources *.cpp)
 list(REMOVE_ITEM render_sources "${CMAKE_CURRENT_SOURCE_DIR}/render/main.cpp")
 
-# Build the "client" library, add required include and link against dependencies
+# Build the "render" library, add required include and link against dependencies
 add_library(${lib_render_target} STATIC ${render_sources})
 add_dependencies(${lib_render_target} generate-headers)
 target_include_directories(${lib_render_target} INTERFACE
@@ -53,7 +53,7 @@ target_link_libraries(${lib_render_target} PUBLIC
   $<TARGET_NAME:shared_static>
   )
 
-# Compile "client" executable
+# Compile "render" executable
 set(render_target render)
 add_executable(${render_target} render/main.cpp)
 target_link_libraries(${render_target} ${lib_render_target})
