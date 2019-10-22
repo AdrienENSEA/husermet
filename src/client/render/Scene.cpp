@@ -8,8 +8,9 @@ Scene::Scene () {
     sf::RenderWindow window(sf::VideoMode(length, height), "Tilemap");
 }
 
-void Scene::draw () {
-    
+void Scene::drawScene () {
+    window.clear(sf::Color(255, 255, 255, 255));
+    window.display();
 }
 
 }
