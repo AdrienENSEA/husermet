@@ -21,19 +21,6 @@ int main(int argc, char* argv[])
     //exemple.setX(53);
 	
     Scene scene;
-    sf::RenderWindow window(sf::VideoMode(512, 512), "Tilemap");
-    while (window.isOpen())
-    {
-        // on gère les évènements
-        sf::Event event;
-        while (window.pollEvent(event))
-        {
-            if(event.type == sf::Event::Closed)
-                window.close();
-        }
-
-        // on dessine le niveau
-        window.display();
-    }
+    scene.drawScene();
     return 0;
 }
