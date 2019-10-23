@@ -33,30 +33,4 @@ endif()
 
 
 
-#---------------------------------------------
 
-set(lib_render_target render_static)
-
-# Find all source files to include in library
-file(GLOB_RECURSE render_sources *.cpp)
-list(REMOVE_ITEM render_sources "${CMAKE_CURRENT_SOURCE_DIR}/render/main.cpp")
-
-# Build the "render" library, add required include and link against dependencies
-add_library(${lib_render_target} STATIC ${render_sources})
-add_dependencies(${lib_render_target} generate-headers)
-target_include_directories(${lib_render_target} INTERFACE
-  ${CMAKE_CURRENT_SOUCE_DIR/render}
-  ${SFML_INCLUDE_DIR}
-  )
-target_link_libraries(${lib_render_target} PUBLIC
-  ${SFML_LIBRARIES}
-  $<TARGET_NAME:shared_static>
-  )
-
-# Compile "render" executable
-set(render_target render)
-add_executable(${render_target} render/main.cpp)
-target_link_libraries(${render_target} ${lib_render_target})
-if(BUILD_CODE_COVERAGE)
-  add_dependencies(code-coverage ${render_target})
-endif()

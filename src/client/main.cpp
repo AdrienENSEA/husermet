@@ -11,9 +11,11 @@ void testSFML() {
 
 #include <state.h>
 #include <string.h>
+#include "render.h"
 
 using namespace std;
 using namespace state;
+using namespace render;
 
 int main(int argc, char* argv[])
 {
@@ -24,12 +26,20 @@ int main(int argc, char* argv[])
         if (string(argv[1]) == "hello") {
             cout << "Bonjour tout le monde !" << endl;
         }
-	if (string(argv[1]) == "state") {
-		cout << "state" << endl;
-	}
+	    if (string(argv[1]) == "state") {
+		    cout << "state" << endl;
+	    }
+        if (string(argv[1]) == "render") {
+            std::list <Team> battle = {};
+            State s(battle, SUN, GRASSY);
+		    Scene scene1;
+            scene1.drawScene(s);
+	    }
+
     }
     else {
-        cout << "Veuillez ajouté 'hello' ou 'state' en argument" << endl;
+        cout << "Veuillez ajouté hello ou render en argument" << endl;
     }
+    
     return 0;
 }
