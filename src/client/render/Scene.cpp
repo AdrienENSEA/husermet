@@ -1,19 +1,21 @@
 #include "Scene.h"
+#include <iostream>
 
 #define LENGTH_SPRITE 96
 #define LENGTH_TERRAIN 290
 #define HEIGHT_TERRAIN 174
+
+using namespace std;
 
 namespace render {
 
 Scene::Scene () : height {512}, length {512}{
 }
 
-void Scene::drawScene (state::State& etat) {
+void Scene::draw (state::State& etat) {
     sf::RenderWindow window(sf::VideoMode(height, length), "Tilemap");
-    std::string filefont = "../res/fontpokemon.ttf";
+    /*std::string filefont = "../res/fontpokemon.ttf";
     font.loadFromFile(filefont);
-    /*
 	sf::Image image;
 	image.loadFromFile("../res/sand.png");
     // rendre le blanc (255,255,255) transparent (0)
@@ -58,15 +60,21 @@ void Scene::drawScene (state::State& etat) {
     
     window.clear(sf::Color(255, 255, 255, 255));
     window.draw(background);
-    window.draw(interface.getR());
-    window.draw(interface.getText(&font, "Attaquer", 200, 410));
-    window.draw(interface.getText(&font, "Pokemon", 350, 410));
-    window.draw(interface.getText(&font, "Sac", 200, 460));
-    window.draw(interface.getText(&font, "Fuite", 350, 460));
-    window.draw(interface.getText(&font, "Que", 35, 415));
-    window.draw(interface.getText(&font, "faire ?", 25, 435));
-    window.draw(pokemon.getS(&texture1, false));
-    window.draw(pokemon.getS(&texture2, true));
+    interface.drawRect(window);
+    
+    interface.setFont("../res/fontpokemon.ttf");
+    interface.setText("Attaquer", 200, 410);
+    interface.drawText(window);
+    interface.setText("Pokemon", 350, 410);
+    interface.drawText(window);
+    interface.setText("Sac", 200, 460);
+    interface.drawText(window);
+    interface.setText("Fuite", 350, 460);
+    interface.drawText(window);
+    interface.setText("Que faire ?", 5, 415);
+    interface.drawText(window);
+    //window.draw(pokemon.getS(&texture1, false));
+    //window.draw(pokemon.getS(&texture2, true));
     
     while (window.isOpen())
     {

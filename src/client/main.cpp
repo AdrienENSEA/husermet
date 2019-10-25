@@ -33,7 +33,7 @@ int main(int argc, char* argv[])
             std::vector <Pokemon> battle = {};
             State s(battle, SUN, MISTY);
 		    Scene scene1;
-            scene1.drawScene(s);
+            scene1.draw(s);
 	    }
 
     }
@@ -53,7 +53,7 @@ int main(int argc, char* argv[])
         std::vector <Pokemon> battle {groudon, groudon};
             State s(battle, SUN, PSYCHIC);
 		    Scene scene1;
-            scene1.drawScene(s);
+            scene1.draw(s);
     }
     
     return 0;
