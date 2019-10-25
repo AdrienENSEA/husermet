@@ -12,7 +12,7 @@ namespace render {
 Scene::Scene () : height {512}, length {512}{
 }
 
-void Scene::draw (state::State& etat) {
+void Scene::draw (state::State& state) {
     sf::RenderWindow window(sf::VideoMode(height, length), "Tilemap");
     /*std::string filefont = "../res/fontpokemon.ttf";
     font.loadFromFile(filefont);
@@ -29,37 +29,19 @@ void Scene::draw (state::State& etat) {
 // rendre image transparente (0) ou légèrement (150)
     p.setColor(sf::Color(255, 255, 255, 220));    
      */
-/*
-    sf::Texture back;
-    back.loadFromFile("../res/terrain_elec.jpg", sf::IntRect(0, 0, 512, 512));
-    sf::Sprite p;
-        p.setTexture(back); 
-    p.setScale(2.1f,2.1f);*/
-    sf::Texture back;
-    back.loadFromFile("../res/spritesheet_terrain.png", sf::IntRect(LENGTH_TERRAIN*(etat.getTypeTerrain()-1), 0, LENGTH_TERRAIN*etat.getTypeTerrain(), HEIGHT_TERRAIN));
-    back.setSmooth(true);
+
     
-    background.setTexture(back);
+    tbackground.loadFromFile("../res/spritesheet_terrain.png", sf::IntRect(LENGTH_TERRAIN*(state.getTypeTerrain()-1), 0, LENGTH_TERRAIN*state.getTypeTerrain(), HEIGHT_TERRAIN));
+
+    
+    background.setTexture(tbackground);
     background.setScale(2.1f,2.1f); 
 // rendre image transparente (0) ou légèrement (150)
     background.setColor(sf::Color(255, 255, 255, 250));    
-
-    sf::Texture texture1;
-    texture1.loadFromFile("../res/spritesheet.png", sf::IntRect(0, 0, LENGTH_SPRITE*etat.getPokemon(0).getID(), LENGTH_SPRITE));
-    sf::Texture texture2;
-    texture2.loadFromFile("../res/spritesheet.png", sf::IntRect(LENGTH_SPRITE*3, 0, LENGTH_SPRITE, LENGTH_SPRITE));
-/*
-        sf::Sprite p;
-        std::vector <sf::Sprite> ps;
-        ps = {};
-        ps.push_back(p);
-        ps.at(0).setTexture(texture);       
-        ps.at(0).setPosition(100,100); 
-        ps.at(0).setScale(SCALE_SPRITE, SCALE_SPRITE);
-    window.draw(ps.at(0));*/
     
     window.clear(sf::Color(255, 255, 255, 255));
     window.draw(background);
+
     interface.drawRect(window);
     
     interface.setFont("../res/fontpokemon.ttf");
@@ -73,9 +55,14 @@ void Scene::draw (state::State& etat) {
     interface.drawText(window);
     interface.setText("Que faire ?", 5, 415);
     interface.drawText(window);
-    //window.draw(pokemon.getS(&texture1, false));
-    //window.draw(pokemon.getS(&texture2, true));
+   
     
+    pokemon.setBack(true);
+    int idpokemon=state.getPokemon(0).getID();
+    pokemon.setTexture("../res/spritesheet.png", idpokemon);
+    pokemon.setSprite();
+    pokemon.draw(window);
+
     while (window.isOpen())
     {
         // on gère les évènements
@@ -87,14 +74,11 @@ void Scene::draw (state::State& etat) {
         }
 
         // on dessine le niveau
-        
-       
 
         window.display();
     }
 
-}
 
-
+    }
 }
 

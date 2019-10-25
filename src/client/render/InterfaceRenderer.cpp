@@ -8,8 +8,8 @@ namespace render {
 
     InterfaceRenderer::InterfaceRenderer () {
     }
-    
-    void InterfaceRenderer::drawRect(sf::RenderWindow& window) {
+    void InterfaceRenderer::drawRect (sf::RenderWindow& window) {
+
         sf::RectangleShape rectangle(sf::Vector2f(LENGTH_WINDOW-175, LENGTH_WINDOW-385));
         rectangle.setPosition(175-10, 385-10);
         rectangle.setOutlineThickness(10);
@@ -30,7 +30,8 @@ namespace render {
     }
     
     void InterfaceRenderer::drawText(sf::RenderWindow& window){
-        window.draw(text);
+        window.draw(text);        
     }
 }
+
 
