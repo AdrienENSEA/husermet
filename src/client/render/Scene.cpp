@@ -6,19 +6,7 @@
 
 namespace render {
 
-Scene::Scene () {
-    height = 512;
-    length = 512;
-    InterfaceRenderer i;
-    interface = &i;
-    PokemonRenderer p;
-    pokemon = &p;
-    sf::Sprite background;
-    this->background = background;
-    sf::Font font;
-    this->font = font;
-    //std::vector <PokemonRenderer> pokemons ={};
-    //pokemons.push_back(pokemon);
+Scene::Scene () : height {512}, length {512}{
 }
 
 void Scene::drawScene (state::State& etat) {
@@ -70,15 +58,15 @@ void Scene::drawScene (state::State& etat) {
     
     window.clear(sf::Color(255, 255, 255, 255));
     window.draw(background);
-    window.draw(interface->getR());
-    window.draw(interface->getText(&font, "Attaquer", 200, 410));
-    window.draw(interface->getText(&font, "Pokemon", 350, 410));
-    window.draw(interface->getText(&font, "Sac", 200, 460));
-    window.draw(interface->getText(&font, "Fuite", 350, 460));
-    window.draw(interface->getText(&font, "Que", 35, 415));
-    window.draw(interface->getText(&font, "faire ?", 25, 435));
-    window.draw(pokemon->getS(&texture1, false));
-    window.draw(pokemon->getS(&texture2, true));
+    window.draw(interface.getR());
+    window.draw(interface.getText(&font, "Attaquer", 200, 410));
+    window.draw(interface.getText(&font, "Pokemon", 350, 410));
+    window.draw(interface.getText(&font, "Sac", 200, 460));
+    window.draw(interface.getText(&font, "Fuite", 350, 460));
+    window.draw(interface.getText(&font, "Que", 35, 415));
+    window.draw(interface.getText(&font, "faire ?", 25, 435));
+    window.draw(pokemon.getS(&texture1, false));
+    window.draw(pokemon.getS(&texture2, true));
     
     while (window.isOpen())
     {
