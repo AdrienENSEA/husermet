@@ -36,6 +36,7 @@ namespace render {
     }
     void PokemonRenderer::setTexture (std::string pathtexture, int idpokemon) {
         tpokemon.loadFromFile(pathtexture, sf::IntRect(LENGTH_SPRITE*(idpokemon-1)+LENGTH_SPRITE*back, 0, LENGTH_SPRITE, LENGTH_SPRITE));
+        tpokemon.setSmooth(true);
         }
 
     void PokemonRenderer::setSprite () {

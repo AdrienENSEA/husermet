@@ -13,7 +13,7 @@ Scene::Scene () : height {512}, length {512}{
 }
 
 void Scene::draw (state::State& state) {
-    sf::RenderWindow window(sf::VideoMode(height, length), "Tilemap");
+    sf::RenderWindow window(sf::VideoMode(height, length), "Fight");
     /*std::string filefont = "../res/fontpokemon.ttf";
     font.loadFromFile(filefont);
 	sf::Image image;
@@ -39,29 +39,7 @@ void Scene::draw (state::State& state) {
 // rendre image transparente (0) ou légèrement (150)
     background.setColor(sf::Color(255, 255, 255, 250));    
     
-    window.clear(sf::Color(255, 255, 255, 255));
-    window.draw(background);
-
-    interface.drawRect(window);
     
-    interface.setFont("../res/fontpokemon.ttf");
-    interface.setText("Attaquer", 200, 410);
-    interface.drawText(window);
-    interface.setText("Pokemon", 350, 410);
-    interface.drawText(window);
-    interface.setText("Sac", 200, 460);
-    interface.drawText(window);
-    interface.setText("Fuite", 350, 460);
-    interface.drawText(window);
-    interface.setText("Que faire ?", 5, 415);
-    interface.drawText(window);
-   
-    
-    pokemon.setBack(true);
-    int idpokemon=state.getPokemon(0).getID();
-    pokemon.setTexture("../res/spritesheet.png", idpokemon);
-    pokemon.setSprite();
-    pokemon.draw(window);
 
     while (window.isOpen())
     {
@@ -74,7 +52,35 @@ void Scene::draw (state::State& state) {
         }
 
         // on dessine le niveau
+        window.clear(sf::Color(255, 255, 255, 255));
+        window.draw(background);
 
+        interface.drawRect(window);
+        
+        interface.setFont("../res/fontpokemon.ttf");
+        interface.setText("Attaquer", 200, 410);
+        interface.drawText(window);
+        interface.setText("Pokemon", 350, 410);
+        interface.drawText(window);
+        interface.setText("Sac", 200, 460);
+        interface.drawText(window);
+        interface.setText("Fuite", 350, 460);
+        interface.drawText(window);
+        interface.setText("Que faire ?", 5, 415);
+        interface.drawText(window);
+       
+        
+        pokemon.setBack(true);
+        int idpokemon=state.getPokemon(0).getID();
+        pokemon.setTexture("../res/spritesheet.png", idpokemon);
+        pokemon.setSprite();
+        pokemon.draw(window);
+
+        pokemon.setBack(false);
+        idpokemon=state.getPokemon(1).getID();
+        pokemon.setTexture("../res/spritesheet.png", idpokemon);
+        pokemon.setSprite();
+        pokemon.draw(window);
         window.display();
     }
 
