@@ -2,7 +2,7 @@
 
 namespace state {
 
-State::State (std::list <Team> battle, TypeWeather weather, TypeTerrain terrain) {
+State::State (std::vector <Pokemon> battle, TypeWeather weather, TypeTerrain terrain) {
 	this->battle = battle;
 	this->weather = weather;
 	this->terrain = terrain;
@@ -28,6 +28,9 @@ TypeWeather State::getTypeWeather () {
 } 
 void State::setTypeWeather (TypeWeather w) {
     weather = w;
+}
+Pokemon State::getPokemon (int position) {
+    return battle[position];
 }
 
 }

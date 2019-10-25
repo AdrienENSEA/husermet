@@ -30,8 +30,8 @@ int main(int argc, char* argv[])
 		    cout << "state" << endl;
 	    }
         if (string(argv[1]) == "render") {
-            std::list <Team> battle = {};
-            State s(battle, SUN, GRASSY);
+            std::vector <Pokemon> battle = {};
+            State s(battle, SUN, MISTY);
 		    Scene scene1;
             scene1.drawScene(s);
 	    }
@@ -39,6 +39,21 @@ int main(int argc, char* argv[])
     }
     else {
         cout << "Veuillez ajouté hello ou render en argument" << endl;
+        StatsPokemon effect_stats {0, 0, 0, 0, 0, 0};
+    StatsAttack stats_attack {0, 0, 0, 0, 0, 0};
+    ModifStatsPokemon stats_modif;
+    std::vector <Type> type {{GROUND}};
+    Attack a1(FRAPPE_ATLAS, "Frappe Atlas", "desc", FIGHT, stats_attack, stats_modif);
+    Attack a2(TOXIK, "Toxic", "desc", POISON, stats_attack, stats_modif);
+    Attack a3(ABRI, "Abri", "desc", NORMAL, stats_attack, stats_modif);
+    std::vector <Attack> attacks {a1, a2, a3};
+    Object restes(ORBE_VIE, "Orbe vie", "description", effect_stats, NONE_S, NONE_T);
+    StatsPokemon stats_pokemon = {0, 0, 0, 0, 0, 0};
+    Pokemon groudon(GROUDON, "Groudon", restes , attacks, 1, type, NONE_S, stats_pokemon, 0);
+        std::vector <Pokemon> battle {groudon, groudon};
+            State s(battle, SUN, PSYCHIC);
+		    Scene scene1;
+            scene1.drawScene(s);
     }
     
     return 0;

@@ -15,13 +15,14 @@ Scene::Scene () {
     pokemon = &p;
     sf::Sprite background;
     this->background = background;
+    sf::Font font;
+    this->font = font;
     //std::vector <PokemonRenderer> pokemons ={};
     //pokemons.push_back(pokemon);
 }
 
 void Scene::drawScene (state::State& etat) {
     sf::RenderWindow window(sf::VideoMode(height, length), "Tilemap");
-    sf::Font font;
     std::string filefont = "../res/fontpokemon.ttf";
     font.loadFromFile(filefont);
     /*
@@ -45,7 +46,7 @@ void Scene::drawScene (state::State& etat) {
         p.setTexture(back); 
     p.setScale(2.1f,2.1f);*/
     sf::Texture back;
-    back.loadFromFile("../res/spritesheet_terrain.png", sf::IntRect(0, 0, LENGTH_TERRAIN*etat.getTypeTerrain(), HEIGHT_TERRAIN));
+    back.loadFromFile("../res/spritesheet_terrain.png", sf::IntRect(LENGTH_TERRAIN*(etat.getTypeTerrain()-1), 0, LENGTH_TERRAIN*etat.getTypeTerrain(), HEIGHT_TERRAIN));
     back.setSmooth(true);
     
     background.setTexture(back);
@@ -54,7 +55,7 @@ void Scene::drawScene (state::State& etat) {
     background.setColor(sf::Color(255, 255, 255, 250));    
 
     sf::Texture texture1;
-    texture1.loadFromFile("../res/spritesheet.png", sf::IntRect(0, 0, LENGTH_SPRITE, LENGTH_SPRITE));
+    texture1.loadFromFile("../res/spritesheet.png", sf::IntRect(0, 0, LENGTH_SPRITE*etat.getPokemon(0).getID(), LENGTH_SPRITE));
     sf::Texture texture2;
     texture2.loadFromFile("../res/spritesheet.png", sf::IntRect(LENGTH_SPRITE*3, 0, LENGTH_SPRITE, LENGTH_SPRITE));
 /*
