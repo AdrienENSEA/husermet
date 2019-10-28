@@ -8,7 +8,7 @@ $ cd build <br/>
 $ cmake .. <br/>
 $ make <br/>
 $ cd ../bin <br/>
-$ ./client <br/>
+$ ./client render<br/>
 
 Pour exécuter les tests unitaires : 
 $ make unittest depuis le dossier build <br/>
