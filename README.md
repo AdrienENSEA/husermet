@@ -9,7 +9,9 @@ $ cmake .. <br/>
 $ make <br/>
 $ cd ../bin <br/>
 $ ./client render<br/>
-
+<br>
+S'il y a des problèmes avec OpenGL, il faut désactiver l'accélération 3D dans les paramètres d’affichage de la VM. <br>
+<br>
 Pour exécuter les tests unitaires : 
 $ make unittest depuis le dossier build <br/>
 
