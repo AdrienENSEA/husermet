@@ -17,8 +17,9 @@ namespace render {
         window.draw(rectangle);
     }
     
-    void InterfaceRenderer::setFont(std::string pathfont){
-        font.loadFromFile(pathfont);
+    bool InterfaceRenderer::setFont(std::string pathfont){
+        if (!font.loadFromFile(pathfont)) return false;
+        return true;
     }
     
     void InterfaceRenderer::setText(std::string text1, int width, int height){
@@ -30,7 +31,7 @@ namespace render {
     }
     
     void InterfaceRenderer::drawText(sf::RenderWindow& window){
-        window.draw(text);        
+        window.draw(text);   
     }
 }
 

@@ -25,11 +25,21 @@ Pokemon PokemonFactory::createPokemon(IdPokemon id_pokemon) {
             attacks.push_back(first_attack);
             types.push_back(WATER);
             stats_pokemon = {100, 100, 90, 150, 140, 90};
-            pokemon = new Pokemon(GROUDON, "Groudon", none, attacks, 1, types, NONE_S, stats_pokemon, 0);
+            pokemon = new Pokemon(KYOGRE, "Kyogre", none, attacks, 1, types, NONE_S, stats_pokemon, 0);
             break;
         case RAYQUAZA :
+            first_attack = AttackFactory::createAttack(E_COQUE);
+            attacks.push_back(first_attack);
+            types.push_back(WATER);
+            stats_pokemon = {100, 100, 90, 150, 140, 90};
+            pokemon = new Pokemon(RAYQUAZA, "Rayquaza", none, attacks, 1, types, NONE_S, stats_pokemon, 0);
             break;
         case LEVEINARD :
+            first_attack = AttackFactory::createAttack(E_COQUE);
+            attacks.push_back(first_attack);
+            types.push_back(WATER);
+            stats_pokemon = {100, 100, 90, 150, 140, 90};
+            pokemon = new Pokemon(LEVEINARD, "Leveinard", none, attacks, 1, types, NONE_S, stats_pokemon, 0);
             break;
         case ECTOPLASMA :
             break;

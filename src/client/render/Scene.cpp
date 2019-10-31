@@ -14,30 +14,12 @@ Scene::Scene () : height {512}, length {512}{
 
 void Scene::draw (state::State& state) {
     sf::RenderWindow window(sf::VideoMode(height, length), "Fight");
-    /*std::string filefont = "../res/fontpokemon.ttf";
-    font.loadFromFile(filefont);
-	sf::Image image;
-	image.loadFromFile("../res/sand.png");
-    // rendre le blanc (255,255,255) transparent (0)
-	//image.createMaskFromColor(sf::Color(255, 255, 255), 0);
 
-    sf::Texture back;
-    back.loadFromImage(image); 
-    sf::Sprite p;
-        p.setTexture(back);
-    p.setScale(2.1f,2.1f); 
-// rendre image transparente (0) ou légèrement (150)
-    p.setColor(sf::Color(255, 255, 255, 220));    
-     */
-
-    
     tbackground.loadFromFile("../res/spritesheet_terrain.png", sf::IntRect(LENGTH_TERRAIN*(state.getTypeTerrain()-1), 0, LENGTH_TERRAIN*state.getTypeTerrain(), HEIGHT_TERRAIN));
 
     
     background.setTexture(tbackground);
-    background.setScale(2.1f,2.1f); 
-// rendre image transparente (0) ou légèrement (150)
-    background.setColor(sf::Color(255, 255, 255, 250));    
+    background.setScale(2.1f,2.1f);    
     
     
 
@@ -45,19 +27,20 @@ void Scene::draw (state::State& state) {
     {
         // on gère les évènements
         sf::Event event;
+        //window.setVerticalSyncEnabled(false);
         while (window.pollEvent(event))
         {
             if(event.type == sf::Event::Closed)
                 window.close();
         }
 
-        // on dessine le niveau
+        // on dessine l'état
         window.clear(sf::Color(255, 255, 255, 255));
         window.draw(background);
 
         interface.drawRect(window);
         
-        interface.setFont("../res/fontpokemon.ttf");
+        if(!interface.setFont("../res/fontpokemon.ttf")) cout << "Echec chargement font" << endl;
         interface.setText("Attaquer", 200, 410);
         interface.drawText(window);
         interface.setText("Pokemon", 350, 410);
@@ -68,19 +51,23 @@ void Scene::draw (state::State& state) {
         interface.drawText(window);
         interface.setText("Que faire ?", 5, 415);
         interface.drawText(window);
-       
+/*
+        std::string att = state.getPokemon(0).getAttack().at(0).getName();
+        interface.setText(att, 200, 410);
+        interface.drawText(window);
+*/
         
-        pokemon.setBack(true);
-        int idpokemon=state.getPokemon(0).getID();
-        pokemon.setTexture("../res/spritesheet.png", idpokemon);
-        pokemon.setSprite();
-        pokemon.draw(window);
-
-        pokemon.setBack(false);
-        idpokemon=state.getPokemon(1).getID();
-        pokemon.setTexture("../res/spritesheet.png", idpokemon);
-        pokemon.setSprite();
-        pokemon.draw(window);
+        for (int i=0; i<12; i++) {
+            if (state.getPokemon(i).getID() != 0) {
+                if (i<6) pokemon.setBack(true);
+                else pokemon.setBack(false);
+                pokemon.setIdPokemon(state.getPokemon(i).getID());
+                pokemon.setTexture("../res/spritesheet.png");
+                pokemon.setSprite();
+                //cout << "Affichage de " << state.getPokemon(i).getName() << endl;
+                pokemon.draw(window);
+            }
+        }
         window.display();
     }
 
