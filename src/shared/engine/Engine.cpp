@@ -2,22 +2,20 @@
 
 namespace engine {
 
-    Engine::Engine (state::State& state) {
-        this->state = state;
+    Engine::Engine () {
         std::vector <Command> commands = {};
     }
 
     void Engine::runCommands () {
-        auto it = commands.begin();
-        while (it != commands.cend()) {
-            commands.at(it).execute(state);
-            commands.erase(it);
-            it++
+        while (!commands.empty()) {
+            commands.at(0).execute(state);
+            commands.erase(commands.begin());
         }   
         
     }
     void Engine::addCommand (Command command, int priority) {
         Command c;
+        c.setPriority(priority);
         
          
     }
