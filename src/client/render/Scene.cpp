@@ -55,6 +55,17 @@ void Scene::draw (state::State& state) {
         std::string att = state.getPokemon(0).getAttack().at(0).getName();
         interface.setText(att, 200, 410);
         interface.drawText(window);
+        att = state.getPokemon(0).getAttack().at(1).getName();
+        interface.setText(att, 350, 410);
+        interface.drawText(window);
+        att = state.getPokemon(0).getAttack().at(2).getName();
+        interface.setText(att, 200, 460);
+        interface.drawText(window);
+        att = state.getPokemon(0).getAttack().at(3).getName();
+        interface.setText(att, 350, 460);
+        interface.drawText(window);
+        interface.setText("Retour", 5, 415);
+        interface.drawText(window);
 */
         
         for (int i=0; i<12; i++) {

@@ -41,10 +41,22 @@ int main(int argc, char* argv[])
 		    Scene scene1;
             scene1.draw(s);
         }
+        if (string(argv[1]) == "engine") {
+
+        }
     }
 
     else {
         cout << "Veuillez ajouté hello ou render en argument" << endl;
+            Pokemon p;
+            // seul un nombre réduit de pokemon sont codés : groudon, kyofre, rayquaza, leveinard
+            Pokemon groudon = PokemonFactory::createPokemon(GROUDON);
+            Pokemon kyogre = PokemonFactory::createPokemon(KYOGRE);
+            std::vector <Pokemon> battle {kyogre, p, p, p, p, p, groudon, p, p, p, p, p};
+            // le terrain PSYCHIC peut etre remplacé par GRASSY, MISTY ou ELECTRIK
+            State s(battle, SUN, PSYCHIC);
+            //Engine engine(s);
+            
     }
     
     return 0;
