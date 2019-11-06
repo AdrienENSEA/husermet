@@ -26,29 +26,29 @@ Pokemon::Pokemon (IdPokemon id_pokemon, std::string name, Object object, std::ve
     this->stats_pokemon = stats_pokemon;
     this->ev = ev;
 }
-
-IdPokemon Pokemon::getID () {
+// Setters and Getters
+IdPokemon Pokemon::getID () const{
 	return id_pokemon;
 }
-std::string Pokemon::getName () {
+std::string Pokemon::getName () const{
 	return name;
 }
-Object* Pokemon::getObject () {
+Object* Pokemon::getObject () const {
 	return object;
 }
-std::vector <Attack> Pokemon::getAttack () {
+std::vector <Attack> Pokemon::getAttack () const {
 	return attacks;
 }
-std::vector <Type> Pokemon::getType () {
+std::vector <Type> Pokemon::getType () const {
 	return type;
 }
-TypeState Pokemon::getState () {
+TypeState Pokemon::getState () const {
 	return state;
 }
-StatsPokemon Pokemon::getStats () {
+StatsPokemon Pokemon::getStats () const {
 	return stats_pokemon;
 }
-int Pokemon::getEV () {
+int Pokemon::getEV () const{
 	return ev;
 }
 void Pokemon::setName (std::string name) {
@@ -66,7 +66,7 @@ void Pokemon::setAttack (int position, Attack attack) {
     attacks.insert(it, attack);
 
 }
-// Setters and Getters
 
 }
+
 

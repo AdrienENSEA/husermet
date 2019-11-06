@@ -20,33 +20,33 @@ Object::Object(IdObject id_object, std::string name, std::string descriptive_eff
     this->effect_type = effect_type;
 }
 
-IdObject Object::getIdObject () {
+// Setters and Getters
+IdObject Object::getIdObject () const {
 	return id_object;
 }
-std::string Object::getName () {
+std::string Object::getName () const {
 	return name;
 }
-std::string Object::getDescriptive () {
+std::string Object::getDescriptive () const {
 	return descriptive_effect;
 }
-StatsPokemon Object::getEffectStats () {
+StatsPokemon Object::getEffectStats () const {
 	return effect_stats;
 }
 void Object::setEffectStats (StatsPokemon stats) {
 	effect_stats = stats;
 }
-TypeState Object::getEffectState () {
+TypeState Object::getEffectState () const {
 	return effect_state;
 }
 void Object::setEffectState (TypeState effect_state) {
 	this->effect_state = effect_state;
 }
-Type Object::getEffectType () {
+Type Object::getEffectType () const {
 	return effect_type;
 }
 void Object::setEffectType (Type effect_type) {
 	this->effect_type = effect_type;
 }
-// Setters and Getters
 
 }

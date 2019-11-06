@@ -21,22 +21,23 @@ Attack::Attack (IdAttack id_attack, std::string name, std::string descriptive_at
 	this->stats_modif = stats_modif;
 }
 
-IdAttack Attack::getIdAttack () {
+// Setters and Getters
+IdAttack Attack::getIdAttack () const {
 	return id_attack;
 }
-std::string Attack::getName () {
+std::string Attack::getName () const {
 	return name;
 }
-std::string Attack::getDescriptive () {
+std::string Attack::getDescriptive () const {
 	return descriptive_attack;
 }
-Type Attack::getType () {
+Type Attack::getType () const {
 	return type;
 }
-StatsAttack Attack::getStatsAttack () {
+StatsAttack Attack::getStatsAttack () const {
 	return stats_attack;
 }
-ModifStatsPokemon Attack::getStatsModif () {
+ModifStatsPokemon Attack::getStatsModif () const{
 	return stats_modif;
 }
 void Attack::setType (Type type) {

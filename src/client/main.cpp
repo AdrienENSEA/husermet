@@ -1,4 +1,5 @@
 #include <iostream>
+#include <unistd.h>
 
 // Les lignes suivantes ne servent qu'à vérifier que la compilation avec SFML fonctionne
 #include <SFML/Graphics.hpp>
@@ -12,10 +13,12 @@ void testSFML() {
 #include <state.h>
 #include <string.h>
 #include "render.h"
+#include "engine.h"
 
 using namespace std;
 using namespace state;
 using namespace render;
+using namespace engine;
 
 int main(int argc, char* argv[])
 {
@@ -32,30 +35,52 @@ int main(int argc, char* argv[])
         if (string(argv[1]) == "render") {
             cout << "Affichage d'un état" << endl;
             Pokemon p;
-            // seul un nombre réduit de pokemon sont codés : groudon, kyofre, rayquaza, leveinard
+            // seul un nombre réduit de pokemon sont codés : groudon, kyogre, rayquaza, leveinard
             Pokemon groudon = PokemonFactory::createPokemon(GROUDON);
             Pokemon kyogre = PokemonFactory::createPokemon(KYOGRE);
             std::vector <Pokemon> battle {kyogre, p, p, p, p, p, groudon, p, p, p, p, p};
             // le terrain PSYCHIC peut etre remplacé par GRASSY, MISTY ou ELECTRIK
-            State s(battle, SUN, PSYCHIC);
+            State s(battle, SUN, PSYCHIC, {0,0,0,0},0);
 		    Scene scene1;
             scene1.draw(s);
         }
         if (string(argv[1]) == "engine") {
-
+            
         }
     }
 
     else {
         cout << "Veuillez ajouté hello ou render en argument" << endl;
+            cout << "Affichage de l'état initial" << endl;
             Pokemon p;
-            // seul un nombre réduit de pokemon sont codés : groudon, kyofre, rayquaza, leveinard
+            // seul un nombre réduit de pokemon sont codés : groudon, kyogre, rayquaza, leveinard
             Pokemon groudon = PokemonFactory::createPokemon(GROUDON);
             Pokemon kyogre = PokemonFactory::createPokemon(KYOGRE);
-            std::vector <Pokemon> battle {kyogre, p, p, p, p, p, groudon, p, p, p, p, p};
+            Pokemon ray = PokemonFactory::createPokemon(RAYQUAZA);
+            std::vector <Pokemon> battle {kyogre,ray, ray, ray, p, p, groudon, p, p, p, p, p};
+            std::vector <Attack> att = battle.at(0).getAttack();
+            std::vector<int> pps = {att.at(0).getStatsAttack().pp, att.at(1).getStatsAttack().pp, att.at(2).getStatsAttack().pp, att.at(3).getStatsAttack().pp};
             // le terrain PSYCHIC peut etre remplacé par GRASSY, MISTY ou ELECTRIK
-            State s(battle, SUN, PSYCHIC);
-            //Engine engine(s);
+            int pv = battle.at(0).getStats().pv;
+            State s(battle, SUN, PSYCHIC, pps, pv);
+            Scene scene;
+            scene.draw(s);
+            cout << "Affichage de l'état après un changement de Pokémon" << endl;
+            Engine e(&s);
+            ChangePokemonCommand c;
+            c.setPokemon(kyogre);
+            c.setPokemon_target(ray);
+            e.addCommand(c);
+            e.runCommands();
+            scene.draw(s);
+            cout << "Affichage de l'état après la première attaque du pokemon actif" << endl;
+            AttackCommand a;
+            a.setPokemon(battle.at(0));
+            a.setPokemon_target(battle.at(6));
+            a.setAttack(battle.at(0).getAttack().at(0));
+            e.addCommand(a);
+            e.runCommands();
+            scene.draw(s);
             
     }
     

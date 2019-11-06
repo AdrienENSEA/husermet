@@ -25,7 +25,7 @@ BOOST_AUTO_TEST_CASE(TestState)
     StatsPokemon stats_pokemon = {0, 0, 0, 0, 0, 0};
     Pokemon groudon(GROUDON, "Groudon", restes , attacks, 1, type, NONE_S, stats_pokemon, 0);
     std::vector <Pokemon> battle {groudon};
-    State s(battle, SUN, GRASSY);
+    State s(battle, SUN, GRASSY, {0,0,0,0},0);
     BOOST_CHECK_EQUAL(s.getTypeTerrain(), GRASSY);
     BOOST_CHECK_EQUAL(s.getTypeWeather(), SUN);
     BOOST_CHECK_EQUAL(s.getPokemon(0).getID(), GROUDON); 

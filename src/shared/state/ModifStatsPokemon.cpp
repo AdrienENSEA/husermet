@@ -11,18 +11,19 @@ ModifStatsPokemon::ModifStatsPokemon () {
 	this->round_left = 0;
 }
 
-StatsPokemon ModifStatsPokemon::getModifStats () {
+// Setters and Getters
+StatsPokemon ModifStatsPokemon::getModifStats () const {
 	return modif_stats_pokemon;
 }
 void ModifStatsPokemon::setModifStats (StatsPokemon modifStatsPokemon) {
 	this->modif_stats_pokemon = modif_stats_pokemon;
 }
-int ModifStatsPokemon::getRoundLeft () {
+int ModifStatsPokemon::getRoundLeft () const {
 	return round_left;
 }
 void ModifStatsPokemon::setRoundLeft (int roundLeft) {
 	
 }
-// Setters and Getters
+
 
 }

@@ -1,15 +1,22 @@
 #include "Scene.h"
 #include <iostream>
+#include <unistd.h>
+#include <string>
 
 #define LENGTH_SPRITE 96
 #define LENGTH_TERRAIN 290
+#define LENGTH_WINDOW 512
 #define HEIGHT_TERRAIN 174
 
 using namespace std;
 
 namespace render {
 
-Scene::Scene () : height {512}, length {512}{
+Scene::Scene () : height {LENGTH_WINDOW}, length {LENGTH_WINDOW}{
+}
+
+Scene::~Scene () {
+    window.close();
 }
 
 void Scene::draw (state::State& state) {
@@ -19,12 +26,10 @@ void Scene::draw (state::State& state) {
 
     
     background.setTexture(tbackground);
-    background.setScale(2.1f,2.1f);    
-    
+    background.setScale(2.1f,2.1f);
     
 
-    while (window.isOpen())
-    {
+    //while (window.isOpen()) {
         // on gère les évènements
         sf::Event event;
         //window.setVerticalSyncEnabled(false);
@@ -41,35 +46,39 @@ void Scene::draw (state::State& state) {
         interface.drawRect(window);
         
         if(!interface.setFont("../res/fontpokemon.ttf")) cout << "Echec chargement font" << endl;
-        interface.setText("Attaquer", 200, 410);
-        interface.drawText(window);
-        interface.setText("Pokemon", 350, 410);
-        interface.drawText(window);
-        interface.setText("Sac", 200, 460);
-        interface.drawText(window);
-        interface.setText("Fuite", 350, 460);
-        interface.drawText(window);
-        interface.setText("Que faire ?", 5, 415);
-        interface.drawText(window);
-/*
-        std::string att = state.getPokemon(0).getAttack().at(0).getName();
-        interface.setText(att, 200, 410);
-        interface.drawText(window);
-        att = state.getPokemon(0).getAttack().at(1).getName();
-        interface.setText(att, 350, 410);
-        interface.drawText(window);
-        att = state.getPokemon(0).getAttack().at(2).getName();
-        interface.setText(att, 200, 460);
-        interface.drawText(window);
-        att = state.getPokemon(0).getAttack().at(3).getName();
-        interface.setText(att, 350, 460);
-        interface.drawText(window);
-        interface.setText("Retour", 5, 415);
-        interface.drawText(window);
-*/
-        
-        for (int i=0; i<12; i++) {
+        // Affichage des pokémon de l'équipe
+        for (int i=0; i<6; i++) {
             if (state.getPokemon(i).getID() != 0) {
+                interface.setIdPokemon(state.getPokemon(i).getID());
+                interface.setTPokemon("../res/spritesheet.png");
+                interface.setPokemon(LENGTH_WINDOW-170+(i%2)*60, 360+(i/2)*60);
+                interface.drawPokemon(window);
+            }
+        }
+        // Affichage des attaques avec leur pp et type
+        std::string att;
+        std::string pp;
+        for (int i=0; i<4; i++) {
+            if (state.getPokemon(0).getAttack().at(i).getType() != 0) {
+                interface.setIdType(state.getPokemon(0).getAttack().at(i).getType());
+                interface.setTType("../res/typesheet.png");
+                interface.setType(30+(i%2)*170, 415+(i/2)*50);
+                interface.drawType(window);
+            }
+            att = state.getPokemon(0).getAttack().at(i).getName();
+            if (att != "name") {
+                interface.setText(att, 30+(i%2)*170, 395+(i/2)*50, 16);
+                interface.drawText(window);
+            }
+            pp = std::to_string(state.getPPs().at(i))+'/'+std::to_string(state.getPokemon(0).getAttack().at(i).getStatsAttack().ppmax);
+            if (pp != "0") {
+                interface.setText(pp, 95+(i%2)*170, 420+(i/2)*50, 14);
+                interface.drawText(window);
+            }
+        }
+        // Afichage des pokémon actif et adverse
+        for (int i=0; i<12; i++) {
+            if (state.getPokemon(i).getID() != 0 && (i==0 || i==6)) {
                 if (i<6) pokemon.setBack(true);
                 else pokemon.setBack(false);
                 pokemon.setIdPokemon(state.getPokemon(i).getID());
@@ -80,7 +89,8 @@ void Scene::draw (state::State& state) {
             }
         }
         window.display();
-    }
+        sleep(5);
+    //}
 
 
     }
