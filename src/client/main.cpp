@@ -66,13 +66,13 @@ int main(int argc, char* argv[])
             Scene scene;
             scene.draw(s);
             cout << "Affichage de l'état après un changement de Pokémon" << endl;
-            Engine e(&s);/*
+            Engine e(&s);
             ChangePokemonCommand c;
             c.setPokemon(kyogre);
             c.setPokemon_target(ray);
             e.addCommand(c);
             e.runCommands();
-            scene.draw(s);*/
+            scene.draw(s);
             cout << "Affichage de l'état après la première attaque du pokemon actif" << endl;
             AttackCommand a;
             a.setPokemon(battle.at(0));
