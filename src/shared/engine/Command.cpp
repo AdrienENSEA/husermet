@@ -32,6 +32,7 @@ namespace engine {
         }
 
         if (commandID == 2) {
+/*
            for (int i =0; i<4; i++) {
 std::cout << attack.getName() << std::endl;
                 if (state->getPokemon(0).getAttack().at(i).getIdAttack() == attack.getIdAttack() ) {
@@ -43,13 +44,13 @@ std::cout << stats.pp << std::endl;
 std::cout << state->getPokemon(0).getAttack().at(i).getStatsAttack().pp << std::endl;
                 }
             } 
-/*
+*/
             std::vector<int> pps = {
             state->getPokemon(0).getAttack().at(0).getStatsAttack().pp-1, 
             state->getPokemon(0).getAttack().at(1).getStatsAttack().pp, 
             state->getPokemon(0).getAttack().at(2).getStatsAttack().pp, 
             state->getPokemon(0).getAttack().at(3).getStatsAttack().pp  };
-        state->setPPs(pps);*/
+        state->setPPs(pps);
         }
     }
 
