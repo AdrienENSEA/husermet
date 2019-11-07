@@ -24,7 +24,7 @@ Pokemon PokemonFactory::createPokemon(IdPokemon id_pokemon) {
             first_attack = AttackFactory::createAttack(DANSE_PLUIE);
             second_attack = AttackFactory::createAttack(TOXIK);
             third_attack = AttackFactory::createAttack(ABRI);
-            fourth_attack = AttackFactory::createAttack(DANSE_PLUIE);
+            fourth_attack = AttackFactory::createAttack(E_COQUE);
             attacks.push_back(first_attack);
             attacks.push_back(second_attack);
             attacks.push_back(third_attack);

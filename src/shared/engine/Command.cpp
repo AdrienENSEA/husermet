@@ -32,12 +32,24 @@ namespace engine {
         }
 
         if (commandID == 2) {
+           for (int i =0; i<4; i++) {
+std::cout << attack.getName() << std::endl;
+                if (state->getPokemon(0).getAttack().at(i).getIdAttack() == attack.getIdAttack() ) {
+                    state::StatsAttack stats = state->getPokemon(0).getAttack().at(i).getStatsAttack();
+std::cout << stats.pp << std::endl;
+                    stats.pp = stats.pp -1;
+std::cout << stats.pp << std::endl;
+                    state->getPokemon(0).getAttack().at(i).setStatsAttack(stats);
+std::cout << state->getPokemon(0).getAttack().at(i).getStatsAttack().pp << std::endl;
+                }
+            } 
+/*
             std::vector<int> pps = {
             state->getPokemon(0).getAttack().at(0).getStatsAttack().pp-1, 
             state->getPokemon(0).getAttack().at(1).getStatsAttack().pp, 
             state->getPokemon(0).getAttack().at(2).getStatsAttack().pp, 
             state->getPokemon(0).getAttack().at(3).getStatsAttack().pp  };
-        state->setPPs(pps);
+        state->setPPs(pps);*/
         }
     }
 
@@ -53,6 +65,12 @@ namespace engine {
     }
     void Command::setPokemon_target(const state::Pokemon& pokemon_target) {
         this->pokemon_target = pokemon_target;
+    }
+    const state::Attack& Command::getAttack() const {
+        return attack;
+    }
+    void Command::setAttack(const state::Attack& attack) {
+        this->attack = attack;
     }
     int Command::getPriority() const {
         return priority;
