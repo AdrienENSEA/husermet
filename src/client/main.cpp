@@ -45,12 +45,6 @@ int main(int argc, char* argv[])
             scene1.draw(s);
         }
         if (string(argv[1]) == "engine") {
-            
-        }
-    }
-
-    else {
-        cout << "Veuillez ajouté hello ou render en argument" << endl;
             cout << "Affichage de l'état initial" << endl;
             Pokemon p;
             // seul un nombre réduit de pokemon sont codés : groudon, kyogre, rayquaza, leveinard
@@ -81,6 +75,12 @@ int main(int argc, char* argv[])
             e.addCommand(a);
             e.runCommands();
             scene.draw(s);
+        }
+    }
+
+    else {
+        cout << "Veuillez ajouté hello ou render en argument" << endl;
+           
             
     }
     
