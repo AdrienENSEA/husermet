@@ -39,17 +39,20 @@ void State::setTypeWeather (TypeWeather w) {
 Pokemon State::getPokemon (int position) const{
     return battle.at(position);
 }
-void State::setPPs (std::vector<int> pps) {
-    this->pps = pps;
+void State::modifPP (int pp, int i) {
+    pps.at(i) += pp;
 }
-std::vector<int> State::getPPs() const {
-    return pps;
+int State::getPP(int i) const {
+    return pps.at(i);
 }
-void State::setPV (int pv) {
-    this->pv = pv;
+void State::modifPV (int pv) {
+    this->pv += pv;
 }
 int State::getPV() const {
     return pv;
+}
+void State::setPPs(std::vector<int> pps) {
+    this->pps = pps;
 }
 }
 

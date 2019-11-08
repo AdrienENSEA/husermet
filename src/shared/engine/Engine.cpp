@@ -8,6 +8,11 @@ namespace engine {
         std::vector <Command> commands = {};
         this->state = state;
     }
+    Engine::Engine () {
+        std::vector <Command> commands = {};
+        state::State s;
+        state = &s;
+    }
 
     void Engine::runCommands () {
         while (!commands.empty()) {

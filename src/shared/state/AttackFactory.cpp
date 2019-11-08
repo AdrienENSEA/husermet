@@ -19,7 +19,7 @@ Attack AttackFactory::createAttack(IdAttack id_attack) {
             attack = new Attack(E_COQUE, "E-Coque", "Le lanceur récupère jusqu’à la moitié de ses PV max", NORMAL, stats_attack, stats_modif);
             break;
         case DANSE_PLUIE :
-            stats_attack = {5, 5, 0, 0, 3, 0, 4};
+            stats_attack = {5, 5, 153, 0, 3, 0, 4};
             stats_modif.setRoundLeft(5);
             stats_pokemon = {0, 0, 0, 0, 0, 0};
             stats_modif.setModifStats(stats_pokemon);
@@ -39,6 +39,7 @@ Attack AttackFactory::createAttack(IdAttack id_attack) {
             attack = new Attack(ABRI, "Abri", "Le lanceur esquive toutes les attaques. Le risque d’échec augmente lorsque la capacité est utilisée plusieurs fois de suite.", NORMAL, stats_attack, stats_modif);
             break;
         case FRAPPE_ATLAS :
+            attack = new Attack();
             break;
         case CHANGE_ECLAIR :
             break;
@@ -53,6 +54,7 @@ Attack AttackFactory::createAttack(IdAttack id_attack) {
         case CAGE_ECLAIR :
             break;
         default:
+            attack = new Attack();
             break;
     }
     

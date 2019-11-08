@@ -1,26 +1,25 @@
 #include "ChangePokemonCommand.h"
 #include <iostream>
 
+
 namespace engine {
 
-    ChangePokemonCommand::ChangePokemonCommand () {
-        priority = 6;
-        commandID = 1;
+    ChangePokemonCommand::ChangePokemonCommand (int pokemon, int pokemon_target) {
+        this->pokemon = pokemon;
+        this->pokemon_target = pokemon_target;
     }
     void ChangePokemonCommand::execute (state::State* state) {
-        int fighter;
-        int back;
-        for (int i =0; i<12; i++) {
-            if (state->getPokemon(i).getID() == pokemon.getID() ) {
-                fighter = i;
-            }
-            if (state->getPokemon(i).getID() == pokemon_target.getID() ) {
-                back = i;
-            }
-        }
         int player = 0;
-        state->changeTeam(fighter, back, player);
-    }
+        std::vector<int> pps = {
+                state->getPokemon(pokemon_target).getAttack().at(0).getPP(),
+                state->getPokemon(pokemon_target).getAttack().at(1).getPP(),
+                state->getPokemon(pokemon_target).getAttack().at(2).getPP(),
+                state->getPokemon(pokemon_target).getAttack().at(3).getPP()};
+        state->setPPs(pps);
+        //state->setPV(state->getPokemon(pokemon_target).getStats().pv);
+        state->changeTeam(pokemon, pokemon_target, player);
+        
+        }
 
 
 };

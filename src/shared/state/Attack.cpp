@@ -1,4 +1,5 @@
 #include "Attack.h"
+#include <iostream>
 
 namespace state {
 
@@ -7,12 +8,13 @@ Attack::Attack () {
 	name = "name";
 	descriptive_attack = "descriptive_attack";
 	type = NONE_T;
-	stats_attack = {0,0,0,0,0,0};
+	struct StatsAttack sa = {0,0,0,0,0,0,0}; 
+    stats_attack = sa;
     ModifStatsPokemon s;
 	stats_modif = s;
 }
 
-Attack::Attack (IdAttack id_attack, std::string name, std::string descriptive_attack, Type type, StatsAttack stats_attack, ModifStatsPokemon stats_modif) {
+Attack::Attack (IdAttack id_attack, std::string name, std::string descriptive_attack, Type type, struct StatsAttack stats_attack, ModifStatsPokemon stats_modif) {
 	this->id_attack = id_attack;
 	this->name = name;
 	this->descriptive_attack = descriptive_attack;
@@ -45,9 +47,18 @@ void Attack::setType (Type type) {
 } 
 void Attack::setStatsAttack (StatsAttack stats_attack) {
 	this->stats_attack = stats_attack;
+std::cout << "attack stats pp ppmax " << stats_attack.pp << stats_attack.ppmax << std::endl;
 }
 void Attack::setStatsModif (ModifStatsPokemon stats_modif) {
 	this->stats_modif = stats_modif;
+}
+int Attack::getPP(){
+    return stats_attack.pp;
+}
+void Attack::modifPP(int pp) {
+    std::cout << stats_attack.pp << "+" << pp << "=";
+    stats_attack.pp += pp;
+    std::cout << stats_attack.pp << std::endl;
 }
 
 }

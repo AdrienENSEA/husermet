@@ -1,4 +1,5 @@
 #include "Pokemon.h"
+#include <iostream>
 
 namespace state {
 
@@ -64,9 +65,17 @@ void Pokemon::setAttack (int position, Attack attack) {
     std::vector<Attack>::iterator it = attacks.begin();
     advance(it, position); 
     attacks.insert(it, attack);
-
 }
-
+void Pokemon::setStatsPokemon (const StatsPokemon& stats) {
+	stats_pokemon = stats;
+}
+void Pokemon::setPV(int pv) {
+    stats_pokemon.pv = pv;
+    std::cout << "pokemon pv " << stats_pokemon.pv << std::endl;
+}
+int Pokemon::getPV() const {
+    return stats_pokemon.pv;
+}
 }
 
 
