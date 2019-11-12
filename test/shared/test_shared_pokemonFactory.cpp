@@ -21,16 +21,16 @@ BOOST_AUTO_TEST_CASE(TestPokemonF)
     
     BOOST_CHECK_EQUAL(groudon.getName(), "Groudon");
     BOOST_CHECK_EQUAL(groudon.getID(), GROUDON);
-    std::vector <Attack> a = groudon.getAttack();
+    std::vector <Attack> a = groudon.getAttacks();
     BOOST_CHECK(!a.empty());
     BOOST_CHECK_EQUAL(a.at(0).getIdAttack(), E_COQUE);
     BOOST_CHECK_EQUAL(a.at(0).getName(), "E-Coque");
     BOOST_CHECK_EQUAL(a.at(0).getStatsAttack().pp, 10);
     BOOST_CHECK_EQUAL(a.at(0).getStatsAttack().power, 0);
     BOOST_CHECK_EQUAL(a.at(0).getStatsAttack().accuracy, 100);
-    BOOST_CHECK_EQUAL(a.at(0).getStatsAttack().category, 0);
+    BOOST_CHECK_EQUAL(a.at(0).getStatsAttack().category, 3);
     BOOST_CHECK_EQUAL(a.at(0).getStatsAttack().priority, 0);
-    BOOST_CHECK_EQUAL(a.at(0).getStatsAttack().scope, 0);
+    BOOST_CHECK_EQUAL(a.at(0).getStatsAttack().scope, -1);
     BOOST_CHECK_EQUAL(a.at(0).getStatsModif().getModifStats().pv, 0);
     BOOST_CHECK_EQUAL(a.at(0).getStatsModif().getModifStats().attack, 0);
     BOOST_CHECK_EQUAL(a.at(0).getStatsModif().getModifStats().defense, 0);

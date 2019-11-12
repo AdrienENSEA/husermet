@@ -1,27 +1,42 @@
 #include "Command.h"
+#include <iostream>
 
 namespace engine {
 
-    Command::Command () {
-        state::Pokemon pokemon;
-        state::Pokemon pokemon_target;
-        priority = 0;
+    Command::Command (int commandID) : commandID(commandID) {
+
     }
+
     void Command::execute (state::State& state) {
+        if (commandID==1) {
+            ChangePokemonCommand c(pokemon, pokemon_target);
+            c.execute(state);
+        }
+        if (commandID==2) {
+            AttackCommand a(pokemon, pokemon_target, attack);
+            a.execute(state);
+        }
     }
 
     // Setters and Getters
-    const state::Pokemon& Command::getPokemon() const {
+    int Command::getPokemon() const {
         return pokemon;
     }
-    void Command::setPokemon(const state::Pokemon& pokemon) {
+    void Command::setPokemon(int pokemon) {
         this->pokemon = pokemon;
     }
-    const state::Pokemon& Command::getPokemon_target() const {
+    int Command::getPokemon_target() const {
         return pokemon_target;
     }
-    void Command::setPokemon_target(const state::Pokemon& pokemon_target) {
+    void Command::setPokemon_target(int pokemon_target) {
         this->pokemon_target = pokemon_target;
+    }
+    int Command::getAttack() const {
+        return attack;
+    }
+    void Command::setAttack(int attack) {
+        this->attack = attack;
+        //priority = state.getPokemon(0).getAttack(attack).getStatsAttack().priority;
     }
     int Command::getPriority() const {
         return priority;
@@ -29,5 +44,6 @@ namespace engine {
     void Command::setPriority(int priority) {
         this->priority = priority;
     }
+
 
 };
