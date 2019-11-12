@@ -88,7 +88,7 @@ int main(int argc, char* argv[])
             //Pokemon kyogre = PokemonFactory::createPokemon(KYOGRE);
             Pokemon kyogre = PokemonFactory::createPokemon(KYOGRE);
             Pokemon ray = PokemonFactory::createPokemon(RAYQUAZA);
-            std::vector <Pokemon> battle {kyogre,ray, ray, ray, p, p, groudon, p, p, p, p, p};
+            std::vector <Pokemon> battle {kyogre,ray, ray, ray, p, p, groudon, groudon, p, p, p, p};
             
             
             // le terrain PSYCHIC peut etre remplacé par GRASSY, MISTY ou ELECTRIK
