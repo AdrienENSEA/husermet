@@ -1,7 +1,7 @@
 
 #include <boost/test/unit_test.hpp>
 
-#include "../../src/shared/state/ObjectFactory.h"
+#include "../../src/shared/state/ItemFactory.h"
 #include "../../src/shared/state/Pokemon.h"
 
 
@@ -15,11 +15,11 @@ BOOST_AUTO_TEST_CASE(TestStaticAssert)
 BOOST_AUTO_TEST_CASE(TestPokemonFactory)
 {
   {
-    Object restes = ObjectFactory::createObject(RESTES);
+    Item restes = ItemFactory::createItem(RESTES);
     
     
     BOOST_CHECK_EQUAL(restes.getName(), "Restes");
-    BOOST_CHECK_EQUAL(restes.getIdObject(), RESTES);
+    BOOST_CHECK_EQUAL(restes.getIdItem(), RESTES);
     //StatsPokemon effect_stats = {0, 0, 0, 0, 0, 0};
     //BOOST_CHECK_EQUAL(restes.getEffectState(), effect_stats);
     /*std::vector <Attack> a = groudon.getAttack();

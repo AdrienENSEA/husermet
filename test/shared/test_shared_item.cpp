@@ -1,7 +1,7 @@
 
 #include <boost/test/unit_test.hpp>
 
-#include "../../src/shared/state/Object.h"
+#include "../../src/shared/state/Item.h"
 
 using namespace ::state;
 
@@ -10,13 +10,13 @@ BOOST_AUTO_TEST_CASE(TestStaticAssert)
   BOOST_CHECK(1);
 }
 
-BOOST_AUTO_TEST_CASE(TestObject)
+BOOST_AUTO_TEST_CASE(TestItem)
 {
   {
     StatsPokemon effect_stats = {0, 0, 0, 0, 0, 0};
-    Object restes(RESTES, "Restes", "description", effect_stats, NONE_S, NONE_T);
+    Item restes(RESTES, "Restes", "description", effect_stats, NONE_S, NONE_T);
     BOOST_CHECK_EQUAL(restes.getName(), "Restes");
-    BOOST_CHECK_EQUAL(restes.getIdObject(), RESTES); 
+    BOOST_CHECK_EQUAL(restes.getIdItem(), RESTES); 
     BOOST_CHECK_EQUAL(restes.getDescriptive(), "description"); 
     BOOST_CHECK_EQUAL(restes.getEffectState(), NONE_S); 
     BOOST_CHECK_EQUAL(restes.getEffectType(), NONE_T); 
@@ -29,7 +29,7 @@ BOOST_AUTO_TEST_CASE(TestObject)
   }
 
   {
-    Object orbe_toxique;
+    Item orbe_toxique;
     orbe_toxique.setEffectStats ({-1/8, 0, 0, 0, 0, 0});
     orbe_toxique.setEffectState(POISONED);
     orbe_toxique.setEffectType(NONE_T);

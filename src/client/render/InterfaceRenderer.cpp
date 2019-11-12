@@ -1,7 +1,7 @@
 #include "InterfaceRenderer.h"
 #include <iostream>
 
-#define LENGTH_SPRITE 96
+#define LENGTH_SPRITE 98
 #define WIDTH_TYPE 50
 #define HEIGHT_TYPE 20
 #define LENGTH_WINDOW 512

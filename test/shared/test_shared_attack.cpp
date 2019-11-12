@@ -14,9 +14,9 @@ BOOST_AUTO_TEST_CASE(TestStaticAssert)
 BOOST_AUTO_TEST_CASE(TestAttack)
 {
   {
-    StatsAttack stats_attack {0, 0, 0, 0, 0, 0, 0};
+    StatsAttack stats_attack {0, 0, 0, 0, 0, 0};
     ModifStatsPokemon stats_modif;
-    Attack frappe_atlas(PROVOC, "Provoc", "desc", DARK, stats_attack, stats_modif);
+    Attack frappe_atlas(PROVOC, "Provoc", "desc", DARK, stats_attack, stats_modif,0);
     BOOST_CHECK_EQUAL(frappe_atlas.getName(), "Provoc");
     BOOST_CHECK_EQUAL(frappe_atlas.getIdAttack(), PROVOC);
     BOOST_CHECK_EQUAL(frappe_atlas.getDescriptive(), "desc");
@@ -33,7 +33,7 @@ BOOST_AUTO_TEST_CASE(TestAttack)
     BOOST_CHECK_EQUAL(frappe_atlas.getStatsModif().getModifStats().sp_attack, 0);
     BOOST_CHECK_EQUAL(frappe_atlas.getStatsModif().getModifStats().sp_defense, 0);
     BOOST_CHECK_EQUAL(frappe_atlas.getStatsModif().getModifStats().speed, 0);
-    StatsAttack stats_attack1 {10, 0, 0, 0, 0, 0, 0};
+    StatsAttack stats_attack1 {10, 0, 0, 0, 0, 0};
     frappe_atlas.setStatsAttack(stats_attack1);
     BOOST_CHECK_EQUAL(frappe_atlas.getStatsAttack().pp, 10);
   }
@@ -41,7 +41,8 @@ BOOST_AUTO_TEST_CASE(TestAttack)
   {
     Attack coudjus;
     coudjus.setType(ELECTRIC);
-    coudjus.setStatsAttack ({15,15,90,100,2,0,3});
+    StatsAttack stats = {15,90,100,2,0,3}; 
+    coudjus.setStatsAttack (stats);
     BOOST_CHECK_EQUAL(coudjus.getType(), ELECTRIC);
     BOOST_CHECK_EQUAL(coudjus.getStatsAttack().pp, 15);
     BOOST_CHECK_EQUAL(coudjus.getStatsAttack().power, 90);

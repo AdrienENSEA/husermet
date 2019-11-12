@@ -21,7 +21,7 @@ BOOST_AUTO_TEST_CASE(TestPokemonF)
     
     BOOST_CHECK_EQUAL(groudon.getName(), "Groudon");
     BOOST_CHECK_EQUAL(groudon.getID(), GROUDON);
-    std::vector <Attack> a = groudon.getAttack();
+    std::vector <Attack> a = groudon.getAttacks();
     BOOST_CHECK(!a.empty());
     BOOST_CHECK_EQUAL(a.at(0).getIdAttack(), E_COQUE);
     BOOST_CHECK_EQUAL(a.at(0).getName(), "E-Coque");

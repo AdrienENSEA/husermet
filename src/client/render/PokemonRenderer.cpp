@@ -1,7 +1,7 @@
 #include "PokemonRenderer.h"
 #include <iostream>
 
-#define LENGTH_SPRITE 96
+#define LENGTH_SPRITE 98
 #define LENGTH_WINDOW 512
 #define SCALE_SPRITE 2.1f
 

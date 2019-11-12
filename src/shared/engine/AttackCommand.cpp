@@ -9,32 +9,39 @@ namespace engine {
         this->pokemon = pokemon;
         this->pokemon_target = pokemon_target;
         this->attack = attack;
-        
     }
     
-    void AttackCommand::execute (state::State* state) {
-        state::Pokemon p = state->getPokemon(pokemon);
-        state::Pokemon p_t = state->getPokemon(pokemon_target);
-        state::Attack a = state->getPokemon(pokemon).getAttack().at(attack);
+    void AttackCommand::execute (state::State& state) {
+        state::Pokemon p = state.getPokemon(pokemon);
+        state::Pokemon p_t = state.getPokemon(pokemon_target);
+        state::Attack a = state.getPokemon(pokemon).getAttack(attack);
         int d = damage(state);
 
-        a.modifPP(-1);
-        state->modifPP(-1,attack);
-        std::cout << "pp"<<a.getPP() << std::endl;
-
-        std::cout << "avant pv"<<p.getPV() << std::endl;
-        int pv = p.getPV()-d;
-        state->modifPV(-d);
-        p.setPV(pv);
-        std::cout << "apres pv"<<p.getPV() << std::endl;
+        state.getPokemon(pokemon).getAttack(attack).modifPP(-1);
+        state.getPokemon(pokemon_target).modifPV(-d);
     }
     
-    int AttackCommand::damage(state::State* state) {
+    int AttackCommand::damage(state::State &state) {
         int d = 0;
-        float cm = sw(state->getPokemon(pokemon).getAttack().at(attack).getType(),state->getPokemon(pokemon_target).getType()) * stab(state->getPokemon(pokemon).getAttack().at(attack).getType(),state->getPokemon(pokemon).getType() ); //1.5 si STAB + 0.5 si resistance + 1.5 si faiblesse + effet objet/climat
-        //std::cout << "cm" << cm << std::endl;
-        d = (state->getPokemon(pokemon).getStats().attack*state->getPokemon(pokemon).getAttack().at(attack).getStatsAttack().power/state->getPokemon(pokemon_target).getStats().defense/50+2)*cm;
-        return d;
+        if (state.getPokemon(pokemon).getAttack(attack).getStatsAttack().category == 1) {
+            std::cout << "attaque physique" << std::endl;
+            float cm = sw(state.getPokemon(pokemon).getAttack(attack).getType(),state.getPokemon(pokemon_target).getType()) * stab(state.getPokemon(pokemon).getAttack(attack).getType(),state.getPokemon(pokemon).getType() ); //1.5 si STAB + 0.5 si resistance + 1.5 si faiblesse + effet objet/climat
+            //std::cout << "cm" << cm << std::endl;
+            d = (state.getPokemon(pokemon).getStats().attack*state.getPokemon(pokemon).getAttack(attack).getStatsAttack().power/state.getPokemon(pokemon_target).getStats().defense/50+2)*cm;
+            return d;
+        }
+        else if (state.getPokemon(pokemon).getAttack(attack).getStatsAttack().category == 2) {
+            std::cout << "attaque spéciale" << std::endl;
+            float cm = sw(state.getPokemon(pokemon).getAttack(attack).getType(),state.getPokemon(pokemon_target).getType()) * stab(state.getPokemon(pokemon).getAttack(attack).getType(),state.getPokemon(pokemon).getType() ); //1.5 si STAB + 0.5 si resistance + 1.5 si faiblesse + effet objet/climat
+            //std::cout << "cm" << cm << std::endl;
+            d = (state.getPokemon(pokemon).getStats().sp_attack*state.getPokemon(pokemon).getAttack(attack).getStatsAttack().power/state.getPokemon(pokemon_target).getStats().sp_defense/50+2)*cm;
+            return d;
+        }
+        else if (state.getPokemon(pokemon).getAttack(attack).getStatsAttack().category == 3) {
+            std::cout << "attaque de statut" << std::endl;
+            return d;
+        }
+        return 0;
     }
     
     float AttackCommand::stab(state::Type a, std::vector<state::Type> p) {
