@@ -13,7 +13,7 @@ Pokemon PokemonFactory::createPokemon(IdPokemon id_pokemon) {
     {
         case GROUDON :
             types.push_back(GROUND);
-            stats_pokemon = {100, 150, 140, 100, 90, 91};
+            stats_pokemon = {100, 150, 140, 100, 90, 90};
             pokemon = new Pokemon(GROUDON, "Groudon", none, FRAPPE_ATLAS, E_COQUE, E_COQUE, E_COQUE, 1, types, NONE_S, stats_pokemon, 0, 100);
             break;
         case KYOGRE :
