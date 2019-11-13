@@ -14,6 +14,7 @@ Pokemon::Pokemon () {
     state = NONE_S;
     stats_pokemon = {0,0,0,0,0};
     ev = 0;
+    pv = 0;
 }
 
 Pokemon::Pokemon (IdPokemon id_pokemon, std::string name, Item item, std::vector <Attack> attacks, int ability, std::vector <Type> type, TypeState state, StatsPokemon stats_pokemon, int ev, int pv) {

@@ -39,14 +39,22 @@ Attack AttackFactory::createAttack(IdAttack id_attack) {
             attack = new Attack(ABRI, "Abri", "Le lanceur esquive toutes les attaques. Le risque d’échec augmente lorsque la capacité est utilisée plusieurs fois de suite.", NORMAL, stats_attack, stats_modif,10);
             break;
         case FRAPPE_ATLAS :
-            stats_attack = {20, 0, 100, 1, 0, 1};
+            stats_attack = {20, 100, 100, 1, 0, 1};
             stats_pokemon = {0, 0, 0, 0, 0, 0};
             stats_modif.setModifStats(stats_pokemon);
             attack = new Attack(FRAPPE_ATLAS, "Frappe Atlas", "L'ennemi est projeté grâce au pouvoir de la gravité. Inflige des dégâts équivalents au niveau du lanceur.", FIGHT, stats_attack, stats_modif,20);
             break;
         case CHANGE_ECLAIR :
+            stats_attack = {20, 70, 100, 1, 0, 1};
+            stats_pokemon = {0, 0, 0, 0, 0, 0};
+            stats_modif.setModifStats(stats_pokemon);
+            attack = new Attack(CHANGE_ECLAIR, "Change Eclair", "Après son attaque, le lanceur revient à toute vitesse et change de place avec un Pokémon de l'équipe prêt au combat.", ELECTRIC, stats_attack, stats_modif,20);
             break;
         case TONNERRE :
+            stats_attack = {20, 300, 100, 1, 0, 1};
+            stats_pokemon = {0, 0, 0, 0, 0, 0};
+            stats_modif.setModifStats(stats_pokemon);
+            attack = new Attack(TONNERRE, "Tonnerre", "Après son attaque, le lanceur revient à toute vitesse et change de place avec un Pokémon de l'équipe prêt au combat.", ELECTRIC, stats_attack, stats_modif,20);
             break;
         case COUP_D_JUS :
             break;

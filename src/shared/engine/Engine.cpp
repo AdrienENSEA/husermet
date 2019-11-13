@@ -39,7 +39,6 @@ namespace engine {
                     }
                     else {
                         int r = rand() % 2;
-                        std::cout << r << std::endl;
                         if (r==0) {
                             auto it = commands.begin()+i;
                             commands.insert(it, command);

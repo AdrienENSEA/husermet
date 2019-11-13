@@ -24,21 +24,21 @@ namespace engine {
     int AttackCommand::damage(state::State &state) {
         int d = 0;
         if (state.getPokemon(pokemon).getAttack(attack).getStatsAttack().category == 1) {
-            std::cout << "attaque physique" << std::endl;
+            //std::cout << "attaque physique" << std::endl;
             float cm = sw(state.getPokemon(pokemon).getAttack(attack).getType(),state.getPokemon(pokemon_target).getType()) * stab(state.getPokemon(pokemon).getAttack(attack).getType(),state.getPokemon(pokemon).getType() ); //1.5 si STAB + 0.5 si resistance + 1.5 si faiblesse + effet objet/climat
             //std::cout << "cm" << cm << std::endl;
             d = (state.getPokemon(pokemon).getStats().attack*state.getPokemon(pokemon).getAttack(attack).getStatsAttack().power/state.getPokemon(pokemon_target).getStats().defense/50+2)*cm;
             return d;
         }
         else if (state.getPokemon(pokemon).getAttack(attack).getStatsAttack().category == 2) {
-            std::cout << "attaque spéciale" << std::endl;
+            //std::cout << "attaque spéciale" << std::endl;
             float cm = sw(state.getPokemon(pokemon).getAttack(attack).getType(),state.getPokemon(pokemon_target).getType()) * stab(state.getPokemon(pokemon).getAttack(attack).getType(),state.getPokemon(pokemon).getType() ); //1.5 si STAB + 0.5 si resistance + 1.5 si faiblesse + effet objet/climat
             //std::cout << "cm" << cm << std::endl;
             d = (state.getPokemon(pokemon).getStats().sp_attack*state.getPokemon(pokemon).getAttack(attack).getStatsAttack().power/state.getPokemon(pokemon_target).getStats().sp_defense/50+2)*cm;
             return d;
         }
         else if (state.getPokemon(pokemon).getAttack(attack).getStatsAttack().category == 3) {
-            std::cout << "attaque de statut" << std::endl;
+            //std::cout << "attaque de statut" << std::endl;
             return d;
         }
         return 0;
@@ -56,7 +56,6 @@ namespace engine {
         bool im = false;
         switch (at) {
             case state::Type::FIRE :
-            std::cout << "feu"<< std::endl;
                 for (uint i =0 ; i<df.size(); i++ ){
                     switch (df.at(i)) {
                         case state::Type::GRASS : 
@@ -76,7 +75,6 @@ namespace engine {
                 }
                 break;
             case state::Type::WATER :
-            std::cout << "eau"<< std::endl;
                 for (uint i =0 ; i<df.size(); i++ ){
                     switch (df.at(i)) {
                         case state::Type::FIRE : 
@@ -96,7 +94,6 @@ namespace engine {
                 }
                 break;
             case state::Type::GRASS :
-            std::cout << "plante" << std::endl;
                 for (uint i =0 ; i<df.size(); i++ ){
                     switch (df.at(i)) {
                         case state::Type::WATER : 
@@ -118,7 +115,6 @@ namespace engine {
                 }
                 break;
             case state::Type::ELECTRIC:
-                std::cout << "elec" << std::endl;
                 for (uint i =0 ; i<df.size(); i++ ){
                     switch (df.at(i)) {
                         case state::Type::WATER : 

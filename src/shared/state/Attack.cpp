@@ -59,7 +59,6 @@ int Attack::getPP() const{
 void Attack::modifPP(int pp) {
     if (this->pp + pp > 0) this->pp += pp;
 	else this->pp = 0;
-	std::cout<< "ex a" << std::endl;
 }
 void Attack::setPP(int pp) {
 	if (pp>0) this->pp = pp;

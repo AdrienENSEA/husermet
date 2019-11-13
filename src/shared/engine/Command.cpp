@@ -36,7 +36,6 @@ namespace engine {
     }
     void Command::setAttack(int attack) {
         this->attack = attack;
-        //priority = state.getPokemon(0).getAttack(attack).getStatsAttack().priority;
     }
     int Command::getPriority() const {
         return priority;

@@ -33,7 +33,7 @@ namespace render {
                 name.setPosition(290,200);
                 level.setPosition(450,200); 
                 slifebar.setPosition(270+112,200+20); 
-                hp.setPosition(270+110,200+30); 
+                hp.setPosition(270+110,200+30);
                 hp_max.setPosition(270+180,200+30); break;
             case 1:
                 sinfo.setPosition(280,260); 
@@ -95,27 +95,27 @@ namespace render {
     }
     
     void InfoRenderer::setTexts(state::Pokemon& pokemon) {
-        this->setFont();
-        
+        //this->setFont();
+        name.setFont(font);
         name.setString(pokemon.getName());
         name.setCharacterSize(12);
         name.setColor(sf::Color::Black);
-        name.setFont(font);
         
+        level.setFont(font);
         level.setString("100");
         level.setCharacterSize(12);
         level.setColor(sf::Color::Black);
-        level.setFont(font);  
-        
-        hp.setString(to_string(pokemon.getStats().pv));
+          
+        hp.setFont(font);  
+        hp.setString(to_string(pokemon.getPV()));
         hp.setCharacterSize(12);
         hp.setColor(sf::Color::White);
-        hp.setFont(font);  
         
+        hp_max.setFont(font);
         hp_max.setString(to_string(pokemon.getStats().pv));
         hp_max.setCharacterSize(12);
         hp_max.setColor(sf::Color::White);
-        hp_max.setFont(font);
+        
     }
     
     void InfoRenderer::draw(sf::RenderWindow& window) const {

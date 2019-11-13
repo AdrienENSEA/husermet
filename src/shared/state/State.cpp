@@ -3,7 +3,7 @@
 
 namespace state {
 
-State::State (std::vector <Pokemon> battle, TypeWeather weather, TypeTerrain terrain, int pv, std::vector<int> pp) : battle(battle), weather(weather), terrain(terrain), pv(pv), pp(pp){
+State::State (std::vector <Pokemon> battle, TypeWeather weather, TypeTerrain terrain) : battle(battle), weather(weather), terrain(terrain) {
 
 }
 

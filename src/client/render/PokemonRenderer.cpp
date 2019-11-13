@@ -50,9 +50,9 @@ namespace render {
         info.setSprite(position);
     }
     
-    void PokemonRenderer::setInfo(state::Pokemon pokemon) {
+    void PokemonRenderer::setInfo(state::Pokemon& pokemon) {
         info.setTexts(pokemon);
-        info.setLifeBar(pokemon.getStats().pv);
+        info.setLifeBar(pokemon.getPV());
     }
     
     void PokemonRenderer::makeTransparent(bool transparent) {
