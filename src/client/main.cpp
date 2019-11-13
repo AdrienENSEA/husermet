@@ -32,17 +32,17 @@ int main(int argc, char* argv[])
 	    if (string(argv[1]) == "state") {
 		    cout << "Veillez utiliser les commandes make unittest et make code-coverage depuis le dossier build" << endl;
 	    }
-        if (string(argv[1]) == "render") {
+        if (string(argv[1]) == "render") {/*
             cout << "Affichage d'un état" << endl;
             Pokemon p;
             // seul un nombre réduit de pokemon sont codés : groudon, kyogre, rayquaza, leveinard
             Pokemon groudon = PokemonFactory::createPokemon(GROUDON);
             Pokemon kyogre = PokemonFactory::createPokemon(KYOGRE);
-            std::vector <Pokemon> battle {kyogre, p, p, p, p, p, groudon, p, p, p, p, p};
+            std::vector <Pokemon> battle {kyogre, kyogre, p, p, p, p, groudon, groudon, p, p, p, p};
             // le terrain PSYCHIC peut etre remplacé par GRASSY, MISTY ou ELECTRIK
             State s(battle, SUN, PSYCHIC);
 		    Scene scene1;
-            scene1.draw(s);
+            scene1.draw(s);*/
         }
         if (string(argv[1]) == "engine") {
             cout << "Affichage de l'état initial" << endl;
