@@ -16,6 +16,26 @@ namespace engine {
             AttackCommand a(pokemon, pokemon_target, attack);
             a.execute(state);
         }
+        if (commandID == 3) {
+            /*
+            int i=0;
+            while (state.getPokemon(i).getPV()==0) {
+                if (i==5) {
+                    state.set(0);
+                    break;
+                }
+                else i++;
+            }
+            i=6;
+            while (state.getPokemon(i).getPV()==0) {
+                if (i==11) {
+                    state.set(1);
+                    break;
+                }
+                else i++;
+            }*/
+            
+        }
     }
 
     // Setters and Getters

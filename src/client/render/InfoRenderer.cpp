@@ -94,7 +94,7 @@ namespace render {
         
     }
     
-    void InfoRenderer::setTexts(state::Pokemon& pokemon) {
+    void InfoRenderer::setTexts(state::Pokemon& pokemon, int joueur) {
         //this->setFont();
         name.setFont(font);
         name.setString(pokemon.getName());
@@ -105,7 +105,7 @@ namespace render {
         level.setString("100");
         level.setCharacterSize(12);
         level.setColor(sf::Color::Black);
-          
+          if (joueur ==0) {
         hp.setFont(font);  
         hp.setString(to_string(pokemon.getPV()));
         hp.setCharacterSize(12);
@@ -114,7 +114,7 @@ namespace render {
         hp_max.setFont(font);
         hp_max.setString(to_string(pokemon.getStats().pv));
         hp_max.setCharacterSize(12);
-        hp_max.setColor(sf::Color::White);
+        hp_max.setColor(sf::Color::White);}
         
     }
     

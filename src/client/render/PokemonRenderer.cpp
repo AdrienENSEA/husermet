@@ -50,8 +50,8 @@ namespace render {
         info.setSprite(position);
     }
     
-    void PokemonRenderer::setInfo(state::Pokemon& pokemon) {
-        info.setTexts(pokemon);
+    void PokemonRenderer::setInfo(state::Pokemon& pokemon, int joueur) {
+        info.setTexts(pokemon, joueur);
         info.setLifeBar(pokemon.getPV());
     }
     

@@ -63,10 +63,25 @@ void Scene::draw (state::State& state) {
                     x = event.mouseButton.x;
                     y = event.mouseButton.y;
                     //std::cout << x << y << std::endl;
-                    std::cout << "mouse x: " << event.mouseButton.x << std::endl;
-                    std::cout << "mouse y: " << event.mouseButton.y << std::endl;
-                    setCommand(state, e, x, y);
-                    DrawRefresh(window, state);
+                    std::cout << "mouse x: " << x << std::endl;
+                    std::cout << "mouse y: " << y << std::endl;
+                    
+                    if(state.getPokemon(0).getPV()==0 || state.getPokemon(1).getPV()==0 || state.getPokemon(6).getPV()==0 || state.getPokemon(7).getPV()==0) {
+                        
+                        std::cout << "pokemon ko" << "x"<< x<< "y"<<y <<"poke"<<convertP(x,y);//<<"pv" <<state.getPokemon(convertP(event.mouseButton.x,event.mouseButton.y)).getPV()<< std::endl;
+                        x = event.mouseButton.x;
+                        y = event.mouseButton.y;
+                        while (window.pollEvent(event) && event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left && x>390 && y>380 && state.getPokemon(convertP(event.mouseButton.x,event.mouseButton.y)).getPV()!=0) {
+                            std::cout << "while waitEvent" << std::endl;
+                            setCommand(state,e,x,y);
+                            DrawRefresh(window, state);
+                        }
+
+                    }
+                    else {
+                        setCommand(state, e, x, y);
+                        DrawRefresh(window, state);
+                    }
                 }
             }
         }
@@ -75,6 +90,7 @@ void Scene::draw (state::State& state) {
         window.display();
 
 /*/////////////////////  Affichage des différents états \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*/
+/*
         if(tmp==0) {
             sleep(5);
             setCommand(state, e, 425,430);
@@ -106,7 +122,7 @@ void Scene::draw (state::State& state) {
             std::cout << "PV du pokémon ennemi faible après de nombreuses attaques" << std::endl;
             tmp++;
         }
-        
+       */
 /*///////////////////////////////////////\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*/
     }
 
@@ -166,78 +182,28 @@ void Scene::draw (state::State& state) {
     }
 
     void Scene::setCommand(state::State& state, engine::Engine& e, int x, int y) {
-        if (y>380) {
-            if (x< 200 && y<440 && y >370) {
-                if (state.getPokemon(0).getAttack(0).getPP()==0) return;
-                engine::Command a(2);
-                a.setPokemon(0);
-                a.setPokemon_target(6);
-                a.setAttack(0);
-                a.setPriority(state.getPokemon(0).getAttack(0).getStatsAttack().priority);
-                e.addCommand(a, state);
-            }
-            else if (x<390 && x> 200 && y<440 && y >370) {
-                if (state.getPokemon(0).getAttack(1).getPP()==0) return;
-                engine::Command a(2);
-                a.setPokemon(0);
-                a.setPokemon_target(6);
-                a.setAttack(1);
-                a.setPriority(state.getPokemon(0).getAttack(1).getStatsAttack().priority);
-                e.addCommand(a, state);
-            }
-            else if (x< 200 && y >440) {
-                if (state.getPokemon(0).getAttack(2).getPP()==0) return;
-                engine::Command a(2);
-                a.setPokemon(0);
-                a.setPokemon_target(6);
-                a.setAttack(2);
-                a.setPriority(state.getPokemon(0).getAttack(2).getStatsAttack().priority);
-                e.addCommand(a, state);
-            }
-            else if (x<390 && x> 200 && y >440) {
-                if (state.getPokemon(0).getAttack(3).getPP()==0) return;
-                engine::Command a(2);
-                a.setPokemon(0);
-                a.setPokemon_target(6);
-                a.setAttack(3);
-                a.setPriority(state.getPokemon(0).getAttack(3).getStatsAttack().priority);
-                e.addCommand(a, state);
-            }
+        if (y>380 && x<=390) {
+            int att = convertA(x,y);
+            if (state.getPokemon(0).getAttack(att).getPP()==0) return;
+            engine::Command a(2);
+            a.setPokemon(0);
+            a.setPokemon_target(6);
+            a.setAttack(att);
+            a.setPriority(state.getPokemon(0).getAttack(att).getStatsAttack().priority);
+            e.addCommand(a, state);
+        }
 
-            else if (x< 450 && x> 390 && y<420 && y >380) return;
-            else if (x< 510 && x> 450 && y<420 && y >380) return;
-            else if (x< 450 && x> 390 && y<460 && y >420) {
-                //if (state.getPokemon(3).getPV()==0) return;
-                engine::Command c(1);
-                c.setPokemon(0);
-                c.setPokemon_target(2);
-                c.setPriority(6);
-                e.addCommand(c,state);
-            }
-            else if (x< 510 && x> 450 && y<460 && y >420) {
-                if (state.getPokemon(4).getPV()==0) return;
-                engine::Command c(1);
-                c.setPokemon(0);
-                c.setPokemon_target(3);
-                c.setPriority(6);
-                e.addCommand(c,state);
-            }
-            else if (x< 450 && x> 390 && y >460) {
-                if (state.getPokemon(3).getPV()==0) return;
-                engine::Command c(1);
-                c.setPokemon(0);
-                c.setPokemon_target(4);
-                c.setPriority(6);
-                e.addCommand(c,state);
-            }
-            else if (x< 510 && x> 450 && y >460) {
-                if (state.getPokemon(4).getPV()==0) return;
-                engine::Command c(1);
-                c.setPokemon(0);
-                c.setPokemon_target(5);
-                c.setPriority(6);
-                e.addCommand(c,state);
-            }
+        else if (x< 450 && x> 390 && y<420 && y >380) return;
+        else if (x< 510 && x> 450 && y<420 && y >380) return;
+        else if (y>380 && x> 390) {
+            int poke = convertP(x,y);
+            //if (state.getPokemon(poke).getPV()==0) return;
+            engine::Command c(1);
+            c.setPokemon(0);
+            c.setPokemon_target(poke);
+            c.setPriority(6);
+            e.addCommand(c,state);
+        }
             engine::Command a1(2);
             std::cout << state.getPokemon(6).getName() << " ennemi attaque " << state.getPokemon(6).getAttack(0).getName() << std::endl;
             a1.setPriority(state.getPokemon(6).getAttack(0).getStatsAttack().priority);
@@ -252,7 +218,7 @@ void Scene::draw (state::State& state) {
             a2.setPokemon_target(1);
             a2.setAttack(1);
             e.addCommand(a2, state);    
-        }
+        
         e.runCommands(state); 
     }
 
@@ -263,8 +229,9 @@ void Scene::draw (state::State& state) {
         pokemon4.setTexture(state.getPokemon(7).getID(), 0);
         pokemon1.setInfo(state.getPokemon(0));
         pokemon2.setInfo(state.getPokemon(1));
-        pokemon3.setInfo(state.getPokemon(6));
-        pokemon4.setInfo(state.getPokemon(7));
+        pokemon3.setInfo(state.getPokemon(6),1);
+        pokemon4.setInfo(state.getPokemon(7),1);
+        
 
         window.draw(background);
         //interface.drawTexts(window);
@@ -272,6 +239,22 @@ void Scene::draw (state::State& state) {
         pokemon2.draw(window);
         pokemon3.draw(window);
         pokemon4.draw(window);
+    }
+
+    int Scene::convertP(int x, int y) {
+        if (x< 450 && x> 390 && y<460 && y >420) return 2;
+        else if (x< 510 && x> 450 && y<460 && y >420) return 3;
+        else if (x< 450 && x> 390 && y >460) return 4;
+        else if (x< 510 && x> 450 && y >460) return 5;
+        return -1;
+    }
+
+    int Scene::convertA(int x, int y) {
+        if (x< 200 && y<440 && y >370) return 0;
+        else if (x<390 && x> 200 && y<440 && y >370) return 1;
+        else if (x< 200 && y >440) return 2;
+        else if (x<390 && x> 200 && y >440) return 3;
+        return -1;
     }
        
 }
