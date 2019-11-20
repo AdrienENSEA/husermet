@@ -13,10 +13,10 @@ State::State() {
 	terrain = NONE_G;
 }
 
-void State::changeTeam (int fighter, int back, int player) {
-    Pokemon temp = battle.at(player + fighter);
-    battle.at(player + fighter) = battle.at(player + back);
-    battle.at(player + back) = temp;
+void State::changeTeam (int fighter, int back) {
+    Pokemon temp = battle.at(fighter);
+    battle.at(fighter) = battle.at(back);
+    battle.at(back) = temp;
 }
 TypeTerrain State::getTypeTerrain () const {
     return terrain;

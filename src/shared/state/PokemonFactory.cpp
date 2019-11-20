@@ -14,7 +14,7 @@ Pokemon PokemonFactory::createPokemon(IdPokemon id_pokemon) {
         case GROUDON :
             types.push_back(GROUND);
             stats_pokemon = {100, 150, 140, 100, 90, 90};
-            pokemon = new Pokemon(GROUDON, "Groudon", none, FRAPPE_ATLAS, E_COQUE, E_COQUE, E_COQUE, 1, types, NONE_S, stats_pokemon, 0, 100);
+            pokemon = new Pokemon(GROUDON, "Groudon", none, FRAPPE_ATLAS, TONNERRE, HYDROCANON, ABRI, 1, types, NONE_S, stats_pokemon, 0, 100);
             break;
         case KYOGRE :
             types.push_back(WATER);
@@ -24,12 +24,12 @@ Pokemon PokemonFactory::createPokemon(IdPokemon id_pokemon) {
         case RAYQUAZA :
             types.push_back(DRAGON);
             stats_pokemon = {100, 100, 90, 150, 140, 90};
-            pokemon = new Pokemon(RAYQUAZA, "Rayquaza", none, TONNERRE, ABRI, CHANGE_ECLAIR, DANSE_PLUIE, 1, types, NONE_S, stats_pokemon, 0,100);
+            pokemon = new Pokemon(RAYQUAZA, "Rayquaza", none, TONNERRE, ABRI, CHANGE_ECLAIR, HYDROCANON, 1, types, NONE_S, stats_pokemon, 0,100);
             break;
         case LEVEINARD :
             types.push_back(NORMAL);
             stats_pokemon = {100, 100, 90, 150, 140, 90};
-            pokemon = new Pokemon(LEVEINARD, "Leveinard", none, E_COQUE, E_COQUE, E_COQUE, E_COQUE, 1, types, NONE_S, stats_pokemon, 0,100);
+            pokemon = new Pokemon(LEVEINARD, "Leveinard", none, E_COQUE, ABRI, TOXIK, TONNERRE, 1, types, NONE_S, stats_pokemon, 0,100);
             break;
         case ECTOPLASMA :
             break;
