@@ -17,7 +17,7 @@ namespace engine {
         
     }
     void Engine::addCommand (Command command, state::State& state) {
-        //std::cout << "size debut" << commands.size() << std::endl;
+        std::cout << "size debut" << commands.size() << std::endl;
         if (commands.size() == 0) {
             commands.insert(commands.begin(), command);
             //std::cout << "size fin vide" << commands.size() << std::endl;
@@ -61,6 +61,7 @@ namespace engine {
                 }
             }
         }
+        std::cout << "size fin" << commands.size() << std::endl;
         
     }
     void Engine::undoCommand () {

@@ -19,6 +19,8 @@ namespace engine {
 
         state.getPokemon(pokemon).getAttack(attack).modifPP(-1);
         state.getPokemon(pokemon_target).modifPV(-d);
+        if (pokemon<6) std::cout << p.getName() << " attaque " << a.getName() << " sur " << p_t.getName() << " ennemi " << std::endl;
+        if (pokemon>5) std::cout << p.getName() << " ennemi attaque " << a.getName() << " sur " << p_t.getName() << std::endl;
     }
     
     int AttackCommand::damage(state::State &state) {

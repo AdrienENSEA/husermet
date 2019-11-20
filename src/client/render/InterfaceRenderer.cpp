@@ -42,17 +42,27 @@ namespace render {
         rectangle2.setOutlineColor(sf::Color(0, 150, 100));
         window.draw(rectangle2);
     }
+
+    void InterfaceRenderer::drawSelect(sf::RenderWindow& window, int position) {
+        sf::RectangleShape rectangle(sf::Vector2f(50, 35));
+        rectangle.setPosition(400+(position%2)*50,375);
+        rectangle.setOutlineThickness(3);
+        rectangle.setOutlineColor(sf::Color(150, 100, 250));
+        window.draw(rectangle);
+    }
     
     bool InterfaceRenderer::setFont(std::string pathfont){
         if (!font.loadFromFile("../res/fontpokemon.ttf")) return false;
         return true;
     }
     
-    void InterfaceRenderer::setText(std::string text1, int width, int height, int size){
+    void InterfaceRenderer::setText(std::string text1, int width, int height, int size, int thickness){
         text.setFont(font);
         text.setString(text1);
         text.setCharacterSize(size);
         text.setPosition(width, height);
+        text.setScale(thickness, thickness);
+        if (thickness!=1) text.setStyle(sf::Text::Bold);
         text.setColor(sf::Color::Black);
     }
     

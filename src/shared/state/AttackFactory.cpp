@@ -64,6 +64,12 @@ Attack AttackFactory::createAttack(IdAttack id_attack) {
             break;
         case CAGE_ECLAIR :
             break;
+        case HYDROCANON :
+            stats_attack = {20, 300, 100, 1, 0, 1};
+            stats_pokemon = {0, 0, 0, 0, 0, 0};
+            stats_modif.setModifStats(stats_pokemon);
+            attack = new Attack(HYDROCANON, "Hydrocanon", "Après son attaque, le lanceur revient à toute vitesse et change de place avec un Pokémon de l'équipe prêt au combat.", WATER, stats_attack, stats_modif,20);
+            break;
         default:
             attack = new Attack();
             break;
