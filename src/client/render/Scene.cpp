@@ -89,7 +89,7 @@ void Scene::draw (state::State& state) {
                         std::cout << "mouse y: " << y << std::endl;
                         if (y>380 && x<=390) {
                             if (state.getPokemon(p).getAttack(convertA(x, y)).getStatsAttack().scope==-1) {
-                                setCommand(state, e, window, x, y, target);
+                                if (state.getPokemon(p).getPV()==0) setCommand(state, e, window, x, y, target);
                             }
                             else {
                                 if (a%2 == 0) a++;
@@ -99,7 +99,7 @@ void Scene::draw (state::State& state) {
                             
                         }
                         if (x>390 && y>380) {
-                            setCommand(state, e, window, x, y);
+                            if (state.getPokemon(p).getPV()!=0) setCommand(state, e, window, x, y);
                         }
                         /*
                         if (y>380 && x<=390) {
@@ -122,12 +122,19 @@ void Scene::draw (state::State& state) {
         }
 
         if(state.getPokemon(0).getPV()==0) {
-            if (state.getPokemon(2).getPV()==0 && state.getPokemon(3).getPV()==0 && state.getPokemon(4).getPV()==0 && state.getPokemon(5).getPV()==0) break;
-            std::cout << state.getPokemon(0).getName() << "ennemi est KO" << std::endl;
+            std::cout << state.getPokemon(0).getName() << " est KO" << std::endl;
+            if (state.getPokemon(2).getPV()==0 && state.getPokemon(3).getPV()==0 && state.getPokemon(4).getPV()==0 && state.getPokemon(5).getPV()==0) {
+                if (state.getPokemon(0).getPV()==0 && state.getPokemon(1).getPV()==0) {
+                    std::cout << "Défaite" << std::endl;
+                    window.close();
+                }
+                r=2;
+                break;
+            }  
             while (window.waitEvent(event) && event.mouseButton.button == sf::Mouse::Left && event.mouseButton.x>390 && event.mouseButton.y>410 && state.getPokemon(convertP(event.mouseButton.x,event.mouseButton.y)).getPV()!=0) {
-                std::cout << "while waitEvent" << state.getPokemon(convertP(event.mouseButton.x,event.mouseButton.y)).getPV() << std::endl;
+                //std::cout << "while waitEvent" << state.getPokemon(convertP(event.mouseButton.x,event.mouseButton.y)).getPV() << std::endl;
                 if (state.getPokemon(convertP(event.mouseButton.x,event.mouseButton.y)).getPV()!=0) {
-                    std::cout << "if waitEvent" << event.mouseButton.x << event.mouseButton.y << std::endl;
+                    //std::cout << "if waitEvent" << event.mouseButton.x << event.mouseButton.y << std::endl;
                     setCommand(state,e,window,event.mouseButton.x,event.mouseButton.y);
                 }
             }
@@ -136,12 +143,19 @@ void Scene::draw (state::State& state) {
             window.display();
         }
         if(state.getPokemon(1).getPV()==0) {
-            if (state.getPokemon(2).getPV()==0 && state.getPokemon(3).getPV()==0 && state.getPokemon(4).getPV()==0 && state.getPokemon(5).getPV()==0) break;
-            std::cout << state.getPokemon(1).getName() << "ennemi est KO" << std::endl;
+            std::cout << state.getPokemon(1).getName() << " est KO" << std::endl;
+            if (state.getPokemon(2).getPV()==0 && state.getPokemon(3).getPV()==0 && state.getPokemon(4).getPV()==0 && state.getPokemon(5).getPV()==0) {
+                if (state.getPokemon(0).getPV()==0 && state.getPokemon(1).getPV()==0) {
+                    std::cout << "Défaite" << std::endl;
+                    window.close();
+                }
+                r=2;
+                break;
+            }                
             while (window.waitEvent(event) && event.mouseButton.button == sf::Mouse::Left && event.mouseButton.x>390 && event.mouseButton.y>410 && state.getPokemon(convertP(event.mouseButton.x,event.mouseButton.y)).getPV()!=0) {
-                std::cout << "while waitEvent" << state.getPokemon(convertP(event.mouseButton.x,event.mouseButton.y)).getPV() << std::endl;
+                //std::cout << "while waitEvent" << state.getPokemon(convertP(event.mouseButton.x,event.mouseButton.y)).getPV() << std::endl;
                 if (state.getPokemon(convertP(event.mouseButton.x,event.mouseButton.y)).getPV()!=0) {
-                    std::cout << "if waitEvent" << event.mouseButton.x << event.mouseButton.y << std::endl;
+                    //std::cout << "if waitEvent" << event.mouseButton.x << event.mouseButton.y << std::endl;
                     setCommand(state,e,window,event.mouseButton.x,event.mouseButton.y);
                 }
             }
@@ -150,26 +164,52 @@ void Scene::draw (state::State& state) {
             window.display();
         }
         if(state.getPokemon(6).getPV()==0) {
-            if (state.getPokemon(8).getPV()==0 && state.getPokemon(9).getPV()==0 && state.getPokemon(10).getPV()==0 && state.getPokemon(11).getPV()==0) break;
-            std::cout << state.getPokemon(6).getName() << "ennemi est KO" << std::endl;
-            engine::Command c(1);
-            int target = rand()%4+2;
-            c.setPriority(6);
-            c.setPokemon(6);
-            c.setPokemon_target(target);
-            e.addCommand(c, state); 
-            e.runCommands(state); 
+            std::cout << state.getPokemon(6).getName() << " ennemi est KO" << std::endl;
+            if (state.getPokemon(6).getPV()==0 && state.getPokemon(7).getPV()==0 && state.getPokemon(8).getPV()==0 && state.getPokemon(9).getPV()==0 && state.getPokemon(10).getPV()==0 && state.getPokemon(11).getPV()==0) {
+                std::cout << "Victoire" << std::endl;
+                window.close();
+            }
+            else {
+                int i=8;
+                while(state.getPokemon(i).getPV()==0) {
+                    if (i==11) {
+                        std::cout << "Victoire" << std::endl;
+                        window.close();
+                    }
+                    i++;
+                }
+                std::cout << i << std::endl;
+                engine::Command c(1);
+                c.setPriority(6);
+                c.setPokemon(6);
+                c.setPokemon_target(i);
+                e.addCommand(c, state); 
+                e.runCommands(state); 
+            }
         }
         if(state.getPokemon(7).getPV()==0) {
-            if (state.getPokemon(8).getPV()==0 && state.getPokemon(9).getPV()==0 && state.getPokemon(10).getPV()==0 && state.getPokemon(11).getPV()==0) break;
-            std::cout << state.getPokemon(7).getName() << "ennemi est KO" << std::endl;
-            engine::Command c(1);
-            int target = rand()%4+2;
-            c.setPriority(6);
-            c.setPokemon(7);
-            c.setPokemon_target(target);
-            e.addCommand(c, state); 
-            e.runCommands(state); 
+            std::cout << state.getPokemon(7).getName() << " ennemi est KO" << std::endl;
+            if (state.getPokemon(6).getPV()==0 && state.getPokemon(7).getPV()==0 && state.getPokemon(8).getPV()==0 && state.getPokemon(9).getPV()==0 && state.getPokemon(10).getPV()==0 && state.getPokemon(11).getPV()==0) {
+                std::cout << "Victoire" << std::endl;
+                window.close();
+            }
+            else {
+                int i=8;
+                while(state.getPokemon(i).getPV()==0) {
+                    if (i==11) {
+                        std::cout << "Victoire" << std::endl;
+                        window.close();
+                    }
+                    i++;
+                }
+                std::cout << i << std::endl;
+                engine::Command c(1);
+                c.setPriority(6);
+                c.setPokemon(7);
+                c.setPokemon_target(i);
+                e.addCommand(c, state); 
+                e.runCommands(state); 
+            }
         }
 
                     
@@ -276,6 +316,7 @@ void Scene::draw (state::State& state) {
         if (y>380 && x<=390) {
             int att = convertA(x,y);
             if (state.getPokemon(p).getAttack(att).getPP()==0) return;
+            if (state.getPokemon(p).getPV()==0) return;
             engine::Command a(2);
             a.setPokemon(p);
             a.setPokemon_target(target);
