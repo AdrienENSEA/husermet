@@ -17,3 +17,10 @@ $ make unittest depuis le dossier build <br/>
 
 Pour vérifier la couverture de code : 
 $ make code-coverage depuis le dossier build <br/>
+
+2.Final
+```console
+$ cd build/
+$ make
+$ ./../bin/client
+```
