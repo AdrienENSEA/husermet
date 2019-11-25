@@ -34,11 +34,11 @@ $ ./../bin/client render
 ```
 
 ## 2.2 Règles de changement d’états et moteur de jeu
-Diagramme de classes pour le moteur de jeu
-Comment jouer ? <br>
+Diagramme de classes pour le moteur de jeu <br>
+Comment jouer ?
 1. Choisir une attaque pour le premier Pokémon avec la souris
 2. Choisir une cible avec les flèches droite ou gauche
-3. Faire de même pour le deuxième Pokémon
+3. Faire de même pour le deuxième Pokémon <br>
 On peut aussi choisir de changer de Pokémon en cliquant sur le Pokémon à échanger
 ```console
 $ ./../bin/client engine
