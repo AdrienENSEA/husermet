@@ -2,4 +2,4 @@
 
 using namespace state;
 
-StateEvent::StateEvent(StateEventID se):id(id){}
+StateEvent::StateEvent(StateEventID id): id{id} {}

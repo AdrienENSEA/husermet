@@ -40,6 +40,7 @@ Comment jouer ?
 2. Choisir une cible avec les flèches droite ou gauche
 3. Faire de même pour le deuxième Pokémon <br>
 On peut aussi choisir de changer de Pokémon en cliquant sur le Pokémon à échanger
+On peut annuler son choix tant que l'on a pas choisi l'action des deux Pokémon. Pour cela il suffit de cliquer sur le Pokémon dont on veut choisir l'action.
 ```console
 $ ./../bin/client engine
 ```

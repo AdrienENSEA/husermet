@@ -92,10 +92,12 @@ namespace render {
         return true;
         }
 
-    void InterfaceRenderer::setPokemon (float x, float y) {
+    void InterfaceRenderer::setPokemon (float x, float y, int ko) {
         pokemon.setTexture(tpokemon);
         pokemon.setPosition(x,y);
         pokemon.setScale(SCALE_SPRITE_MIN, SCALE_SPRITE_MIN);
+        if (ko) pokemon.setColor(sf::Color(50,50,50,250));
+        else pokemon.setColor(sf::Color(255,255,255,255));
     }
     void InterfaceRenderer::setIdPokemon (int idpokemon) {
         this->idpokemon = idpokemon;

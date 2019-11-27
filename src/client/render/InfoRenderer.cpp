@@ -19,8 +19,6 @@ namespace render {
         }
         else
             cout << "Error value back in setTexture InfoRenderer" << endl;
-        
-        //this->setLifeBar();
     }
     
     void InfoRenderer::setSprite(int position) {
@@ -70,15 +68,15 @@ namespace render {
             cout << "Error load font" << endl;
     }
     
-    void InfoRenderer::setLifeBar(int pv) {
+    void InfoRenderer::setLifeBar(int hp, int hp_max) {
         // high life
-        if(pv>100) {
+        if(hp>=hp_max/2) {
             if (!tlifebar.loadFromFile("../res/hud.png", sf::IntRect(59, 7, 48, 1)))
                 cout << "Error load texture lifebar" << endl;
         }
                 
         // low life
-        else if(pv<30) {
+        else if(hp<hp_max/2) {
             if (!tlifebar.loadFromFile("../res/hud.png", sf::IntRect(59, 14, 48, 1)))
                 cout << "Error load texture lifebar" << endl;
         }
@@ -91,7 +89,7 @@ namespace render {
         }
                 
         slifebar.setTexture(tlifebar);
-        
+        slifebar.setTextureRect(sf::IntRect(0, 0, 48*hp/hp_max, 2));
     }
     
     void InfoRenderer::setTexts(state::Pokemon& pokemon, int joueur) {
@@ -131,8 +129,24 @@ namespace render {
         
     }
     
-    void InfoRenderer::displayDamage (state::State& state, sf::RenderWindow& window, int damage) {
-        //this->setSprite();
+    void InfoRenderer::displayDamage (state::State& state, sf::RenderWindow& window, int damage, int position) {
+        int hp, hp_max;
+        
+            hp = state.getPokemon(position).getPV();
+            hp_max = state.getPokemon(position).getStats().pv;
+            
+        /*for (int i = damage; i > 0; i--) {
+            this->setLifeBar(hp+i, hp_max);
+            this->hp.setString(to_string(hp+i));
+            this->draw(window);
+            window.display();
+            sf::sleep(sf::milliseconds(25));
+        }*/
+        
+        setLifeBar(hp, hp_max);
+        if (position <2) this->hp.setString(to_string(hp));
+        draw(window);
+        window.display();
     }
 }
 

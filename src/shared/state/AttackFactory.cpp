@@ -51,10 +51,10 @@ Attack AttackFactory::createAttack(IdAttack id_attack) {
             attack = new Attack(CHANGE_ECLAIR, "Change Eclair", "Après son attaque, le lanceur revient à toute vitesse et change de place avec un Pokémon de l'équipe prêt au combat.", ELECTRIC, stats_attack, stats_modif,20);
             break;
         case TONNERRE :
-            stats_attack = {20, 300, 100, 1, 0, 1};
+            stats_attack = {15, 90, 100, 2, 0, 1};
             stats_pokemon = {0, 0, 0, 0, 0, 0};
             stats_modif.setModifStats(stats_pokemon);
-            attack = new Attack(TONNERRE, "Tonnerre", "Après son attaque, le lanceur revient à toute vitesse et change de place avec un Pokémon de l'équipe prêt au combat.", ELECTRIC, stats_attack, stats_modif,20);
+            attack = new Attack(TONNERRE, "Tonnerre", "Après son attaque, le lanceur revient à toute vitesse et change de place avec un Pokémon de l'équipe prêt au combat.", ELECTRIC, stats_attack, stats_modif,15);
             break;
         case COUP_D_JUS :
             break;
@@ -65,10 +65,58 @@ Attack AttackFactory::createAttack(IdAttack id_attack) {
         case CAGE_ECLAIR :
             break;
         case HYDROCANON :
-            stats_attack = {20, 300, 100, 1, 0, 1};
+            stats_attack = {5, 110, 100, 2, 0, 1};
             stats_pokemon = {0, 0, 0, 0, 0, 0};
             stats_modif.setModifStats(stats_pokemon);
-            attack = new Attack(HYDROCANON, "Hydrocanon", "Après son attaque, le lanceur revient à toute vitesse et change de place avec un Pokémon de l'équipe prêt au combat.", WATER, stats_attack, stats_modif,20);
+            attack = new Attack(HYDROCANON, "Hydrocanon","", WATER, stats_attack, stats_modif,5);
+            break;
+        case MEGAFOUET :
+            stats_attack = {10, 120, 85, 1, 0, 1};
+            stats_pokemon = {0, 0, 0, 0, 0, 0};
+            stats_modif.setModifStats(stats_pokemon);
+            attack = new Attack(MEGAFOUET, "Megafouet", "", GRASS, stats_attack, stats_modif,10);
+            break;
+        case LAME_FEUILLE :
+            stats_attack = {15, 90, 100, 1, 0, 1};
+            stats_pokemon = {0, 0, 0, 0, 0, 0};
+            stats_modif.setModifStats(stats_pokemon);
+            attack = new Attack(LAME_FEUILLE, "Lame feuille", "", GRASS, stats_attack, stats_modif,15);
+            break;
+        case DEFLAGRATION :
+            stats_attack = {5, 110, 85, 2, 0, 1};
+            stats_pokemon = {0, 0, 0, 0, 0, 0};
+            stats_modif.setModifStats(stats_pokemon);
+            attack = new Attack(DEFLAGRATION, "Deflagration", "", FIRE, stats_attack, stats_modif,5);
+            break;
+        case EBULLITION :
+            stats_attack = {15, 80, 100, 2, 0, 1};
+            stats_pokemon = {0, 0, 0, 0, 0, 0};
+            stats_modif.setModifStats(stats_pokemon);
+            attack = new Attack(EBULLITION, "Ebullition", "", WATER, stats_attack, stats_modif,15);
+            break;
+        case LASER_GLACE :
+            stats_attack = {10, 90, 100, 2, 0, 1};
+            stats_pokemon = {0, 0, 0, 0, 0, 0};
+            stats_modif.setModifStats(stats_pokemon);
+            attack = new Attack(LASER_GLACE, "Laser Glace", "", ICE, stats_attack, stats_modif,10);
+            break;
+        case LUMINOCANON :
+            stats_attack = {10, 80, 100, 2, 0, 1};
+            stats_pokemon = {0, 0, 0, 0, 0, 0};
+            stats_modif.setModifStats(stats_pokemon);
+            attack = new Attack(LUMINOCANON, "Luminocanon", "", STEEL, stats_attack, stats_modif,10);
+            break;
+        case TELLURIFORCE :
+            stats_attack = {10, 90, 100, 2, 0, 1};
+            stats_pokemon = {0, 0, 0, 0, 0, 0};
+            stats_modif.setModifStats(stats_pokemon);
+            attack = new Attack(TELLURIFORCE, "Telluriforce", "", GROUND, stats_attack, stats_modif,15);
+            break;
+        case DRACO_METEORE :
+            stats_attack = {5, 130, 90, 2, 0, 1};
+            stats_pokemon = {0, 0, 0, 0, 0, 0};
+            stats_modif.setModifStats(stats_pokemon);
+            attack = new Attack(DRACO_METEORE, "Draco Meteore", "", DRAGON, stats_attack, stats_modif,5);
             break;
         default:
             attack = new Attack();

@@ -63,6 +63,12 @@ namespace engine {
     void Command::setPriority(int priority) {
         this->priority = priority;
     }
+    int Command::getCommandID() const {
+        return commandID;
+    }
+    void Command::setCommandID(int commandID) {
+        this->commandID = commandID;
+    }
 
 
 };

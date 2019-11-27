@@ -9,13 +9,16 @@ namespace engine {
         std::vector <Command> commands = {};
     }
 
-    void Engine::runCommands (state::State &state) {
+    void Engine::runCommands (state::State &state, std::vector<int>& order) {
         while (!commands.empty()) {
-            commands.at(0).execute(state);
+            if (state.getPokemon(commands.at(0).getPokemon()).getPV()!=0 || commands.at(0).getCommandID()==1) {
+                if (commands.at(0).getCommandID()==2) order.push_back(commands.at(0).getPokemon_target());
+                commands.at(0).execute(state);
+            }
             commands.erase(commands.begin());
         }   
-        
     }
+
     void Engine::addCommand (Command command, state::State& state) {
         //std::cout << "size debut" << commands.size() << std::endl;
         if (commands.size() == 0) {
@@ -38,6 +41,7 @@ namespace engine {
                         break;
                     }
                     else {
+                        srand (time(NULL));
                         int r = rand() % 2;
                         if (r==0) {
                             auto it = commands.begin()+i;
@@ -64,6 +68,7 @@ namespace engine {
         //std::cout << "size fin" << commands.size() << std::endl;
         
     }
+    
     void Engine::undoCommand () {
         commands.clear();
     }

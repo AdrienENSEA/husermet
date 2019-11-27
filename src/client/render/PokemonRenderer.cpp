@@ -13,11 +13,13 @@ namespace render {
     }
     
     void PokemonRenderer::draw (sf::RenderWindow& window) {
-        
         window.draw(pokemon);
         info.draw(window);
     }
-    
+
+    void PokemonRenderer::drawP (sf::RenderWindow& window) {
+        window.draw(pokemon);
+    }
     
     bool PokemonRenderer::setTexture (int idpokemon, int back) {
         if (!tpokemon.loadFromFile("../res/spritesheet2.png", sf::IntRect(LENGTH_SPRITE*2*(idpokemon-1)+LENGTH_SPRITE*back, 0, LENGTH_SPRITE, LENGTH_SPRITE))){
@@ -52,9 +54,13 @@ namespace render {
     
     void PokemonRenderer::setInfo(state::Pokemon& pokemon, int joueur) {
         info.setTexts(pokemon, joueur);
-        info.setLifeBar(pokemon.getPV());
+        info.setLifeBar(pokemon.getPV(), pokemon.getStats().pv);
     }
-    
+
+    InfoRenderer& PokemonRenderer::getInfo() {
+        return this->info;
+    }
+
     void PokemonRenderer::makeTransparent(bool transparent) {
         sf::Color color = pokemon.getColor();
         if (transparent) {
@@ -69,21 +75,22 @@ namespace render {
         pokemon.setColor(color);
     }
     
-    void PokemonRenderer::displayDamage (state::State& state, sf::RenderWindow& window) {
+    void PokemonRenderer::displayDamage (state::State& state, sf::RenderWindow& window, int damage, int position) {
         sf::Clock clock;
         sf::Time tim;
         bool shown = false;
         do {
             sf::sleep(sf::milliseconds(200));
-            this->makeTransparent(shown);
-            this->draw(window);
+            makeTransparent(shown);
+            draw(window);
             window.display();
             shown = !shown;
             tim = clock.getElapsedTime();
-        } while(tim.asSeconds()<1.8);
-        this->makeTransparent(false);
-        this->draw(window);
+        } while(tim.asSeconds()<1.0);
+        makeTransparent(false);
+        draw(window);
         window.display();
+        info.displayDamage(state, window, damage, position);
 
     } 
     
