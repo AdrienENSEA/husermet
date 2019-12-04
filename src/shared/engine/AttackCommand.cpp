@@ -27,14 +27,14 @@ namespace engine {
         int d = 0;
         if (state.getPokemon(pokemon).getAttack(attack).getStatsAttack().category == 1) {
             //std::cout << "attaque physique" << std::endl;
-            float cm = sw(state.getPokemon(pokemon).getAttack(attack).getType(),state.getPokemon(pokemon_target).getType()) * stab(state.getPokemon(pokemon).getAttack(attack).getType(),state.getPokemon(pokemon).getType() ); //1.5 si STAB + 0.5 si resistance + 1.5 si faiblesse + effet objet/climat
+            float cm = 5*sw(state.getPokemon(pokemon).getAttack(attack).getType(),state.getPokemon(pokemon_target).getType()) * stab(state.getPokemon(pokemon).getAttack(attack).getType(),state.getPokemon(pokemon).getType() ); //1.5 si STAB + 0.5 si resistance + 1.5 si faiblesse + effet objet/climat
             //std::cout << "cm" << cm << std::endl;
             d = (state.getPokemon(pokemon).getStats().attack*state.getPokemon(pokemon).getAttack(attack).getStatsAttack().power/state.getPokemon(pokemon_target).getStats().defense/50+2)*cm;
             return d;
         }
         else if (state.getPokemon(pokemon).getAttack(attack).getStatsAttack().category == 2) {
             //std::cout << "attaque spéciale" << std::endl;
-            float cm = sw(state.getPokemon(pokemon).getAttack(attack).getType(),state.getPokemon(pokemon_target).getType()) * stab(state.getPokemon(pokemon).getAttack(attack).getType(),state.getPokemon(pokemon).getType() ); //1.5 si STAB + 0.5 si resistance + 1.5 si faiblesse + effet objet/climat
+            float cm = 5*sw(state.getPokemon(pokemon).getAttack(attack).getType(),state.getPokemon(pokemon_target).getType()) * stab(state.getPokemon(pokemon).getAttack(attack).getType(),state.getPokemon(pokemon).getType() ); //1.5 si STAB + 0.5 si resistance + 1.5 si faiblesse + effet objet/climat
             //std::cout << "cm" << cm << std::endl;
             d = (state.getPokemon(pokemon).getStats().sp_attack*state.getPokemon(pokemon).getAttack(attack).getStatsAttack().power/state.getPokemon(pokemon_target).getStats().sp_defense/50+2)*cm;
             return d;

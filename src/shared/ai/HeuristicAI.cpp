@@ -52,8 +52,8 @@ namespace ai {
 
     int HeuristicAI::change(state::State& state) {
         int d;
-        int attack_opt = 0;
-        int target_opt = 0;
+        //int attack_opt = 0;
+        //int target_opt = 0;
         int d_max = 0;
         int pokemon_opt = 8;
         for (int pokemon=8; pokemon<12; pokemon++) {
@@ -61,12 +61,14 @@ namespace ai {
                 for (int attack=0; attack<4; attack++) {
                     if (state.getPokemon(pokemon).getAttack(attack).getPP()!=0) {
                         for (int target=0; target<2; target++) {
-                            d = damage(state.getPokemon(pokemon).getAttack(attack), state.getPokemon(pokemon), state.getPokemon(target));
-                            if (d > d_max) {
-                                d_max = d;
-                                attack_opt = attack;
-                                target_opt = target;
-                                pokemon_opt = pokemon;
+                            if (state.getPokemon(target).getPV()!=0) {
+                                d = damage(state.getPokemon(pokemon).getAttack(attack), state.getPokemon(pokemon), state.getPokemon(target));
+                                if (d > d_max) {
+                                    d_max = d;
+                                    //attack_opt = attack;
+                                    //target_opt = target;
+                                    pokemon_opt = pokemon;
+                                }
                             }
                         }
                     }
