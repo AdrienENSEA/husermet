@@ -18,7 +18,7 @@ Pokemon PokemonFactory::createPokemon(IdPokemon id_pokemon) {
             break;
         case KYOGRE :
             types.push_back(WATER);
-            stats_pokemon = {100, 100, 90, 150, 140, 90};
+            stats_pokemon = {100, 100, 90, 150, 140, 100};
             pokemon = new Pokemon(KYOGRE, "Kyogre", none, EBULLITION, TONNERRE, LASER_GLACE, HYDROCANON, 1, types, NONE_S, stats_pokemon, 0,100);
             break;
         case RAYQUAZA :

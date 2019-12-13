@@ -16,7 +16,7 @@ Scene::Scene () : height {512}, length {512} {
 }
 static int p, a, r, c;
 static std::vector<int> order = {};
-void Scene::draw (state::State& state) {
+void Scene::draw (state::State& state, int ai_type) {
     sf::RenderWindow window(sf::VideoMode(height, length), "Fight");
     int x, y;
     p=0;
@@ -56,8 +56,7 @@ void Scene::draw (state::State& state) {
         sf::Event event;
         int target;
         //window.setVerticalSyncEnabled(false);
-        
-
+/*
         if(state.getPokemon(0).getPV()==0 && r==0) {
             std::cout << state.getPokemon(0).getName() << " est KO" << std::endl;
             if (state.getPokemon(2).getPV()==0 && state.getPokemon(3).getPV()==0 && state.getPokemon(4).getPV()==0 && state.getPokemon(5).getPV()==0) {
@@ -72,7 +71,7 @@ void Scene::draw (state::State& state) {
                 while (r==0) {
                     while (window.pollEvent(event) && event.mouseButton.button == sf::Mouse::Left && event.mouseButton.x>390 && event.mouseButton.y>410 && state.getPokemon(convertP(event.mouseButton.x,event.mouseButton.y)).getPV()!=0) {
                         //std::cout << "while waitEvent" << state.getPokemon(convertP(event.mouseButton.x,event.mouseButton.y)).getPV() << std::endl;
-                        setCommand(state,e,window,event.mouseButton.x,event.mouseButton.y);
+                        setCommand(state,e,window,event.mouseButton.x,event.mouseButton.y, ai_type);
                         e.runCommands(state, order);
                     }
                 }
@@ -100,7 +99,7 @@ void Scene::draw (state::State& state) {
                     while (window.pollEvent(event) && event.mouseButton.button == sf::Mouse::Left && event.mouseButton.x>390 && event.mouseButton.y>410 && state.getPokemon(convertP(event.mouseButton.x,event.mouseButton.y)).getPV()!=0) {
                         //std::cout << "while waitEvent" << state.getPokemon(convertP(event.mouseButton.x,event.mouseButton.y)).getPV() << std::endl;
                         p=1;
-                        setCommand(state,e,window,event.mouseButton.x,event.mouseButton.y);
+                        setCommand(state,e,window,event.mouseButton.x,event.mouseButton.y, ai_type);
                         e.runCommands(state, order);
                     }
                 }
@@ -172,14 +171,50 @@ void Scene::draw (state::State& state) {
                 window.display();
             }
         }
-
-        if((state.getPokemon(0).getPV() !=0 && state.getPokemon(1).getPV()!=0 && state.getPokemon(6).getPV()!=0 && state.getPokemon(7).getPV()!=0) || c==1 || r==1) {
+*/
+        //if((state.getPokemon(0).getPV() !=0 && state.getPokemon(1).getPV()!=0 && state.getPokemon(6).getPV()!=0 && state.getPokemon(7).getPV()!=0) || c==1 || r==1) {
          
             while (window.pollEvent(event))
             {
+            //setCommand_Adv(e, state);
+                DrawRefresh(window, state);
                 if(event.type == sf::Event::Closed) {
                     std::cout << "Vous avez fermer la fenetre" << endl;
                     window.close();
+                }
+                if(event.type == sf::Event::KeyPressed) {
+                    if(event.key.code == sf::Keyboard::Return) {
+                        ai::HeuristicAI joueur;
+                        joueur.run(e, state,window,0);
+                        if (ai_type==0) {
+                            ai::RandomAI ia;
+                            ia.run(e,state,window,1);
+                            e.runCommands(state, order);
+                            DrawRefresh(window, state);
+                            if (ia.check_pv(state,window,1)==1) return;
+                        }
+                        else if (ai_type==1) {
+                            ai::HeuristicAI ia;
+                            ia.run(e,state,window,1);
+                            e.runCommands(state, order);
+                            DrawRefresh(window, state);
+                            if (ia.check_pv(state,window,1)==1) return;
+                        }
+                        else if (ai_type==2) {
+                            ai::DeepAI ia;
+                            ia.run(e,state,window,1);
+                            e.runCommands(state, order);
+                            DrawRefresh(window, state);
+                            if (ia.check_pv(state,window,1)==1) return;
+                        }
+                        if (joueur.check_pv(state,window,0)==1) return;
+                        DrawRefresh(window, state);
+                        for (int i =0; i<2; i++) {
+                            if (state.getPokemon(6+i).getPV()==0) std::cout << state.getPokemon(6+i).getName() << " ennemi est KO" << endl;
+                            if (state.getPokemon(i).getPV()==0) std::cout << state.getPokemon(i).getName() << " est KO" << endl;
+                        }
+                        cout << "--------Prochain tour--------" << endl;
+                    }
                 }
                 if(event.type == sf::Event::KeyPressed) {
                     if(event.key.code == sf::Keyboard::Space) {
@@ -191,7 +226,7 @@ void Scene::draw (state::State& state) {
                             target = 6;
                             a++;
                             //std::cout << "g" << a << std::endl;
-                            setCommand(state, e, window, x, y, target);
+                            setCommand(state, e, window, x, y, ai_type, target);
                         }
                     }
                     if(event.key.code == sf::Keyboard::Right) {
@@ -200,7 +235,7 @@ void Scene::draw (state::State& state) {
                             target = 7;
                             a++ ;
                             //std::cout << "d" << a << std::endl;
-                            setCommand(state, e, window, x, y, target);
+                            setCommand(state, e, window, x, y, ai_type, target);
                         }
                     }
                 }
@@ -212,7 +247,7 @@ void Scene::draw (state::State& state) {
                         //std::cout << "mouse y: " << y << std::endl;
                         if (y>380 && x<=390) {
                             if (state.getPokemon(p).getAttack(convertA(x, y)).getStatsAttack().scope==-1) {
-                                if (state.getPokemon(p).getPV()==0) setCommand(state, e, window, x, y, target);
+                                if (state.getPokemon(p).getPV()==0) setCommand(state, e, window, x, y, ai_type, target);
                             }
                             else {
                                 if (a%2 == 0) a++;
@@ -222,7 +257,7 @@ void Scene::draw (state::State& state) {
                             
                         }
                         if (x>390 && y>380) {
-                            if (state.getPokemon(p).getPV()!=0) setCommand(state, e, window, x, y);
+                            if (state.getPokemon(p).getPV()!=0) setCommand(state, e, window, x, y, ai_type);
                         }
                         /*
                         if (y>380 && x<=390) {
@@ -242,7 +277,7 @@ void Scene::draw (state::State& state) {
             initInterface(state, window, p);
 
             window.display();
-        }
+        //}
 
                     
 
@@ -346,7 +381,7 @@ void Scene::draw (state::State& state) {
         }
     }
 
-    void Scene::setCommand(state::State& state, engine::Engine& e, sf::RenderWindow& window, int x, int y, int target) {
+    void Scene::setCommand(state::State& state, engine::Engine& e, sf::RenderWindow& window, int x, int y, int ai_type, int target) {
         if (y>380 && x<=390) {
             int att = convertA(x,y);
             if (state.getPokemon(p).getAttack(att).getPP()==0) return;
@@ -392,8 +427,18 @@ void Scene::draw (state::State& state) {
         }
         if (r==2) {
             //std::cout << "adv" << r << std::endl;
-            ai::DeepAI ia;
-            ia.run(e,state);
+            if (ai_type==0) {
+                ai::RandomAI ia;
+                ia.run(e,state,window,1);
+            }
+            else if (ai_type==1) {
+                ai::HeuristicAI ia;
+                ia.run(e,state,window,1);
+            }
+            else if (ai_type==2) {
+                ai::DeepAI ia;
+                ia.run(e,state,window,1);
+            }
             e.runCommands(state, order);
             //setCommand_Adv(e, state);
             DrawRefresh(window, state);

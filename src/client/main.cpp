@@ -35,10 +35,14 @@ int main(int argc, char* argv[])
         if (string(argv[1]) == "render") {
             cout << "Affichage d'un état" << endl;
             Pokemon p;
-            // seul un nombre réduit de pokemon sont codés : groudon, kyogre, rayquaza, leveinard
+            // seul un nombre réduit de pokemon sont codés : groudon, kyogre, rayquaza, leveinard, heatran, staross, noacier
             Pokemon groudon = PokemonFactory::createPokemon(GROUDON);
             Pokemon kyogre = PokemonFactory::createPokemon(KYOGRE);
-            std::vector <Pokemon> battle {kyogre, kyogre, p, p, p, p, groudon, groudon, p, p, p, p};
+            Pokemon ray = PokemonFactory::createPokemon(RAYQUAZA);
+            Pokemon heatran = PokemonFactory::createPokemon(HEATRAN);
+            Pokemon staross = PokemonFactory::createPokemon(STAROSS);
+            Pokemon noacier = PokemonFactory::createPokemon(NOACIER);
+            std::vector <Pokemon> battle {kyogre,groudon, ray, staross, noacier, heatran, kyogre, groudon, ray, heatran, staross, noacier};
             // le terrain PSYCHIC peut etre remplacé par GRASSY, MISTY ou ELECTRIK
             State s(battle, SUN, PSYCHIC);
 		    Scene scene1;
@@ -47,11 +51,14 @@ int main(int argc, char* argv[])
         if (string(argv[1]) == "engine") {
             cout << "Affichage de l'état initial" << endl;
             Pokemon p;
-            // seul un nombre réduit de pokemon sont codés : groudon, kyogre, rayquaza, leveinard
+            // seul un nombre réduit de pokemon sont codés : groudon, kyogre, rayquaza, leveinard, heatran, staross, noacier
             Pokemon groudon = PokemonFactory::createPokemon(GROUDON);
             Pokemon kyogre = PokemonFactory::createPokemon(KYOGRE);
             Pokemon ray = PokemonFactory::createPokemon(RAYQUAZA);
-            std::vector <Pokemon> battle {kyogre,groudon, ray, ray, ray, ray, kyogre, groudon, ray, ray, ray, ray};
+            Pokemon heatran = PokemonFactory::createPokemon(HEATRAN);
+            Pokemon staross = PokemonFactory::createPokemon(STAROSS);
+            Pokemon noacier = PokemonFactory::createPokemon(NOACIER);
+            std::vector <Pokemon> battle {kyogre,groudon, ray, staross, noacier, heatran, kyogre, groudon, ray, heatran, staross, noacier};
 
             // le terrain PSYCHIC peut etre remplacé par GRASSY, MISTY ou ELECTRIK
             State s(battle, SUN, PSYCHIC);
@@ -59,13 +66,67 @@ int main(int argc, char* argv[])
             Scene scene;
             scene.draw(s);
         }
+        if (string(argv[1]) == "random_ai") {
+            cout << "Affichage de l'état initial avec une IA random" << endl;
+            Pokemon p;
+            // seul un nombre réduit de pokemon sont codés : groudon, kyogre, rayquaza, leveinard, heatran, staross, noacier
+            Pokemon groudon = PokemonFactory::createPokemon(GROUDON);
+            Pokemon kyogre = PokemonFactory::createPokemon(KYOGRE);
+            Pokemon ray = PokemonFactory::createPokemon(RAYQUAZA);
+            Pokemon heatran = PokemonFactory::createPokemon(HEATRAN);
+            Pokemon staross = PokemonFactory::createPokemon(STAROSS);
+            Pokemon noacier = PokemonFactory::createPokemon(NOACIER);
+            std::vector <Pokemon> battle {kyogre,groudon, ray, staross, noacier, heatran, kyogre, groudon, ray, heatran, staross, noacier};
+
+            // le terrain PSYCHIC peut etre remplacé par GRASSY, MISTY ou ELECTRIK
+            State s(battle, SUN, PSYCHIC);
+
+            Scene scene;
+            scene.draw(s, 0);
+        }
+        if (string(argv[1]) == "heuristic_ai") {
+            cout << "Affichage de l'état initial avec une IA heuristic" << endl;
+            Pokemon p;
+            // seul un nombre réduit de pokemon sont codés : groudon, kyogre, rayquaza, leveinard, heatran, staross, noacier
+            Pokemon groudon = PokemonFactory::createPokemon(GROUDON);
+            Pokemon kyogre = PokemonFactory::createPokemon(KYOGRE);
+            Pokemon ray = PokemonFactory::createPokemon(RAYQUAZA);
+            Pokemon heatran = PokemonFactory::createPokemon(HEATRAN);
+            Pokemon staross = PokemonFactory::createPokemon(STAROSS);
+            Pokemon noacier = PokemonFactory::createPokemon(NOACIER);
+            std::vector <Pokemon> battle {kyogre,groudon, ray, staross, noacier, heatran, kyogre, groudon, ray, heatran, staross, noacier};
+
+            // le terrain PSYCHIC peut etre remplacé par GRASSY, MISTY ou ELECTRIK
+            State s(battle, SUN, PSYCHIC);
+
+            Scene scene;
+            scene.draw(s, 1);
+        }
+        if (string(argv[1]) == "deep_ai") {
+            cout << "Affichage de l'état initial avec une IA deep" << endl;
+            Pokemon p;
+            // seul un nombre réduit de pokemon sont codés : groudon, kyogre, rayquaza, leveinard, heatran, staross, noacier
+            Pokemon groudon = PokemonFactory::createPokemon(GROUDON);
+            Pokemon kyogre = PokemonFactory::createPokemon(KYOGRE);
+            Pokemon ray = PokemonFactory::createPokemon(RAYQUAZA);
+            Pokemon heatran = PokemonFactory::createPokemon(HEATRAN);
+            Pokemon staross = PokemonFactory::createPokemon(STAROSS);
+            Pokemon noacier = PokemonFactory::createPokemon(NOACIER);
+            std::vector <Pokemon> battle {kyogre,groudon, ray, staross, noacier, heatran, kyogre, groudon, ray, heatran, staross, noacier};
+
+            // le terrain PSYCHIC peut etre remplacé par GRASSY, MISTY ou ELECTRIK
+            State s(battle, SUN, PSYCHIC);
+
+            Scene scene;
+            scene.draw(s, 2);
+        }
     }
 
     else {
         cout << "Veuillez ajouté hello, render ou engine en argument" << endl;
         cout << "Affichage de l'état initial" << endl;
         Pokemon p;
-        // seul un nombre réduit de pokemon sont codés : groudon, kyogre, rayquaza, leveinard
+        // seul un nombre réduit de pokemon sont codés : groudon, kyogre, rayquaza, leveinard, heatran, staross, noacier
         Pokemon groudon = PokemonFactory::createPokemon(GROUDON);
         Pokemon kyogre = PokemonFactory::createPokemon(KYOGRE);
         Pokemon ray = PokemonFactory::createPokemon(RAYQUAZA);
@@ -78,7 +139,7 @@ int main(int argc, char* argv[])
         State s(battle, SUN, PSYCHIC);
 
         Scene scene;
-        scene.draw(s);
+        scene.draw(s,2);
     }
     
     return 0;

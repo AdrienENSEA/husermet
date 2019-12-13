@@ -48,17 +48,17 @@ $ ./../bin/client engine
 ## 2.Final Intelligence Artificielle Random
 Intelligence Artificielle choisissant ses actions au hasard
 ```console
-$ ./../bin/client
+$ ./../bin/client random_ai
 ```
 
 ## 3.1 Intelligence Artificielle Heuristic
 Intelligence Artificielle choisissant ses actions de manière à maximiser les dégâts
 ```console
-$ ./../bin/client
+$ ./../bin/client heuristic_ai
 ```
 
 ## 3.Final Intelligence Artificielle avancée
 Intelligence Artificielle choisissant ses actions de manière à maximiser les dégâts sur plusieurs tours
 ```console
-$ ./../bin/client
+$ ./../bin/client deep_ai
 ```
