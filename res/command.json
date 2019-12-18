@@ -1,0 +1,30 @@
+{
+   "Command1" : {
+      "Attack" : 3,
+      "CommandID" : 1,
+      "Pokemon" : 1,
+      "Pokemon_target" : 5,
+      "Priority" : 1
+   },
+   "Command2" : {
+      "Attack" : 3,
+      "CommandID" : 1,
+      "Pokemon" : 1,
+      "Pokemon_target" : 5,
+      "Priority" : 1
+   },
+   "Command3" : {
+      "Attack" : 3,
+      "CommandID" : 1,
+      "Pokemon" : 1,
+      "Pokemon_target" : 5,
+      "Priority" : 1
+   },
+   "Command4" : {
+      "Attack" : 3,
+      "CommandID" : 1,
+      "Pokemon" : 1,
+      "Pokemon_target" : 5,
+      "Priority" : 1
+   }
+}

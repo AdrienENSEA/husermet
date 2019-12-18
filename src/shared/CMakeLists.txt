@@ -19,6 +19,9 @@ target_include_directories(${lib_shared_target} PUBLIC
   ${SFML_LIBRARIES}
   $<TARGET_NAME:client_static>
   )
+  target_link_libraries(${lib_shared_target} PUBLIC
+  json
+  )
 
 # vim: set sw=2 sts=2 et:
 
