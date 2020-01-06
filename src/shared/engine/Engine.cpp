@@ -84,6 +84,8 @@ namespace engine {
     
      
     void Engine::writeJSON (std::vector<Command> vect_command) {
+    
+        static int nbstep = 0;
         // Open file
         fstream file_json;
         file_json.open("../res/command.json", fstream::out | fstream::in | fstream::app);
@@ -102,40 +104,42 @@ namespace engine {
         Json::StyledWriter styledwriter;
         
         // Command 1
-        command_json["Command1"]["Pokemon"]         = vect_command.at(0).getPokemon(); 
-        command_json["Command1"]["Pokemon_target"]  = vect_command.at(0).getPokemon_target();
-        command_json["Command1"]["Attack"]          = vect_command.at(0).getAttack();
-        command_json["Command1"]["Priority"]        = vect_command.at(0).getPriority();
-        command_json["Command1"]["CommandID"]       = vect_command.at(0).getCommandID();
+        command_json["Step"+to_string(nbstep)]["Command1"]["Pokemon"]         = vect_command.at(0).getPokemon(); 
+        command_json["Step"+to_string(nbstep)]["Command1"]["Pokemon_target"]  = vect_command.at(0).getPokemon_target();
+        command_json["Step"+to_string(nbstep)]["Command1"]["Attack"]          = vect_command.at(0).getAttack();
+        command_json["Step"+to_string(nbstep)]["Command1"]["Priority"]        = vect_command.at(0).getPriority();
+        command_json["Step"+to_string(nbstep)]["Command1"]["CommandID"]       = vect_command.at(0).getCommandID();
 
         // Command 2
-        command_json["Command2"]["Pokemon"]         = vect_command.at(1).getPokemon(); 
-        command_json["Command2"]["Pokemon_target"]  = vect_command.at(1).getPokemon_target();
-        command_json["Command2"]["Attack"]          = vect_command.at(1).getAttack();
-        command_json["Command2"]["Priority"]        = vect_command.at(1).getPriority();
-        command_json["Command2"]["CommandID"]       = vect_command.at(1).getCommandID();
+        command_json["Step"+to_string(nbstep)]["Command2"]["Pokemon"]         = vect_command.at(1).getPokemon(); 
+        command_json["Step"+to_string(nbstep)]["Command2"]["Pokemon_target"]  = vect_command.at(1).getPokemon_target();
+        command_json["Step"+to_string(nbstep)]["Command2"]["Attack"]          = vect_command.at(1).getAttack();
+        command_json["Step"+to_string(nbstep)]["Command2"]["Priority"]        = vect_command.at(1).getPriority();
+        command_json["Step"+to_string(nbstep)]["Command2"]["CommandID"]       = vect_command.at(1).getCommandID();
 
         // Command 3
-        command_json["Command3"]["Pokemon"]         = vect_command.at(2).getPokemon(); 
-        command_json["Command3"]["Pokemon_target"]  = vect_command.at(2).getPokemon_target();
-        command_json["Command3"]["Attack"]          = vect_command.at(2).getAttack();
-        command_json["Command3"]["Priority"]        = vect_command.at(2).getPriority();
-        command_json["Command3"]["CommandID"]       = vect_command.at(2).getCommandID();
+        command_json["Step"+to_string(nbstep)]["Command3"]["Pokemon"]         = vect_command.at(2).getPokemon(); 
+        command_json["Step"+to_string(nbstep)]["Command3"]["Pokemon_target"]  = vect_command.at(2).getPokemon_target();
+        command_json["Step"+to_string(nbstep)]["Command3"]["Attack"]          = vect_command.at(2).getAttack();
+        command_json["Step"+to_string(nbstep)]["Command3"]["Priority"]        = vect_command.at(2).getPriority();
+        command_json["Step"+to_string(nbstep)]["Command3"]["CommandID"]       = vect_command.at(2).getCommandID();
 
         // Command 4
-        command_json["Command4"]["Pokemon"]         = vect_command.at(3).getPokemon(); 
-        command_json["Command4"]["Pokemon_target"]  = vect_command.at(3).getPokemon_target();
-        command_json["Command4"]["Attack"]          = vect_command.at(3).getAttack();
-        command_json["Command4"]["Priority"]        = vect_command.at(3).getPriority();
-        command_json["Command4"]["CommandID"]       = vect_command.at(3).getCommandID();
+        command_json["Step"+to_string(nbstep)]["Command4"]["Pokemon"]         = vect_command.at(3).getPokemon(); 
+        command_json["Step"+to_string(nbstep)]["Command4"]["Pokemon_target"]  = vect_command.at(3).getPokemon_target();
+        command_json["Step"+to_string(nbstep)]["Command4"]["Attack"]          = vect_command.at(3).getAttack();
+        command_json["Step"+to_string(nbstep)]["Command4"]["Priority"]        = vect_command.at(3).getPriority();
+        command_json["Step"+to_string(nbstep)]["Command4"]["CommandID"]       = vect_command.at(3).getCommandID();
         
         // Write output
         file_json << styledwriter.write(command_json);
+        nbstep++;
         file_json.close();
         
     }
 
     void Engine::readJSON (std::vector<Command>& vect_command) {
+        static int nbstep = 0;
         // Open file
         fstream file_json;
         file_json.open("../../../res/command.json", fstream::in);
@@ -150,34 +154,35 @@ namespace engine {
             cout << "error" << endl;
         
         // Read all the 4 commands
-        command.setPokemon(         command_json["Command1"]["Pokemon"].asInt());
-        command.setPokemon_target(  command_json["Command1"]["Pokemon_target"].asInt());
-        command.setAttack(          command_json["Command1"]["Attack"].asInt());
-        command.setPriority(        command_json["Command1"]["Priority"].asInt());
-        command.setCommandID(       command_json["Command1"]["CommandID"].asInt());
+        command.setPokemon(         command_json["Step"+to_string(nbstep)]["Command1"]["Pokemon"].asInt());
+        command.setPokemon_target(  command_json["Step"+to_string(nbstep)]["Command1"]["Pokemon_target"].asInt());
+        command.setAttack(          command_json["Step"+to_string(nbstep)]["Command1"]["Attack"].asInt());
+        command.setPriority(        command_json["Step"+to_string(nbstep)]["Command1"]["Priority"].asInt());
+        command.setCommandID(       command_json["Step"+to_string(nbstep)]["Command1"]["CommandID"].asInt());
         vect_command.push_back(command);
         
-        command.setPokemon(         command_json["Command2"]["Pokemon"].asInt()); 
-        command.setPokemon_target(  command_json["Command2"]["Pokemon_target"].asInt());
-        command.setAttack(          command_json["Command2"]["Attack"].asInt());
-        command.setPriority(        command_json["Command2"]["Priority"].asInt());
-        command.setCommandID(       command_json["Command2"]["CommandID"].asInt());
+        command.setPokemon(         command_json["Step"+to_string(nbstep)]["Command2"]["Pokemon"].asInt()); 
+        command.setPokemon_target(  command_json["Step"+to_string(nbstep)]["Command2"]["Pokemon_target"].asInt());
+        command.setAttack(          command_json["Step"+to_string(nbstep)]["Command2"]["Attack"].asInt());
+        command.setPriority(        command_json["Step"+to_string(nbstep)]["Command2"]["Priority"].asInt());
+        command.setCommandID(       command_json["Step"+to_string(nbstep)]["Command2"]["CommandID"].asInt());
         vect_command.push_back(command);
         
-        command.setPokemon(         command_json["Command3"]["Pokemon"].asInt()); 
-        command.setPokemon_target(  command_json["Command3"]["Pokemon_target"].asInt());
-        command.setAttack(          command_json["Command3"]["Attack"].asInt());
-        command.setPriority(        command_json["Command3"]["Priority"].asInt());
-        command.setCommandID(       command_json["Command3"]["CommandID"].asInt());
+        command.setPokemon(         command_json["Step"+to_string(nbstep)]["Command3"]["Pokemon"].asInt()); 
+        command.setPokemon_target(  command_json["Step"+to_string(nbstep)]["Command3"]["Pokemon_target"].asInt());
+        command.setAttack(          command_json["Step"+to_string(nbstep)]["Command3"]["Attack"].asInt());
+        command.setPriority(        command_json["Step"+to_string(nbstep)]["Command3"]["Priority"].asInt());
+        command.setCommandID(       command_json["Step"+to_string(nbstep)]["Command3"]["CommandID"].asInt());
         vect_command.push_back(command);
         
-        command.setPokemon(         command_json["Command4"]["Pokemon"].asInt()); 
-        command.setPokemon_target(  command_json["Command4"]["Pokemon_target"].asInt());
-        command.setAttack(          command_json["Command4"]["Attack"].asInt());
-        command.setPriority(        command_json["Command4"]["Priority"].asInt());
-        command.setCommandID(       command_json["Command4"]["CommandID"].asInt());
+        command.setPokemon(         command_json["Step"+to_string(nbstep)]["Command4"]["Pokemon"].asInt()); 
+        command.setPokemon_target(  command_json["Step"+to_string(nbstep)]["Command4"]["Pokemon_target"].asInt());
+        command.setAttack(          command_json["Step"+to_string(nbstep)]["Command4"]["Attack"].asInt());
+        command.setPriority(        command_json["Step"+to_string(nbstep)]["Command4"]["Priority"].asInt());
+        command.setCommandID(       command_json["Step"+to_string(nbstep)]["Command4"]["CommandID"].asInt());
         vect_command.push_back(command);
         
+        nbstep++;
         // CLose file
         file_json.close();
         //return vect_command;
