@@ -14,29 +14,13 @@ namespace engine {
             ChangePokemonCommand c(pokemon, pokemon_target);
             c.execute(state);
         }
+        if (commandID==3) {
+            ChangePokemonCommand c(pokemon, pokemon_target);
+            c.execute(state);
+        }
         if (commandID==2) {
             AttackCommand a(pokemon, pokemon_target, attack);
             a.execute(state);
-        }
-        if (commandID == 3) {
-            /*
-            int i=0;
-            while (state.getPokemon(i).getPV()==0) {
-                if (i==5) {
-                    state.set(0);
-                    break;
-                }
-                else i++;
-            }
-            i=6;
-            while (state.getPokemon(i).getPV()==0) {
-                if (i==11) {
-                    state.set(1);
-                    break;
-                }
-                else i++;
-            }*/
-            
         }
     }
 

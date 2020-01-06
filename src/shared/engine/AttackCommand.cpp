@@ -2,6 +2,7 @@
 #include <unistd.h>
 #include <iostream>
 
+#define LEVEL 100
 
 namespace engine {
 
@@ -25,18 +26,28 @@ namespace engine {
     
     int AttackCommand::damage(state::State &state) {
         int d = 0;
+        float level, power, att, def, coeff, r, cc, coeff_stab, sw_type;
+        level = LEVEL*2/5+2;
+        power = state.getPokemon(pokemon).getAttack(attack).getStatsAttack().power*state.getPokemon(pokemon).getAbility();
+        sw_type = sw(state.getPokemon(pokemon).getAttack(attack).getType(),state.getPokemon(pokemon_target).getType()); // 0.5 si resistance + 1.5 si faiblesse
+        coeff_stab = stab(state.getPokemon(pokemon).getAttack(attack).getType(),state.getPokemon(pokemon).getType());
+        srand (time(NULL));
+        r = (rand()%38+217)*100/255;
+        cc = crit();
         if (state.getPokemon(pokemon).getAttack(attack).getStatsAttack().category == 1) {
             //std::cout << "attaque physique" << std::endl;
-            float cm = 5*sw(state.getPokemon(pokemon).getAttack(attack).getType(),state.getPokemon(pokemon_target).getType()) * stab(state.getPokemon(pokemon).getAttack(attack).getType(),state.getPokemon(pokemon).getType() ); //1.5 si STAB + 0.5 si resistance + 1.5 si faiblesse + effet objet/climat
-            //std::cout << "cm" << cm << std::endl;
-            d = (state.getPokemon(pokemon).getStats().attack*state.getPokemon(pokemon).getAttack(attack).getStatsAttack().power/state.getPokemon(pokemon_target).getStats().defense/50+2)*cm;
+            att = state.getPokemon(pokemon).getStats().attack;
+            coeff = burn(state.getPokemon(pokemon).getState())*tvt(state.getPokemon(pokemon).getAttack(attack).getStatsAttack().scope)*weather(state.getPokemon(pokemon).getAttack(attack).getType(),state.getTypeWeather())*terrain(state.getPokemon(pokemon).getAttack(attack).getType(),state.getTypeTerrain());
+            def = state.getPokemon(pokemon_target).getStats().defense;
+            d = (level*power*att/50/def*coeff+2)*cc*r/100*coeff_stab*sw_type;
             return d;
         }
         else if (state.getPokemon(pokemon).getAttack(attack).getStatsAttack().category == 2) {
             //std::cout << "attaque spéciale" << std::endl;
-            float cm = 5*sw(state.getPokemon(pokemon).getAttack(attack).getType(),state.getPokemon(pokemon_target).getType()) * stab(state.getPokemon(pokemon).getAttack(attack).getType(),state.getPokemon(pokemon).getType() ); //1.5 si STAB + 0.5 si resistance + 1.5 si faiblesse + effet objet/climat
-            //std::cout << "cm" << cm << std::endl;
-            d = (state.getPokemon(pokemon).getStats().sp_attack*state.getPokemon(pokemon).getAttack(attack).getStatsAttack().power/state.getPokemon(pokemon_target).getStats().sp_defense/50+2)*cm;
+            att = state.getPokemon(pokemon).getStats().sp_attack;
+            coeff = tvt(state.getPokemon(pokemon).getAttack(attack).getStatsAttack().scope)*weather(state.getPokemon(pokemon).getAttack(attack).getType(),state.getTypeWeather())*terrain(state.getPokemon(pokemon).getAttack(attack).getType(),state.getTypeTerrain());
+            def = state.getPokemon(pokemon_target).getStats().sp_defense;
+            d = (level*power*att/50/def*coeff+2)*cc*r/100*coeff_stab*sw_type;
             return d;
         }
         else if (state.getPokemon(pokemon).getAttack(attack).getStatsAttack().category == 3) {
@@ -141,6 +152,79 @@ namespace engine {
         if (im) coeff = 0;
         //std::cout << "coeff" << coeff << std::endl;
         return coeff;
+    }
+
+    float AttackCommand::burn(state::TypeState state) {
+        if (state==state::BURNED) return 0.5;
+        return 1;
+    }
+
+    float AttackCommand::tvt(int scope) {
+        if (scope == 2) return 0.75;
+        return 1;
+    }
+
+    float AttackCommand::weather(state::Type type, state::TypeWeather weather) {
+        switch (weather) {
+            case state::TypeWeather::RAIN:
+                if (type==state::Type::WATER) return 1.5;
+                if (type==state::Type::FIRE) return 0.5;
+                break;
+            case state::TypeWeather::SUN:
+                if (type==state::Type::WATER) return 0.5;
+                if (type==state::Type::FIRE) return 1.5;
+                if (type==state::Type::GRASS) return 1.5;
+                break;
+            case state::TypeWeather::SNOW:
+                if (type==state::Type::ICE) return 1.5;
+                break;
+            case state::TypeWeather::FOG:
+                if (type==state::Type::NORMAL) return 1.5;
+                break;
+            case state::TypeWeather::SAND:
+                if (type==state::Type::GROUND) return 1.5;
+                if (type==state::Type::ROCK) return 1.5;
+                break;
+            case state::TypeWeather::WIND:
+                if (type==state::Type::DRAGON) return 1.5;
+                if (type==state::Type::FLY) return 1.5;
+                if (type==state::Type::BUG) return 0.5;
+                break;
+            default:
+                break;
+        }
+        
+        return 1;
+    }
+
+    float AttackCommand::terrain(state::Type type, state::TypeTerrain terrain) {
+        switch (terrain) {
+            case state::TypeTerrain::GRASSY :
+                if (type==state::Type::GRASS) return 1.5;
+                if (type==state::Type::BUG) return 1.5;
+                if (type==state::Type::GROUND) return 0.5;
+                break;
+            case state::TypeTerrain::ELECTRIK :
+                if (type==state::Type::ELECTRIC) return 1.5;
+                break;
+            case state::TypeTerrain::PSYCHIC :
+                if (type==state::Type::PSY) return 1.5;
+                break;
+            case state::TypeTerrain::MISTY :
+                if (type==state::Type::FAIRY) return 1.5;
+                if (type==state::Type::DRAGON) return 0.5;
+                break;
+            default:
+                break;
+        }
+        return 1;
+    }
+
+    int AttackCommand::crit() {
+        srand(time(NULL));
+        int r=rand()%24;
+        if (r==3) return 2;
+        return 1;
     }
 // Setters and Getters
 

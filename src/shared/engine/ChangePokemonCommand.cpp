@@ -14,5 +14,4 @@ namespace engine {
         if (pokemon>5) std::cout << state.getPokemon(pokemon_target).getName() << " ennemi échange avec " << state.getPokemon(pokemon).getName() << " ennemi" << std::endl;
         }
 
-
 };

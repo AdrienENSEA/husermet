@@ -14,314 +14,316 @@ using namespace sf;
 
 namespace render {
 
-Scene::Scene () : height {512}, length {512} {
-}
-static int p, a, r, c;
-static std::vector<int> order = {};
-void Scene::draw (state::State& state, int ai_type) {
-    sf::RenderWindow window(sf::VideoMode(height, length), "Fight");
-    int x, y;
-    p=0;
-    a=0;
-    r=0;
-    c=0;
-    //int tmp=0;
-    engine::Engine e;
-
-    tbackground.loadFromFile("../res/spritesheet_terrain.png", sf::IntRect(LENGTH_TERRAIN*(state.getTypeTerrain()-1), 0, LENGTH_TERRAIN*state.getTypeTerrain(), HEIGHT_TERRAIN));
-
-    
-    background.setTexture(tbackground);
-    background.setScale(2.1f,2.1f);    
-    
-    //interface.setTexts({"Que faire?", "Attaquer", "Pokemon", "Sac", "Fuite"});
-    initPokemon(state);
-    initInterface(state,window,p);
-
-    // on dessine l'état
-    window.clear(sf::Color(255, 255, 255, 255));
-    window.draw(background);
-
-    //interface.drawRect(window);
-    //interface.drawTexts(window);
-    pokemon1.draw(window);
-    pokemon2.draw(window);
-    pokemon3.draw(window);
-    pokemon4.draw(window);
-
-
-    if(!interface.setFont("../res/fontpokemon.ttf")) cout << "Echec chargement font" << endl;
-
-    while (window.isOpen())
-    {
-        // on gère les évènements
-        sf::Event event;
-        int target;
-        //window.setVerticalSyncEnabled(false);
-/*
-        if(state.getPokemon(0).getPV()==0 && r==0) {
-            std::cout << state.getPokemon(0).getName() << " est KO" << std::endl;
-            if (state.getPokemon(2).getPV()==0 && state.getPokemon(3).getPV()==0 && state.getPokemon(4).getPV()==0 && state.getPokemon(5).getPV()==0) {
-                if (state.getPokemon(0).getPV()<=0 && state.getPokemon(1).getPV()<=0) {
-                    std::cout << "Défaite" << std::endl;
-                    window.close();
-                }
-                r=1;
-                p=1;
-            }
-            else {
-                while (r==0) {
-                    while (window.pollEvent(event) && event.mouseButton.button == sf::Mouse::Left && event.mouseButton.x>390 && event.mouseButton.y>410 && state.getPokemon(convertP(event.mouseButton.x,event.mouseButton.y)).getPV()!=0) {
-                        //std::cout << "while waitEvent" << state.getPokemon(convertP(event.mouseButton.x,event.mouseButton.y)).getPV() << std::endl;
-                        setCommand(state,e,window,event.mouseButton.x,event.mouseButton.y, ai_type);
-                        e.runCommands(state, order);
-                    }
-                }
-                r=0;
-                p=0;
-                a=0;
-                initInterface(state, window,p);
-                DrawRefresh(window, state);
-                window.display();
-            }
-        }
-        if(state.getPokemon(1).getPV()==0 && r==0) {
-            std::cout << state.getPokemon(1).getName() << " est KO" << std::endl;
-            if (state.getPokemon(2).getPV()==0 && state.getPokemon(3).getPV()==0 && state.getPokemon(4).getPV()==0 && state.getPokemon(5).getPV()==0) {
-                //std::cout << "Défaite" << std::endl;
-                if (state.getPokemon(0).getPV()<=0 && state.getPokemon(1).getPV()<=0) {
-                    std::cout << "Défaite" << std::endl;
-                    window.close();
-                }
-                r=1;
-                p=0;
-            }
-            else {
-                while (r==0) {
-                    while (window.pollEvent(event) && event.mouseButton.button == sf::Mouse::Left && event.mouseButton.x>390 && event.mouseButton.y>410 && state.getPokemon(convertP(event.mouseButton.x,event.mouseButton.y)).getPV()!=0) {
-                        //std::cout << "while waitEvent" << state.getPokemon(convertP(event.mouseButton.x,event.mouseButton.y)).getPV() << std::endl;
-                        p=1;
-                        setCommand(state,e,window,event.mouseButton.x,event.mouseButton.y, ai_type);
-                        e.runCommands(state, order);
-                    }
-                }
-                r=0;
-                p=0;
-                a=0;
-                initInterface(state, window,p);
-                DrawRefresh(window, state);
-                window.display();
-            }
-        }
-        if(state.getPokemon(6).getPV()==0) {
-            if (c==0) std::cout << state.getPokemon(6).getName() << " ennemi est KO" << std::endl;
-            if (state.getPokemon(8).getPV()<=0 && state.getPokemon(9).getPV()<=0 && state.getPokemon(10).getPV()<=0 && state.getPokemon(11).getPV()<=0) {
-                c=1;
-                if (state.getPokemon(6).getPV()<=0 && state.getPokemon(7).getPV()<=0) {
-                    std::cout << "Victoire" << std::endl;
-                    window.close();
-                }
-            }
-            else {
-                int i=8;
-                while(state.getPokemon(i).getPV()<=0) {
-                    if (i==11) {
-                        break;
-                    }
-                    i++;
-                }
-                engine::Command c(1);
-                c.setPriority(6);
-                c.setPokemon(6);
-                c.setPokemon_target(i);
-                e.addCommand(c, state); 
-                e.runCommands(state, order); 
-                r=0;
-                p=0;
-                a=0;
-                DrawRefresh(window, state);
-                window.display();
-            }
-        }
-        if(state.getPokemon(7).getPV()==0) {
-            if (c==0) std::cout << state.getPokemon(7).getName() << " ennemi est KO" << std::endl;
-            if (state.getPokemon(8).getPV()==0 && state.getPokemon(9).getPV()==0 && state.getPokemon(10).getPV()==0 && state.getPokemon(11).getPV()==0) {
-                c=1;
-                if (state.getPokemon(6).getPV()<=0 && state.getPokemon(7).getPV()<=0) {
-                    std::cout << "Victoire" << std::endl;
-                    window.close();
-                }
-            }
-            else {
-                int i=8;
-                while(state.getPokemon(i).getPV()<=0) {
-                    if (i==11) {
-                        break;
-                    }
-                    i++;
-                }
-                engine::Command c(1);
-                c.setPriority(6);
-                c.setPokemon(7);
-                c.setPokemon_target(i);
-                e.addCommand(c, state); 
-                e.runCommands(state, order); 
-                r=0;
-                p=0;
-                a=0;
-                DrawRefresh(window, state);
-                window.display();
-            }
-        }
-*/
-        //if((state.getPokemon(0).getPV() !=0 && state.getPokemon(1).getPV()!=0 && state.getPokemon(6).getPV()!=0 && state.getPokemon(7).getPV()!=0) || c==1 || r==1) {
-         
-            while (window.pollEvent(event))
-            {
-            //setCommand_Adv(e, state);
-                DrawRefresh(window, state);
-                if(event.type == sf::Event::Closed) {
-                    std::cout << "Vous avez fermer la fenetre" << endl;
-                    remove("../res/command.json");
-                    window.close();
-                }
-                if(event.type == sf::Event::KeyPressed) {
-                    if(event.key.code == sf::Keyboard::Return) {
-                        ai::HeuristicAI joueur;
-                        joueur.run(e, state,window,0);
-                        if (ai_type==0) {
-                            ai::RandomAI ia;
-                            ia.run(e,state,window,1);
-                            e.runCommands(state, order);
-                            DrawRefresh(window, state);
-                            if (ia.check_pv(state,window,1)==1) return;
-                        }
-                        else if (ai_type==1) {
-                            ai::HeuristicAI ia;
-                            ia.run(e,state,window,1);
-                            e.runCommands(state, order);
-                            DrawRefresh(window, state);
-                            if (ia.check_pv(state,window,1)==1) return;
-                        }
-                        else if (ai_type==2) {
-                            ai::DeepAI ia;
-                            ia.run(e,state,window,1);
-                            e.runCommands(state, order);
-                            DrawRefresh(window, state);
-                            if (ia.check_pv(state,window,1)==1) return;
-                        }
-                        if (joueur.check_pv(state,window,0)==1) return;
-                        DrawRefresh(window, state);
-                        for (int i =0; i<2; i++) {
-                            if (state.getPokemon(6+i).getPV()==0) std::cout << state.getPokemon(6+i).getName() << " ennemi est KO" << endl;
-                            if (state.getPokemon(i).getPV()==0) std::cout << state.getPokemon(i).getName() << " est KO" << endl;
-                        }
-                        cout << "--------Prochain tour--------" << endl;
-                    }
-                }
-                if(event.type == sf::Event::KeyPressed) {
-                    if(event.key.code == sf::Keyboard::Space) {
-                        pokemon1.displayDamage(state, window, 20, p);
-                    }
-                    if(event.key.code == sf::Keyboard::Left) {
-                        //std::cout << "<-" << std::endl;
-                        if (a%2 ==1) {
-                            target = 6;
-                            a++;
-                            //std::cout << "g" << a << std::endl;
-                            setCommand(state, e, window, x, y, ai_type, target);
-                        }
-                    }
-                    if(event.key.code == sf::Keyboard::Right) {
-                        //std::cout << "->" << std::endl;
-                        if (a%2 ==1) {
-                            target = 7;
-                            a++ ;
-                            //std::cout << "d" << a << std::endl;
-                            setCommand(state, e, window, x, y, ai_type, target);
-                        }
-                    }
-                }
-                if (event.type == sf::Event::MouseButtonPressed) {
-                    if (event.mouseButton.button == sf::Mouse::Left) {
-                        x = event.mouseButton.x;
-                        y = event.mouseButton.y;
-                        //std::cout << "mouse x: " << x << std::endl;
-                        //std::cout << "mouse y: " << y << std::endl;
-                        if (y>380 && x<=390) {
-                            if (state.getPokemon(p).getAttack(convertA(x, y)).getStatsAttack().scope==-1) {
-                                if (state.getPokemon(p).getPV()==0) setCommand(state, e, window, x, y, ai_type, target);
-                            }
-                            else {
-                                if (a%2 == 0) a++;
-                                //std::cout << "xy" << a << std::endl;
-                                std::cout << "<- ou ->" << std::endl;
-                            }
-                            
-                        }
-                        if (x>390 && y>380) {
-                            if (state.getPokemon(p).getPV()!=0) setCommand(state, e, window, x, y, ai_type);
-                        }
-                        /*
-                        if (y>380 && x<=390) {
-                            std::cout << "if" << std::endl;
-                            while (window.waitEvent(ev)&& ev.mouseButton.button == sf::Mouse::Left && ev.mouseButton.x>285 && ev.mouseButton.x < 395 && ev.mouseButton.y<145) {
-                                std::cout << "ok" <<std::endl;
-                                setCommandA(state, e, x, y, ev.mouseButton.x,ev.mouseButton.y);
-                                DrawRefresh(window, state);
-                            }
-                            std::cout << "if" << std::endl;
-                        }
-                        */
-                    }
-                }
-                
-            }
-            initInterface(state, window, p);
-
-            window.display();
-        //}
-
-                    
-
-/*/////////////////////  Affichage des différents états \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*/
-/*
-        if(tmp==0) {
-            sleep(5);
-            setCommand(state, e, 425,430);
-            DrawRefresh(window, state);
-            std::cout << "Echange avec le 3e pokémon" << std::endl;
-            tmp++;
-        }
-        else if(tmp==1) {
-            sleep(5);
-            setCommand(state, e, 63,409);
-            DrawRefresh(window, state);
-            std::cout << "Attaque Tonnerre de Rayquaza" << std::endl;
-            tmp++;
-        }
-        else if(tmp==2) {
-            sleep(5);
-            pokemon1.displayDamage(state, window);
-            std::cout << "Pokémon touché" << std::endl;
-            tmp++;
-        }
-        else if(tmp==3) {
-            sleep(5);
-            setCommand(state, e, 63,409);
-            setCommand(state, e, 63,409);
-            setCommand(state, e, 63,409);
-            setCommand(state, e, 63,409);
-            setCommand(state, e, 63,409);
-            DrawRefresh(window, state);
-            std::cout << "PV du pokémon ennemi faible après de nombreuses attaques" << std::endl;
-            tmp++;
-        }
-       */
-/*///////////////////////////////////////\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*/
+    Scene::Scene () : height {512}, length {512} {
+    }
+    Scene::Scene (uint heigth, uint length) : height(height), length(length) {
     }
 
+    static int p, a, r, c;
 
+    void Scene::draw (sf::RenderWindow& window, int ai_type) {
+        p=0;
+        a=0;
+        r=0;
+        c=0;
+        engine::Engine e;
+        std::vector<int> order = {};
+
+        tbackground.loadFromFile("../res/spritesheet_terrain.png", sf::IntRect(LENGTH_TERRAIN*(e.getState().getTypeTerrain()-1), 0, LENGTH_TERRAIN*e.getState().getTypeTerrain(), HEIGHT_TERRAIN));
+
+        
+        background.setTexture(tbackground);
+        background.setScale(2.1f,2.1f);    
+        
+        //interface.setTexts({"Que faire?", "Attaquer", "Pokemon", "Sac", "Fuite"});
+        initPokemon(e.getState());
+        initInterface(e.getState(),window,p);
+
+        // on dessine l'état
+        window.clear(sf::Color(255, 255, 255, 255));
+        window.draw(background);
+
+        //interface.drawRect(window);
+        //interface.drawTexts(window);
+        pokemon1.draw(window);
+        pokemon2.draw(window);
+        pokemon3.draw(window);
+        pokemon4.draw(window);
+
+
+        if(!interface.setFont("../res/fontpokemon.ttf")) cout << "Echec chargement font" << endl;
+        //run(window,e,ai_type, order);
+    }
+
+    void Scene::run(sf::RenderWindow& window, engine::Engine& e, int ai_type, std::vector<int>& order) {
+        int x, y;
+
+        ai::HeuristicAI joueur;
+        ai::RandomAI ia1;
+        ai::HeuristicAI ia2;
+        ai::DeepAI ia3;
+
+        while (window.isOpen())
+        {
+            // on gère les évènements
+            sf::Event event;
+            int target;
+            //window.setVerticalSyncEnabled(false);
+            
+                if(e.getState().getPokemon(0).getPV()==0 && r==0) {
+                    std::cout << e.getState().getPokemon(0).getName() << " est KO" << std::endl;
+                    if (e.getState().getPokemon(2).getPV()==0 && e.getState().getPokemon(3).getPV()==0 && e.getState().getPokemon(4).getPV()==0 && e.getState().getPokemon(5).getPV()==0) {
+                        if (e.getState().getPokemon(0).getPV()<=0 && e.getState().getPokemon(1).getPV()<=0) {
+                            std::cout << "Défaite" << std::endl;
+                            window.close();
+                        }
+                        r=1;
+                        p=1;
+                        initInterface(e.getState(), window,p);
+                        DrawRefresh(window, e.getState(),order);
+                        window.display();
+                    }
+                    else {
+                        while (r==0) {
+                            while (window.pollEvent(event) && event.mouseButton.button == sf::Mouse::Left && event.mouseButton.x>390 && event.mouseButton.y>410 && e.getState().getPokemon(convertP(event.mouseButton.x,event.mouseButton.y)).getPV()!=0) {
+                                //std::cout << "while waitEvent" << e.getState().getPokemon(convertP(event.mouseButton.x,event.mouseButton.y)).getPV() << std::endl;
+                                setCommand(e.getState(),e,window,event.mouseButton.x,event.mouseButton.y, ai_type,order);
+                                e.runCommands(order);
+                                initInterface(e.getState(), window,p);
+                                DrawRefresh(window, e.getState(),order);
+                                window.display();
+                            }
+                        }
+                        r=0;
+                        p=0;
+                        a=0;
+                        initInterface(e.getState(), window,p);
+                        DrawRefresh(window, e.getState(),order);
+                        window.display();
+                    }
+                }
+                if(e.getState().getPokemon(1).getPV()==0 && r==0) {
+                    std::cout << e.getState().getPokemon(1).getName() << " est KO" << std::endl;
+                    if (e.getState().getPokemon(2).getPV()==0 && e.getState().getPokemon(3).getPV()==0 && e.getState().getPokemon(4).getPV()==0 && e.getState().getPokemon(5).getPV()==0) {
+                        //std::cout << "Défaite" << std::endl;
+                        if (e.getState().getPokemon(0).getPV()<=0 && e.getState().getPokemon(1).getPV()<=0) {
+                            std::cout << "Défaite" << std::endl;
+                            remove("../res/command.json");
+                            window.close();
+                        }
+                        r=1;
+                        p=0;
+                        initInterface(e.getState(), window,p);
+                        DrawRefresh(window, e.getState(),order);
+                        window.display();
+                    }
+                    else {
+                        while (r==0) {
+                            while (window.pollEvent(event) && event.mouseButton.button == sf::Mouse::Left && event.mouseButton.x>390 && event.mouseButton.y>410 && e.getState().getPokemon(convertP(event.mouseButton.x,event.mouseButton.y)).getPV()!=0) {
+                                //std::cout << "while waitEvent" << e.getState().getPokemon(convertP(event.mouseButton.x,event.mouseButton.y)).getPV() << std::endl;
+                                p=1;
+                                setCommand(e.getState(),e,window,event.mouseButton.x,event.mouseButton.y, ai_type,order);
+                                e.runCommands(order);
+                                initInterface(e.getState(), window,p);
+                                DrawRefresh(window, e.getState(),order);
+                                window.display();
+                            }
+                        }
+                        r=0;
+                        p=0;
+                        a=0;
+                        initInterface(e.getState(), window,p);
+                        DrawRefresh(window, e.getState(),order);
+                        window.display();
+                    }
+                }
+                if(e.getState().getPokemon(6).getPV()==0) {
+                    if (c==0) std::cout << e.getState().getPokemon(6).getName() << " ennemi est KO" << std::endl;
+                    if (e.getState().getPokemon(8).getPV()<=0 && e.getState().getPokemon(9).getPV()<=0 && e.getState().getPokemon(10).getPV()<=0 && e.getState().getPokemon(11).getPV()<=0) {
+                        c=1;
+                        if (e.getState().getPokemon(6).getPV()<=0 && e.getState().getPokemon(7).getPV()<=0) {
+                            std::cout << "Victoire" << std::endl;
+                            remove("../res/command.json");
+                            window.close();
+                        }
+                    }
+                    else {
+                        int i=8;
+                        while(e.getState().getPokemon(i).getPV()<=0) {
+                            if (i==11) {
+                                break;
+                            }
+                            i++;
+                        }
+                        engine::Command c(1);
+                        c.setPriority(6);
+                        c.setPokemon(6);
+                        c.setPokemon_target(i);
+                        e.addCommand(c); 
+                        e.runCommands(order); 
+                        r=0;
+                        p=0;
+                        a=0;
+                        DrawRefresh(window, e.getState(),order);
+                        initInterface(e.getState(), window,p);
+                        window.display();
+                    }
+                }
+                if(e.getState().getPokemon(7).getPV()==0) {
+                    if (c==0) std::cout << e.getState().getPokemon(7).getName() << " ennemi est KO" << std::endl;
+                    if (e.getState().getPokemon(8).getPV()==0 && e.getState().getPokemon(9).getPV()==0 && e.getState().getPokemon(10).getPV()==0 && e.getState().getPokemon(11).getPV()==0) {
+                        c=1;
+                        if (e.getState().getPokemon(6).getPV()<=0 && e.getState().getPokemon(7).getPV()<=0) {
+                            std::cout << "Victoire" << std::endl;
+                            remove("../res/command.json");
+                            window.close();
+                        }
+                    }
+                    else {
+                        int i=8;
+                        while(e.getState().getPokemon(i).getPV()<=0) {
+                            if (i==11) {
+                                break;
+                            }
+                            i++;
+                        }
+                        engine::Command c(1);
+                        c.setPriority(6);
+                        c.setPokemon(7);
+                        c.setPokemon_target(i);
+                        e.addCommand(c); 
+                        e.runCommands(order); 
+                        r=0;
+                        p=0;
+                        a=0;
+                        DrawRefresh(window, e.getState(),order);
+                        initInterface(e.getState(), window,p);
+                        window.display();
+                    }
+                }
+
+                if((e.getState().getPokemon(0).getPV() !=0 && e.getState().getPokemon(1).getPV()!=0 && e.getState().getPokemon(6).getPV()!=0 && e.getState().getPokemon(7).getPV()!=0) || c==1 || r==1) {
+                
+                    while (window.pollEvent(event))
+                    {
+                        DrawRefresh(window, e.getState(), order);
+                        if(event.type == sf::Event::Closed) {
+                            std::cout << "Vous avez fermer la fenetre" << endl;
+                            remove("../res/command.json");
+                            window.close();
+                        }
+
+                        if(event.type == sf::Event::KeyPressed && ai_type<4 && ai_type>0) {
+                            if(event.key.code == sf::Keyboard::Return) {
+                                if (joueur.check_pv(e,window,0)==0) 
+                                    joueur.run(e, e.getState(),0);
+                                if (ai_type==1 && ia1.check_pv(e, window, 1)==0) {
+                                    ia1.run(e,e.getState(),1);
+                                    e.runCommands(order);
+                                    DrawRefresh(window, e.getState(),order);
+                                    if (ia1.check_pv(e,window,1)==1) return;
+                                }
+                                else if (ai_type==2 && ia2.check_pv(e, window, 1)==0) {
+                                    ia2.run(e,e.getState(),1);
+                                    e.runCommands(order);
+                                    DrawRefresh(window, e.getState(),order);
+                                    if (ia2.check_pv(e,window,1)==1) return;
+                                }
+                                else if (ai_type==3 && ia3.check_pv(e, window, 1)==0) {
+                                    ia3.run(e,e.getState(),1);
+                                    e.runCommands(order);
+                                    DrawRefresh(window, e.getState(),order);
+                                    if (ia3.check_pv(e,window,1)==1) return;
+                                }
+                                if (joueur.check_pv(e,window,0)==1) return;
+                                DrawRefresh(window, e.getState(),order);
+                                for (int i =0; i<2; i++) {
+                                    if (e.getState().getPokemon(6+i).getPV()==0) std::cout << e.getState().getPokemon(6+i).getName() << " ennemi est KO" << endl;
+                                    if (e.getState().getPokemon(i).getPV()==0) std::cout << e.getState().getPokemon(i).getName() << " est KO" << endl;
+                                }
+                                cout << "--------Prochain tour--------" << endl;
+                            }
+                            initInterface(e.getState(), window, p);
+                        }
+                        
+                        if(event.type == sf::Event::KeyPressed) {
+                            if(event.key.code == sf::Keyboard::Space) {
+                                pokemon1.displayDamage(e.getState(), window, 20, p);
+                            }
+                            if(event.key.code == sf::Keyboard::Left) {
+                                //std::cout << "<-" << std::endl;
+                                if (a%2 ==1) {
+                                    target = 6;
+                                    a++;
+                                    //std::cout << "g" << a << std::endl;
+                                    setCommand(e.getState(), e, window, x, y, ai_type,order, target);
+                                }
+                            }
+                            if(event.key.code == sf::Keyboard::Right) {
+                                //std::cout << "->" << std::endl;
+                                if (a%2 ==1) {
+                                    target = 7;
+                                    a++ ;
+                                    //std::cout << "d" << a << std::endl;
+                                    setCommand(e.getState(), e, window, x, y, ai_type,order, target);
+                                }
+                            }
+                        }
+                        if (event.type == sf::Event::MouseButtonPressed) {
+                            if (event.mouseButton.button == sf::Mouse::Left) {
+                                x = event.mouseButton.x;
+                                y = event.mouseButton.y;
+                                std::cout << "mouse x: " << x << std::endl;
+                                std::cout << "mouse y: " << y << std::endl;
+                                if (y>380 && x<=390) {
+                                    if (e.getState().getPokemon(p).getAttack(convertA(x, y)).getStatsAttack().scope==-1) {
+                                        if (e.getState().getPokemon(p).getPV()==0) setCommand(e.getState(), e, window, x, y, ai_type,order, target);
+                                    }
+                                    else {
+                                        if (a%2 == 0) a++;
+                                        //std::cout << "xy" << a << std::endl;
+                                        std::cout << "<- ou ->" << std::endl;
+                                    }
+                                    
+                                }
+                                if (x>390 && y>380) {
+                                    if (e.getState().getPokemon(p).getPV()!=0) setCommand(e.getState(), e, window, x, y, ai_type,order);
+                                }
+                                /*
+                                if (y>380 && x<=390) {
+                                    std::cout << "if" << std::endl;
+                                    while (window.waitEvent(ev)&& ev.mouseButton.button == sf::Mouse::Left && ev.mouseButton.x>285 && ev.mouseButton.x < 395 && ev.mouseButton.y<145) {
+                                        std::cout << "ok" <<std::endl;
+                                        setCommandA(e.getState(), e, x, y, ev.mouseButton.x,ev.mouseButton.y);
+                                        DrawRefresh(window, e.getState());
+                                    }
+                                    std::cout << "if" << std::endl;
+                                }
+                                */
+                            }
+                            initInterface(e.getState(), window, p);
+                        }
+                        initInterface(e.getState(), window, p);
+                    }
+                    initInterface(e.getState(), window, p);
+                    window.display();
+                }      
+
+    /*/////////////////////  Affichage des différents états \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*/
+            if (ai_type==-1) {
+                ai_type = -2;
+                sleep(3);
+                setCommand(e.getState(), e, window, 425,430, 0,order);
+                DrawRefresh(window, e.getState(),order);
+                initInterface(e.getState(), window, p);
+                //std::cout << "Echange avec le 3e pokémon" << std::endl;
+                setCommand(e.getState(), e, window, 478,430, 0,order);
+                DrawRefresh(window, e.getState(),order);
+                initInterface(e.getState(), window, p);
+                //std::cout << "Echange avec le 4e pokémon" << std::endl;
+            }
+    /*///////////////////////////////////////\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*/
+        }
     }
     
     void Scene::initPokemon(state::State& state) {
@@ -384,7 +386,7 @@ void Scene::draw (state::State& state, int ai_type) {
         }
     }
 
-    void Scene::setCommand(state::State& state, engine::Engine& e, sf::RenderWindow& window, int x, int y, int ai_type, int target) {
+    void Scene::setCommand(state::State& state, engine::Engine& e, sf::RenderWindow& window, int x, int y, int ai_type, std::vector<int>& order, int target) {
         if (y>380 && x<=390) {
             int att = convertA(x,y);
             if (state.getPokemon(p).getAttack(att).getPP()==0) return;
@@ -394,7 +396,7 @@ void Scene::draw (state::State& state, int ai_type) {
             a.setPokemon_target(target);
             a.setAttack(att);
             a.setPriority(state.getPokemon(p).getAttack(att).getStatsAttack().priority);
-            e.addCommand(a, state);
+            e.addCommand(a);
             r++;
             p=1-p;
         }
@@ -424,27 +426,27 @@ void Scene::draw (state::State& state, int ai_type) {
             c.setPokemon(p);
             c.setPokemon_target(poke);
             c.setPriority(6);
-            e.addCommand(c,state);
+            e.addCommand(c);
             r++;
             p=1-p;
         }
         if (r==2) {
             //std::cout << "adv" << r << std::endl;
-            if (ai_type==0) {
+            if (ai_type==1) {
                 ai::RandomAI ia;
-                ia.run(e,state,window,1);
-            }
-            else if (ai_type==1) {
-                ai::HeuristicAI ia;
-                ia.run(e,state,window,1);
+                ia.run(e,state,1);
             }
             else if (ai_type==2) {
-                ai::DeepAI ia;
-                ia.run(e,state,window,1);
+                ai::HeuristicAI ia;
+                ia.run(e,state,1);
             }
-            e.runCommands(state, order);
+            else if (ai_type==3) {
+                ai::DeepAI ia;
+                ia.run(e,state,1);
+            }
+            e.runCommands(order);
             //setCommand_Adv(e, state);
-            DrawRefresh(window, state);
+            DrawRefresh(window, state,order);
             r=0;
             a=0;
             p=0;
@@ -452,9 +454,11 @@ void Scene::draw (state::State& state, int ai_type) {
 
     }
 
-    void Scene::DrawRefresh(sf::RenderWindow& window, state::State& state) {
+    void Scene::DrawRefresh(sf::RenderWindow& window, state::State& state, std::vector<int>& order) {
 
-        window.clear(sf::Color(255, 255, 255, 255));
+        //window.clear(sf::Color(255, 255, 255, 255));
+        sf::RectangleShape rectangle(sf::Vector2f(512, 385));
+        rectangle.setPosition(0,0);
         pokemon1.setTexture(state.getPokemon(0).getID(), 1);
         pokemon2.setTexture(state.getPokemon(1).getID(), 1);
         pokemon3.setTexture(state.getPokemon(6).getID(), 0);
@@ -515,6 +519,8 @@ void Scene::draw (state::State& state, int ai_type) {
         return -1;
     }
 
+    
+/*
     void Scene::setCommand_Adv(engine::Engine& e, state::State& state) {
         for (int i=6;i<8; i++) {
             int action = rand() % 2;
@@ -526,7 +532,7 @@ void Scene::draw (state::State& state, int ai_type) {
                 a.setPokemon(i);
                 a.setPokemon_target(target);
                 a.setAttack(att);
-                e.addCommand(a, state);
+                e.addCommand(a);
             }
             else {
                 engine::Command c(1);
@@ -534,11 +540,11 @@ void Scene::draw (state::State& state, int ai_type) {
                 c.setPriority(6);
                 c.setPokemon(i);
                 c.setPokemon_target(target);
-                e.addCommand(c, state); 
+                e.addCommand(c); 
             }
         }
-        e.runCommands(state, order);   
+        e.runCommands(order);   
     }
-       
+    */   
 }
 

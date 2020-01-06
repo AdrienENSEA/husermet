@@ -12,22 +12,35 @@ using namespace std;
 
 namespace engine {
 
-    Engine::Engine () {
+    Engine::Engine () :state() {
         std::vector <Command> commands = {};
     }
 
-    void Engine::runCommands (state::State &state, std::vector<int>& order) {
-        this->writeJSON(commands);
+    void Engine::runCommands (std::vector<int>& order) {
+        //this->writeJSON(commands);
+    cout << "commands size" << commands.size() << endl;
         while (!commands.empty()) {
-            if (state.getPokemon(commands.at(0).getPokemon()).getPV()!=0 || commands.at(0).getCommandID()==1) {
+            
+            if (state.getPokemon(commands.at(0).getPokemon()).getPV()!=0) {
                 if (commands.at(0).getCommandID()==2) order.push_back(commands.at(0).getPokemon_target());
                 commands.at(0).execute(state);
             }
+            if (commands.at(0).getCommandID()==3 /*|| (state.getPokemon(commands.at(0).getPokemon()).getPV()==0 && commands.at(0).getCommandID()==1)*/) {
+                    commands.at(0).execute(state);
+                    if (commands.size()>1) {
+                        for (uint i =1; i<commands.size(); i++) {
+                            if (commands.at(i).getPokemon()==commands.at(0).getPokemon()) commands.erase(commands.begin()+i);
+                        }
+                    }
+                }
             commands.erase(commands.begin());
-        }   
+        }
     }
-
-    void Engine::addCommand (Command command, state::State& state) {
+    state::State& Engine::getState() {
+        return state;
+    }
+    void Engine::addCommand (Command command) {
+        //state::State state = getState();
         //std::cout << "size debut" << commands.size() << std::endl;
         if (commands.size() == 0) {
             commands.insert(commands.begin(), command);
@@ -77,6 +90,10 @@ namespace engine {
         
     }
     
+    void Engine::updateState(state::State& state) {
+        this->state = state;
+    }
+
     void Engine::undoCommand () {
         commands.clear();
     }

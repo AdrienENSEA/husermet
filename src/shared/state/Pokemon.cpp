@@ -94,6 +94,9 @@ void Pokemon::modifPV(int pv) {
     if (this->pv + pv > 0) this->pv += pv;
     else this->pv = 0;
 }
+int Pokemon::getAbility() {
+    return ability;
+}
 }
 
 

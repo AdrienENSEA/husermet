@@ -8,9 +8,17 @@ State::State (std::vector <Pokemon> battle, TypeWeather weather, TypeTerrain ter
 }
 
 State::State() {
-	battle = {};
-	weather = NONE_W;
-	terrain = NONE_G;
+    // seul un nombre réduit de pokemon sont codés : groudon, kyogre, rayquaza, leveinard, heatran, staross, noacier
+    Pokemon groudon = PokemonFactory::createPokemon(GROUDON);
+    Pokemon kyogre = PokemonFactory::createPokemon(KYOGRE);
+    Pokemon ray = PokemonFactory::createPokemon(RAYQUAZA);
+    Pokemon heatran = PokemonFactory::createPokemon(HEATRAN);
+    Pokemon staross = PokemonFactory::createPokemon(STAROSS);
+    Pokemon noacier = PokemonFactory::createPokemon(NOACIER);
+    battle = {kyogre,groudon, ray, staross, noacier, heatran, kyogre, groudon, ray, heatran, staross, noacier};
+        
+	weather = SUN;
+	terrain = PSYCHIC;
 }
 
 void State::changeTeam (int fighter, int back) {

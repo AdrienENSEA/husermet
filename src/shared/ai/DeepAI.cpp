@@ -5,11 +5,11 @@
 using namespace std;
 int rmax=2;
 namespace ai {
-    void DeepAI::run(engine::Engine& e, state::State& state, sf::RenderWindow& window, int player) {
-        int target_done = -1, pokemon_done = -1;
+    void DeepAI::run(engine::Engine& e, state::State& state, int player) {
+        std::vector<int> target_done = {}, pokemon_done = {};
         int target;
         int r=0;
-        if (check_pv(state, window, player)==0) {
+        
 
             int damages_opt[6];
             int attacks_opt[6];
@@ -17,26 +17,28 @@ namespace ai {
             int i1=-1, i2;
 
             for (int pokemon=6*player; pokemon<2+6*player;pokemon++) {
-                if (state.getPokemon(pokemon).getPV()!=0 && pokemon!=pokemon_done) {
+                if (state.getPokemon(pokemon).getPV()!=0 && find(pokemon_done.begin(), pokemon_done.end(), pokemon)==pokemon_done.end()) { // si le pokémon a encore des PV et n'a pas encore attaqué
                     for (int attack=0; attack<4; attack++) {
                         if (state.getPokemon(pokemon).getAttack(attack).getPP()!=0) {
                             for (int target=6*(1-player); target<2+6*(1-player);target++){
-                                if (state.getPokemon(target).getPV()!=0 && target!=target_done) {
-                                    int d=damage(state.getPokemon(pokemon).getAttack(attack), state.getPokemon(pokemon), state.getPokemon(target));
+                                if (state.getPokemon(target).getPV()!=0 && find(target_done.begin(), target_done.end(), target)==target_done.end() && find(pokemon_done.begin(), pokemon_done.end(), pokemon)==pokemon_done.end()) {
+                                    engine::AttackCommand ac(pokemon, target, attack);
+                                    int d=ac.damage(state);
                                     if (d >=state.getPokemon(target).getPV()) {
-                                        int other_p = 6*player+1-pokemon+6*player;
-                                        if (state.getPokemon(pokemon).getStats().speed>state.getPokemon(other_p).getStats().speed) {
+                                        //int other_p = 6*player+1-pokemon+6*player;
+                                        if (state.getPokemon(pokemon).getStats().speed>state.getPokemon(target).getStats().speed) {
                                             engine::Command a(2);
                                             a.setPriority(state.getPokemon(pokemon).getAttack(attack).getStatsAttack().priority);
                                             a.setPokemon(pokemon);
                                             a.setPokemon_target(target);
                                             a.setAttack(attack);
-                                            e.addCommand(a, state);
+                                            e.addCommand(a);
+                                            cout << "1";
                                             damages_opt[pokemon-6*player] = d;
                                             attacks_opt[pokemon-6*player] = attack;
                                             targets_opt[pokemon-6*player] = target;
-                                            target_done = target;
-                                            pokemon_done = pokemon;
+                                            target_done.push_back(target);
+                                            pokemon_done.push_back(pokemon);
                                             i1=pokemon-6*player;
                                             if(++r==rmax) return;
                                             break;
@@ -54,60 +56,64 @@ namespace ai {
             if (i1==-1) {
                 i1 = max(damages_opt,6);
                 int pokemon_opt1 = i1 + player*6;
-                if ( (pokemon_opt1==6*player && state.getPokemon(6*player).getPV()!=0) || (pokemon_opt1==1+6*player && state.getPokemon(1+6*player).getPV()!=0) ) {
+                if ( (pokemon_opt1==6*player && state.getPokemon(pokemon_opt1).getPV()!=0) || (pokemon_opt1==1+6*player && state.getPokemon(pokemon_opt1).getPV()!=0) ) {
                     engine::Command a(2);
                     a.setPriority(state.getPokemon(pokemon_opt1).getAttack(attacks_opt[i1]).getStatsAttack().priority);
                     a.setPokemon(pokemon_opt1);
                     a.setPokemon_target(targets_opt[i1]);
                     a.setAttack(attacks_opt[i1]);
-                    e.addCommand(a, state);
+                    e.addCommand(a);
+                    cout << "2";
                     if(++r==rmax) return;
                 }
                 else {
                     engine::Command c(1);
                     target = pokemon_opt1;
                     int pokemon;
-                    if (damages_opt[0]>damages_opt[1]) pokemon = 1+player*6;
+                    if (damages_opt[0]>damages_opt[1] || find(pokemon_done.begin(), pokemon_done.end(), player*6)!=pokemon_done.end()) pokemon = 1+player*6;
                     else pokemon = player*6;
                     c.setPriority(6);
                     c.setPokemon(pokemon);
                     c.setPokemon_target(target);
-                    e.addCommand(c, state);
+                    e.addCommand(c);
+                    cout<<"3";
                     if(++r==rmax) return;
                 }
-            }
-            i2 = max2(damages_opt,6,i1);
+            }cout <<"i1"<<i1<<endl;
+            i2 = max2(damages_opt,6,i1);cout<<"i2"<<i2<<endl;
             int pokemon_opt2 = -1;
             if (i2!=-1) pokemon_opt2 = i2 + player*6;
             
-            if ( (pokemon_opt2==6*player && state.getPokemon(6*player).getPV()!=0) || (pokemon_opt2==1+6*player && state.getPokemon(1+6*player).getPV()!=0) ) {
+            if ( (pokemon_opt2==6*player && state.getPokemon(pokemon_opt2).getPV()!=0) || (pokemon_opt2==1+6*player && state.getPokemon(pokemon_opt2).getPV()!=0) ) {
                 engine::Command a(2);
                 a.setPriority(state.getPokemon(pokemon_opt2).getAttack(attacks_opt[i2]).getStatsAttack().priority);
                 a.setPokemon(pokemon_opt2);
                 a.setPokemon_target(targets_opt[i2]);
                 a.setAttack(attacks_opt[i2]);
-                e.addCommand(a, state);
+                e.addCommand(a);
+                cout<<"4";
                 if(r==rmax) return;
             }
             else if (pokemon_opt2!=-1) {
                 engine::Command c(1);
                 target = pokemon_opt2;
                 int pokemon;
-                if (damages_opt[0]>damages_opt[1]) pokemon = 1+player*6;
+                if (damages_opt[0]>damages_opt[1] || find(pokemon_done.begin(), pokemon_done.end(), player*6)!=pokemon_done.end()) pokemon = 1+player*6;
                 else pokemon = player*6;
                 c.setPriority(6);
                 c.setPokemon(pokemon);
                 c.setPokemon_target(target);
-                e.addCommand(c, state);
+                e.addCommand(c);
+                cout<<"5";
                 if(r==rmax) return;
             }
-        }     
+            
     }
 
-    void DeepAI::opt(state::State& state, int damages_opt[], int attacks_opt[], int targets_opt[], int player, int pokemon_done, int target_done) {
+    void DeepAI::opt(state::State& state, int damages_opt[], int attacks_opt[], int targets_opt[], int player, std::vector<int> pokemon_done, std::vector<int> target_done) {
         int d;
         for (int pokemon=player*6; pokemon<player*6+6; pokemon++) {
-            if (state.getPokemon(pokemon).getPV() != 0 && pokemon!=pokemon_done) {
+            if (state.getPokemon(pokemon).getPV() != 0 && find(pokemon_done.begin(), pokemon_done.end(), pokemon)==pokemon_done.end()) {
                 int d_max = 0;
                 int attack_opt = 0;
                 int target_opt = 0;
@@ -115,8 +121,9 @@ namespace ai {
                     if (state.getPokemon(pokemon).getAttack(attack).getPP()!=0) {
                         int player_target = 1-player;
                         for (int target=player_target*6; target<2+player_target*6; target++) {
-                            if (state.getPokemon(target).getPV()!=0 && target!=target_done) {
-                                d = damage(state.getPokemon(pokemon).getAttack(attack), state.getPokemon(pokemon), state.getPokemon(target));
+                            if (state.getPokemon(target).getPV()!=0 && find(target_done.begin(), target_done.end(), target)==target_done.end()) {
+                                engine::AttackCommand ac(pokemon, target, attack);
+                                int d=ac.damage(state);
                                 //cout << state.getPokemon(pokemon).getName() << d << endl;
                                 if (d > d_max) {
                                     d_max = d;
@@ -131,123 +138,15 @@ namespace ai {
                 attacks_opt[pokemon-6*player]=attack_opt;
                 targets_opt[pokemon-6*player]=target_opt;
             }
-            else if (pokemon!=pokemon_done) {
+            else if (find(pokemon_done.begin(), pokemon_done.end(), pokemon)==pokemon_done.end()) {
                 damages_opt[pokemon-6*player]=0;
                 attacks_opt[pokemon-6*player]=0;
                 targets_opt[pokemon-6*player]=0;
             }
         }
-    }
-    int DeepAI::damage(state::Attack& attack, state::Pokemon& pokemon, state::Pokemon& target) {
-        int d = 0;
-        if (attack.getStatsAttack().category == 1) {
-            float cm = 5*sw(attack.getType(),target.getType()) * stab(attack.getType(),pokemon.getType()); //1.5 si STAB + 0.5 si resistance + 1.5 si faiblesse + effet objet/climat
-            d = (pokemon.getStats().attack*attack.getStatsAttack().power/target.getStats().defense/50+2)*cm;
-            return d;
-        }
-        else if (attack.getStatsAttack().category == 2) {
-            float cm = 5*sw(attack.getType(),target.getType()) * stab(attack.getType(),pokemon.getType()); //1.5 si STAB + 0.5 si resistance + 1.5 si faiblesse + effet objet/climat
-            d = (pokemon.getStats().sp_attack*attack.getStatsAttack().power/target.getStats().sp_defense/50+2)*cm;
-            return d;
-        }
-        else if (attack.getStatsAttack().category == 3) {
-            return d;
-        }
-        return 0;
-    }
-
-    float DeepAI::stab(state::Type a, std::vector<state::Type> p) {
-        for (uint i = 0; i<p.size(); i++) {
-            if (p.at(i) == a) return 1.5;
-        }
-        return 1;
-    }
-    
-    float DeepAI::sw(state::Type at, std::vector<state::Type> df) {
-        float coeff = 1;
-        bool im = false;
-        switch (at) {
-            case state::Type::FIRE :
-                for (uint i =0 ; i<df.size(); i++ ){
-                    switch (df.at(i)) {
-                        case state::Type::GRASS : 
-                        case state::Type::ICE : 
-                        case state::Type::STEEL : 
-                        case state::Type::BUG : 
-                            coeff += 0.5;
-                            break;
-                        case state::Type::FIRE : 
-                        case state::Type::WATER : 
-                        case state::Type::DRAGON : 
-                        case state::Type::ROCK :
-                            coeff -= 0.5;
-                            break;
-                        default : break;
-                    }
-                }
-                break;
-            case state::Type::WATER :
-                for (uint i =0 ; i<df.size(); i++ ){
-                    switch (df.at(i)) {
-                        case state::Type::FIRE : 
-                        case state::Type::ROCK : 
-                        case state::Type::GROUND :
-                            coeff += 0.5;
-                            break;
-                        case state::Type::WATER : 
-                        case state::Type::GRASS : 
-                        case state::Type::DRAGON :
-                            coeff -= 0.5;
-                            break;
-                        default : break;
-                    }
-                }
-                break;
-            case state::Type::GRASS :
-                for (uint i =0 ; i<df.size(); i++ ){
-                    switch (df.at(i)) {
-                        case state::Type::WATER : 
-                        case state::Type::ROCK : 
-                        case state::Type::GROUND : 
-                            coeff += 0.5;
-                            break;
-                        case state::Type::FIRE : 
-                        case state::Type::GRASS : 
-                        case state::Type::DRAGON : 
-                        case state::Type::STEEL :
-                        case state::Type::BUG :
-                        case state::Type::POISON : 
-                        case state::Type::FLY :
-                            coeff -= 0.5;
-                            break;
-                        default : break;
-                    }
-                }
-                break;
-            case state::Type::ELECTRIC:
-                for (uint i =0 ; i<df.size(); i++ ){
-                    switch (df.at(i)) {
-                        case state::Type::WATER : 
-                        case state::Type::FLY : 
-                            coeff += 0.5;
-                            break;
-                        case state::Type::GRASS : 
-                        case state::Type::ELECTRIC : 
-                        case state::Type::DRAGON :
-                            coeff -= 0.5;
-                            break;
-                        case state::Type::GROUND :
-                            im = true;
-                            break;
-                        default : break;
-                    }
-                }
-                break;
-            default:
-                break;
-        }
-        if (im) coeff = 0;
-        return coeff;
+        cout << damages_opt[0] <<" " << damages_opt[1] <<" " <<damages_opt[2]<<" "  <<damages_opt[3]<<" "  <<damages_opt[4]<<" "  <<damages_opt[5] << endl;
+        if (pokemon_done.size()>0) cout <<"done"<< pokemon_done[0] << endl;
+        if (pokemon_done.size()>1) cout <<"done"<< pokemon_done[1] << endl;
     }
     
     int DeepAI::change(state::State& state, int player) {
@@ -261,7 +160,8 @@ namespace ai {
                         int player_target = 1-player;
                         for (int target=6*player_target; target<2+6*player_target; target++) {
                             if (state.getPokemon(target).getPV()!=0) {
-                                d = damage(state.getPokemon(pokemon).getAttack(attack), state.getPokemon(pokemon), state.getPokemon(target));
+                                engine::AttackCommand ac(pokemon, target, attack);
+                                d = ac.damage(state);
                                 if (d > d_max) {
                                     d_max = d;
                                     pokemon_opt = pokemon;
@@ -308,37 +208,38 @@ namespace ai {
         return i_max2;
     }
 
-    int DeepAI::check_pv(state::State& state, sf::RenderWindow& window, int player) {
-        if (state.getPokemon(2+6*player).getPV()==0 && state.getPokemon(3+6*player).getPV()==0 && state.getPokemon(4+6*player).getPV()==0 && state.getPokemon(5+6*player).getPV()==0) { 
-            if (state.getPokemon(6*player).getPV()==0 && state.getPokemon(1+6*player).getPV()==0) {
+    int DeepAI::check_pv(engine::Engine& e, sf::RenderWindow& window, int player) {
+        if (e.getState().getPokemon(2+6*player).getPV()==0 && e.getState().getPokemon(3+6*player).getPV()==0 && e.getState().getPokemon(4+6*player).getPV()==0 && e.getState().getPokemon(5+6*player).getPV()==0) { 
+            if (e.getState().getPokemon(6*player).getPV()==0 && e.getState().getPokemon(1+6*player).getPV()==0) {
                 if (player==1) cout << "IA a perdu" << endl;
                 else cout << "IA joueur a perdu" << endl;
                 window.close();
                 return 1;
             }
-            if (state.getPokemon(6*player).getPV()==0 || state.getPokemon(1+6*player).getPV()==0) rmax = 1;
+            if (e.getState().getPokemon(6*player).getPV()==0 || e.getState().getPokemon(1+6*player).getPV()==0) rmax = 1;
             return 0;
         }
         else {
             int target;
             std::vector<int> order = {};
             for (int i=0; i<2; i++) {
-                if (state.getPokemon(6*player+i).getPV()==0) {
-                    if (player) cout << state.getPokemon(6*player+i).getName() << " ennemi est KO" << endl;
-                    if (!player) cout << state.getPokemon(6*player+i).getName() << " est KO" << endl;
-                    engine::Engine engine;
-                    engine::Command c(1);
-                    target = change(state, player);
+                if (e.getState().getPokemon(6*player+i).getPV()==0) {
+                    if (player) cout << e.getState().getPokemon(6*player+i).getName() << " ennemi est KO" << endl;
+                    if (!player) cout << e.getState().getPokemon(6*player+i).getName() << " est KO" << endl;
+                    engine::Command c(3);
+                    target = change(e.getState(), player);
                     c.setPriority(6);
                     c.setPokemon(6*player+i);
                     c.setPokemon_target(target);
-                    engine.addCommand(c, state); 
-                    engine.runCommands(state,order);
+                    e.addCommand(c);
+                    e.runCommands(order);
                 }
             }
             return 0;
         }
     }
+
+    
        
 }
 /*
