@@ -1,6 +1,8 @@
 #include "Command.h"
 #include <iostream>
 
+using namespace std;
+
 namespace engine {
 
     Command::Command (int commandID) : commandID(commandID) {
@@ -68,6 +70,13 @@ namespace engine {
     }
     void Command::setCommandID(int commandID) {
         this->commandID = commandID;
+    }
+    void Command::toString() {
+        cout << " Pokemon : "           << to_string(this->pokemon) << endl;
+        cout << " Pokemon target : "    << to_string(this->pokemon_target) << endl;
+        cout << " Attack : "            << to_string(this->attack) << endl;
+        cout << " Priority : "          << to_string(this->priority) << endl;
+        cout << " CommandID : "         << to_string(this->commandID) << endl;
     }
 
 

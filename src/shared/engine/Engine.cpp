@@ -2,6 +2,7 @@
 #include <iostream>
 #include <stdlib.h>
 #include <typeinfo>
+#include <string.h>
 
 // For json
 #include <json/json.h>
@@ -16,6 +17,7 @@ namespace engine {
     }
 
     void Engine::runCommands (state::State &state, std::vector<int>& order) {
+        this->writeJSON(commands);
         while (!commands.empty()) {
             if (state.getPokemon(commands.at(0).getPokemon()).getPV()!=0 || commands.at(0).getCommandID()==1) {
                 if (commands.at(0).getCommandID()==2) order.push_back(commands.at(0).getPokemon_target());
@@ -84,7 +86,16 @@ namespace engine {
     void Engine::writeJSON (std::vector<Command> vect_command) {
         // Open file
         fstream file_json;
-        file_json.open("../../../res/command.json", fstream::out);
+        file_json.open("../res/command.json", fstream::out | fstream::in | fstream::app);
+        cerr << "Error : " << strerror(errno) << endl;
+        
+        vect_command.at(0).toString();
+        cout << endl;
+        vect_command.at(1).toString();
+        cout << endl;
+        vect_command.at(2).toString();
+        cout << endl;
+        vect_command.at(3).toString();
         
         //Create value
         Json::Value command_json;

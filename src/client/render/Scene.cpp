@@ -1,6 +1,8 @@
 #include "Scene.h"
 #include <iostream>
 #include <unistd.h>
+#include <stdio.h>
+
 
 #define LENGTH_SPRITE 98
 #define LENGTH_TERRAIN 290
@@ -180,6 +182,7 @@ void Scene::draw (state::State& state, int ai_type) {
                 DrawRefresh(window, state);
                 if(event.type == sf::Event::Closed) {
                     std::cout << "Vous avez fermer la fenetre" << endl;
+                    remove("../res/command.json");
                     window.close();
                 }
                 if(event.type == sf::Event::KeyPressed) {
