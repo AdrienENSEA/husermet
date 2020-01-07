@@ -108,7 +108,6 @@ namespace render {
                         //std::cout << "Défaite" << std::endl;
                         if (e.getState().getPokemon(0).getPV()<=0 && e.getState().getPokemon(1).getPV()<=0) {
                             std::cout << "Défaite" << std::endl;
-                            remove("../res/command.json");
                             window.close();
                         }
                         r=1;
@@ -143,7 +142,6 @@ namespace render {
                         c=1;
                         if (e.getState().getPokemon(6).getPV()<=0 && e.getState().getPokemon(7).getPV()<=0) {
                             std::cout << "Victoire" << std::endl;
-                            remove("../res/command.json");
                             window.close();
                         }
                     }
@@ -175,7 +173,6 @@ namespace render {
                         c=1;
                         if (e.getState().getPokemon(6).getPV()<=0 && e.getState().getPokemon(7).getPV()<=0) {
                             std::cout << "Victoire" << std::endl;
-                            remove("../res/command.json");
                             window.close();
                         }
                     }
@@ -209,7 +206,6 @@ namespace render {
                         DrawRefresh(window, e.getState(), order);
                         if(event.type == sf::Event::Closed) {
                             std::cout << "Vous avez fermer la fenetre" << endl;
-                            remove("../res/command.json");
                             window.close();
                         }
 

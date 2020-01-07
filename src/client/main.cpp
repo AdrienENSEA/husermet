@@ -44,7 +44,10 @@ int main(int argc, char* argv[])
             cout << "Affichage de l'état initial" << endl;
             sf::RenderWindow window(sf::VideoMode(512, 512), "Fight");
             Scene scene;
+            Engine e;
+            std::vector<int> order;
             scene.draw(window,-1);
+            scene.run(window,e,-1,order);
         }
         else if (string(argv[1]) == "random_ai") {
             cout << "Affichage de l'état initial avec une IA random" << endl;
@@ -66,11 +69,9 @@ int main(int argc, char* argv[])
         }
         else if (string(argv[1]) == "thread") {
             cout << "Affichage de l'état initial avec un thread séparé" << endl;
-            
-        }
-        else if (string(argv[1]) == "record") {
-            cout << "Enregistrement des commandes après 5 tours" << endl;
-            
+            remove("../res/command.json");
+			Client client;
+            client.run();
         }
         else if (string(argv[1]) == "play") {
             cout << "Affichage du jeu depuis un enregistrement de commandes" << endl;
@@ -80,15 +81,9 @@ int main(int argc, char* argv[])
 
     else {
         cout << "Veuillez ajouté hello, render ou engine en argument" << endl;
-	
 			Client client;
+            client.play();
 
-            //sf::RenderWindow window(sf::VideoMode(512, 512), "Fight");
-			
-			//while (window.isOpen()){
-				client.run();
-				//window.close();
-			//}
     }
     
     return 0;
