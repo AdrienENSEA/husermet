@@ -140,7 +140,7 @@ namespace engine {
         static int nbstep = 0;
         // Open file
         fstream file_json;
-        file_json.open("../../../res/command.json", fstream::in);
+        file_json.open("../res/command.json", fstream::in);
         
         //Create value
         Json::Value command_json;

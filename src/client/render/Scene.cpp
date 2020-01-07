@@ -52,7 +52,7 @@ namespace render {
 
 
         if(!interface.setFont("../res/fontpokemon.ttf")) cout << "Echec chargement font" << endl;
-        //run(window,e,ai_type, order);
+        run(window,e,ai_type, order);
     }
 
     void Scene::run(sf::RenderWindow& window, engine::Engine& e, int ai_type, std::vector<int>& order) {
