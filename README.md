@@ -67,7 +67,7 @@ Moteur de jeu et moteur de rendu dans deux thread différents
 ```console
 $ ./../bin/client thread
 ```
-Enregistrement des commandes durant 5 tours de jeu <br>
+Enregistrement des commandes durant 4 tours de jeu <br>
 Exécution des commandes enregistrées
 ```console
 $ ./../bin/server record
