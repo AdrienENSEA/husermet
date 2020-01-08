@@ -9,40 +9,35 @@ namespace ai {
         std::vector<int> target_done = {}, pokemon_done = {};
         int target;
         int r=0;
-        
+        int damages_opt[6];
+        int attacks_opt[6];
+        int targets_opt[6];
+        int i1=-1, i2;
 
-            int damages_opt[6];
-            int attacks_opt[6];
-            int targets_opt[6];
-            int i1=-1, i2;
-
-            for (int pokemon=6*player; pokemon<2+6*player;pokemon++) {
-                if (state.getPokemon(pokemon).getPV()!=0 && find(pokemon_done.begin(), pokemon_done.end(), pokemon)==pokemon_done.end()) { // si le pokémon a encore des PV et n'a pas encore attaqué
-                    for (int attack=0; attack<4; attack++) {
-                        if (state.getPokemon(pokemon).getAttack(attack).getPP()!=0) {
-                            for (int target=6*(1-player); target<2+6*(1-player);target++){
-                                if (state.getPokemon(target).getPV()!=0 && find(target_done.begin(), target_done.end(), target)==target_done.end() && find(pokemon_done.begin(), pokemon_done.end(), pokemon)==pokemon_done.end()) {
-                                    engine::AttackCommand ac(pokemon, target, attack);
-                                    int d=ac.damage(state);
-                                    if (d >=state.getPokemon(target).getPV()) {
-                                        //int other_p = 6*player+1-pokemon+6*player;
-                                        if (state.getPokemon(pokemon).getStats().speed>state.getPokemon(target).getStats().speed) {
-                                            engine::Command a(2);
-                                            a.setPriority(state.getPokemon(pokemon).getAttack(attack).getStatsAttack().priority);
-                                            a.setPokemon(pokemon);
-                                            a.setPokemon_target(target);
-                                            a.setAttack(attack);
-                                            e.addCommand(a);
-                                            cout << "1";
-                                            damages_opt[pokemon-6*player] = d;
-                                            attacks_opt[pokemon-6*player] = attack;
-                                            targets_opt[pokemon-6*player] = target;
-                                            target_done.push_back(target);
-                                            pokemon_done.push_back(pokemon);
-                                            i1=pokemon-6*player;
-                                            if(++r==rmax) return;
-                                            break;
-                                        }
+        for (int pokemon=6*player; pokemon<2+6*player;pokemon++) {
+            if (state.getPokemon(pokemon).getPV()!=0 && find(pokemon_done.begin(), pokemon_done.end(), pokemon)==pokemon_done.end()) { // si le pokémon a encore des PV et n'a pas encore attaqué
+                for (int attack=0; attack<4; attack++) {
+                    if (state.getPokemon(pokemon).getAttack(attack).getPP()!=0) {
+                        for (int target=6*(1-player); target<2+6*(1-player);target++){
+                            if (state.getPokemon(target).getPV()!=0 && find(target_done.begin(), target_done.end(), target)==target_done.end() && find(pokemon_done.begin(), pokemon_done.end(), pokemon)==pokemon_done.end()) {
+                                engine::AttackCommand ac(pokemon, target, attack);
+                                int d=ac.damage(state);
+                                if (d >=state.getPokemon(target).getPV()) {
+                                    if (state.getPokemon(pokemon).getStats().speed>state.getPokemon(target).getStats().speed) {
+                                        engine::Command a(2);
+                                        a.setPriority(state.getPokemon(pokemon).getAttack(attack).getStatsAttack().priority);
+                                        a.setPokemon(pokemon);
+                                        a.setPokemon_target(target);
+                                        a.setAttack(attack);
+                                        e.addCommand(a);
+                                        damages_opt[pokemon-6*player] = d;
+                                        attacks_opt[pokemon-6*player] = attack;
+                                        targets_opt[pokemon-6*player] = target;
+                                        target_done.push_back(target);
+                                        pokemon_done.push_back(pokemon);
+                                        i1=pokemon-6*player;
+                                        if(++r==rmax) return;
+                                        break;
                                     }
                                 }
                             }
@@ -50,53 +45,25 @@ namespace ai {
                     }
                 }
             }
-            
-            
-            opt(state, damages_opt, attacks_opt, targets_opt, player, pokemon_done, target_done);
-            if (i1==-1) {
-                i1 = max(damages_opt,6);
-                int pokemon_opt1 = i1 + player*6;
-                if ( (pokemon_opt1==6*player && state.getPokemon(pokemon_opt1).getPV()!=0) || (pokemon_opt1==1+6*player && state.getPokemon(pokemon_opt1).getPV()!=0) ) {
-                    engine::Command a(2);
-                    a.setPriority(state.getPokemon(pokemon_opt1).getAttack(attacks_opt[i1]).getStatsAttack().priority);
-                    a.setPokemon(pokemon_opt1);
-                    a.setPokemon_target(targets_opt[i1]);
-                    a.setAttack(attacks_opt[i1]);
-                    e.addCommand(a);
-                    cout << "2";
-                    if(++r==rmax) return;
-                }
-                else {
-                    engine::Command c(1);
-                    target = pokemon_opt1;
-                    int pokemon;
-                    if (damages_opt[0]>damages_opt[1] || find(pokemon_done.begin(), pokemon_done.end(), player*6)!=pokemon_done.end()) pokemon = 1+player*6;
-                    else pokemon = player*6;
-                    c.setPriority(6);
-                    c.setPokemon(pokemon);
-                    c.setPokemon_target(target);
-                    e.addCommand(c);
-                    cout<<"3";
-                    if(++r==rmax) return;
-                }
-            }cout <<"i1"<<i1<<endl;
-            i2 = max2(damages_opt,6,i1);cout<<"i2"<<i2<<endl;
-            int pokemon_opt2 = -1;
-            if (i2!=-1) pokemon_opt2 = i2 + player*6;
-            
-            if ( (pokemon_opt2==6*player && state.getPokemon(pokemon_opt2).getPV()!=0) || (pokemon_opt2==1+6*player && state.getPokemon(pokemon_opt2).getPV()!=0) ) {
+        }
+        
+        
+        opt(state, damages_opt, attacks_opt, targets_opt, player, pokemon_done, target_done);
+        if (i1==-1) {
+            i1 = max(damages_opt,6);
+            int pokemon_opt1 = i1 + player*6;
+            if ( (pokemon_opt1==6*player && state.getPokemon(pokemon_opt1).getPV()!=0) || (pokemon_opt1==1+6*player && state.getPokemon(pokemon_opt1).getPV()!=0) ) {
                 engine::Command a(2);
-                a.setPriority(state.getPokemon(pokemon_opt2).getAttack(attacks_opt[i2]).getStatsAttack().priority);
-                a.setPokemon(pokemon_opt2);
-                a.setPokemon_target(targets_opt[i2]);
-                a.setAttack(attacks_opt[i2]);
+                a.setPriority(state.getPokemon(pokemon_opt1).getAttack(attacks_opt[i1]).getStatsAttack().priority);
+                a.setPokemon(pokemon_opt1);
+                a.setPokemon_target(targets_opt[i1]);
+                a.setAttack(attacks_opt[i1]);
                 e.addCommand(a);
-                cout<<"4";
-                if(r==rmax) return;
+                if(++r==rmax) return;
             }
-            else if (pokemon_opt2!=-1) {
+            else {
                 engine::Command c(1);
-                target = pokemon_opt2;
+                target = pokemon_opt1;
                 int pokemon;
                 if (damages_opt[0]>damages_opt[1] || find(pokemon_done.begin(), pokemon_done.end(), player*6)!=pokemon_done.end()) pokemon = 1+player*6;
                 else pokemon = player*6;
@@ -104,9 +71,34 @@ namespace ai {
                 c.setPokemon(pokemon);
                 c.setPokemon_target(target);
                 e.addCommand(c);
-                cout<<"5";
-                if(r==rmax) return;
+                if(++r==rmax) return;
             }
+        }
+        i2 = max2(damages_opt,6,i1);
+        int pokemon_opt2 = -1;
+        if (i2!=-1) pokemon_opt2 = i2 + player*6;
+        
+        if ( (pokemon_opt2==6*player && state.getPokemon(pokemon_opt2).getPV()!=0) || (pokemon_opt2==1+6*player && state.getPokemon(pokemon_opt2).getPV()!=0) ) {
+            engine::Command a(2);
+            a.setPriority(state.getPokemon(pokemon_opt2).getAttack(attacks_opt[i2]).getStatsAttack().priority);
+            a.setPokemon(pokemon_opt2);
+            a.setPokemon_target(targets_opt[i2]);
+            a.setAttack(attacks_opt[i2]);
+            e.addCommand(a);
+            if(r==rmax) return;
+        }
+        else if (pokemon_opt2!=-1) {
+            engine::Command c(1);
+            target = pokemon_opt2;
+            int pokemon;
+            if (damages_opt[0]>damages_opt[1] || find(pokemon_done.begin(), pokemon_done.end(), player*6)!=pokemon_done.end()) pokemon = 1+player*6;
+            else pokemon = player*6;
+            c.setPriority(6);
+            c.setPokemon(pokemon);
+            c.setPokemon_target(target);
+            e.addCommand(c);
+            if(r==rmax) return;
+        }
             
     }
 
@@ -124,7 +116,6 @@ namespace ai {
                             if (state.getPokemon(target).getPV()!=0 && find(target_done.begin(), target_done.end(), target)==target_done.end()) {
                                 engine::AttackCommand ac(pokemon, target, attack);
                                 int d=ac.damage(state);
-                                //cout << state.getPokemon(pokemon).getName() << d << endl;
                                 if (d > d_max) {
                                     d_max = d;
                                     attack_opt = attack;
@@ -144,9 +135,6 @@ namespace ai {
                 targets_opt[pokemon-6*player]=0;
             }
         }
-        cout << damages_opt[0] <<" " << damages_opt[1] <<" " <<damages_opt[2]<<" "  <<damages_opt[3]<<" "  <<damages_opt[4]<<" "  <<damages_opt[5] << endl;
-        if (pokemon_done.size()>0) cout <<"done"<< pokemon_done[0] << endl;
-        if (pokemon_done.size()>1) cout <<"done"<< pokemon_done[1] << endl;
     }
     
     int DeepAI::change(state::State& state, int player) {
@@ -242,49 +230,7 @@ namespace ai {
     
        
 }
-/*
-    void DeepAI::max(state::State& state) {
-        int d = 0;
-        int attack, target;
-        for (int pokemon=6; pokemon<11; pokemon++) {
-            int attack_opt = 0;
-            int target_opt = 0;
-            int d_max = 0;
-            for (attack=0; attack<4; attack++) {
-                if (state.getPokemon(pokemon).getAttack(attack).getPP()!=0) {
-                    for (target=0; target<2; target++) {
-                        d = damage(state.getPokemon(pokemon).getAttack(attack), state.getPokemon(pokemon), state.getPokemon(target));
-                        //cout << "pokemon"<<pokemon<<"attack"<< attack<<"target"<<target<<"d" << d << endl;
-                        if (d > d_max) {
-                            d_max = d;
-                            attack_opt = attack;
-                            target_opt = target;
-                            //cout << "pokemon"<<pokemon<<"attack_opt"<< attack_opt<<"target_opt"<<target_opt << "dmax" << d_max << endl;
-                        }
-                    }
-                }
-            }
-            
-            if (state.getPokemon(pokemon).getAttack(0).getPP()==0 && state.getPokemon(pokemon).getAttack(1).getPP()==0 && state.getPokemon(pokemon).getAttack(2).getPP()==0 && state.getPokemon(pokemon).getAttack(3).getPP()==0) {
-                engine::Command c(1);
-                target = 8;
-                while (state.getPokemon(target).getPV()==0) {
-                    if (target<12) target++;
-                    else break;
-                }
-                c.setPriority(6);
-                c.setPokemon(pokemon);
-                c.setPokemon_target(target);
-                e.addCommand(c, state); 
-            }
-            engine::Command a(2);
-            a.setPriority(state.getPokemon(pokemon).getAttack(attack_opt).getStatsAttack().priority);
-            a.setPokemon(pokemon);
-            a.setPokemon_target(target_opt);
-            a.setAttack(attack_opt);
-            e.addCommand(a, state);
-        }  
-        */ 
+
 
 
 
