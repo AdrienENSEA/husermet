@@ -6,12 +6,14 @@
 // Includes for microhttpd
 #include <microhttpd.h>
 #include <string.h>
-#define PORT 8888
+#define PORT 8080 
+#define MAXLINE 1024
 
 // Includes for client
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+#define SOCKET_ERROR -1
 
 using namespace std;
 
@@ -56,8 +58,8 @@ namespace server {
     void Server::run () {
         struct MHD_Daemon *daemon;
 
-        daemon = MHD_start_daemon (MHD_USE_INTERNAL_POLLING_THREAD, PORT, NULL, NULL, &answer_to_connection_test, NULL, MHD_OPTION_END);
-        cout << "Server launched on localhost port 8888" << endl << "http://localhost:8888/" << endl;
+        daemon = MHD_start_daemon (MHD_USE_INTERNAL_POLLING_THREAD, PORT, NULL, NULL, &answer_to_connection, NULL, MHD_OPTION_END);
+        cout << "Server launched on localhost port " + to_string(PORT) << endl << "http://localhost:" + to_string(PORT) + "/" << endl;
         if (NULL == daemon) cout << "Error server" << endl;
         getchar ();
 
@@ -66,35 +68,43 @@ namespace server {
     }
     
     void Server::talkwith() {
-        int clientSocket;
-        char buffer[1024];
-        struct sockaddr_in serverAddr;
-        socklen_t addr_size;
+        int sockfd; 
+        char buffer[MAXLINE]; 
+        char *hello = "GET /dontcare HTTP/1.1 \0"; 
+        struct sockaddr_in     servaddr; 
 
-        /*---- Create the socket. The three arguments are: ----*/
-        /* 1) Internet domain 2) Stream socket 3) Default protocol (TCP in this case) */
-        clientSocket = socket(PF_INET, SOCK_STREAM, 0);
+        // Creating socket file descriptor 
+        if ( (sockfd = socket(AF_INET, SOCK_DGRAM, 0)) < 0 ) { 
+            perror("socket creation failed"); 
+            exit(EXIT_FAILURE); 
+        } 
 
-        /*---- Configure settings of the server address struct ----*/
-        /* Address family = Internet */
-        serverAddr.sin_family = AF_INET;
-        /* Set port number, using htons function to use proper byte order */
-        serverAddr.sin_port = htons(PORT);
-        /* Set IP address to localhost */
-        serverAddr.sin_addr.s_addr = inet_addr("127.0.0.1");
-        /* Set all bits of the padding field to 0 */
-        memset(serverAddr.sin_zero, '\0', sizeof serverAddr.sin_zero);
+        memset(&servaddr, 0, sizeof(servaddr)); 
+          
+        // Filling server information 
+        servaddr.sin_family = AF_INET; 
+        servaddr.sin_port = htons(PORT); 
+        servaddr.sin_addr.s_addr = INADDR_LOOPBACK; //INADDR_ANY all local interfaces; 
         
-        /*---- Connect the socket to the server using the address struct ----*/
-        addr_size = sizeof serverAddr;
-        connect(clientSocket, (struct sockaddr *) &serverAddr, addr_size);
-
-        /*---- Read the message from the server into the buffer ----*/
-        recv(clientSocket, buffer, 1024, 0);
-
-        /*---- Print the received message ----*/
-        printf("Data received: %s",buffer); 
-    }
-    
-    
+        if (connect(sockfd, (sockaddr *) &servaddr, sizeof(sockaddr)) == SOCKET_ERROR) {
+            perror("Connection to server failed");
+            exit(errno);
+        }
+        
+        int n;
+        socklen_t len; 
+          
+        send(sockfd, (const char *)hello, strlen(hello), 
+            MSG_CONFIRM); 
+        printf("Hello message sent.\n"); 
+              
+        /*
+        n = recvfrom(sockfd, (char *)buffer, MAXLINE,  
+                    MSG_WAITALL, (struct sockaddr *) &servaddr, 
+                    &len); 
+        buffer[n] = '\0'; 
+        printf("Server : %s\n", buffer); 
+        */
+        close(sockfd);
+}
 }

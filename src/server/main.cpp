@@ -56,6 +56,9 @@ int main(int argc, char* argv[])
 		    cout << "Start of listen : " << endl;
 		    Server server;
 		    server.run();
+	    }
+	    if (string(argv[1]) == "client") {
+		    cout << "Start of client : " << endl;
 		    Server server1;
 		    server1.talkwith();
 	    }
