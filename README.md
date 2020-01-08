@@ -62,3 +62,14 @@ Intelligence Artificielle choisissant ses actions de manière à maximiser les d
 ```console
 $ ./../bin/client deep_ai
 ```
+## 4.1 Modularisation
+Moteur de jeu et moteur de rendu dans deux thread différents
+```console
+$ ./../bin/client thread
+```
+Enregistrement des commandes durant 5 tours de jeu <br>
+Exécution des commandes enregistrées
+```console
+$ ./../bin/server record
+$ ./../bin/client play
+```

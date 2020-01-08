@@ -105,18 +105,24 @@ void setCommand(state::State& state, engine::Engine& e, int x, int y, int ai_typ
 }
 
 void thread_engine(void* ptr){
-    while (1) {
+    engine::Engine* ptr_e=(engine::Engine*)ptr;
+    while (1) { 
         if (r==2) {
-        //cout << "test" << endl;
-
-        //joueur.run(*ptr, ptr->getState(),window,0);
-        engine::Engine* ptr_e=(engine::Engine*)ptr;
-
         ptr_e->runCommands(order);
-        usleep(5000);
         r=0;
         }
     }
+}
+
+void thread_play(void* ptr){
+    engine::Engine* ptr_e=(engine::Engine*)ptr;
+    std::vector<engine::Command> vect;
+        ptr_e->readJSON(vect);
+        for (uint i=0; i<vect.size();i++) {
+            if (vect.at(i).getCommandID()==2) order.push_back(vect.at(i).getPokemon_target());
+            vect.at(i).execute(ptr_e->getState());
+            sleep(1);
+        }
 }
 
 namespace client {
@@ -146,6 +152,7 @@ namespace client {
                     if (e.getState().getPokemon(2).getPV()==0 && e.getState().getPokemon(3).getPV()==0 && e.getState().getPokemon(4).getPV()==0 && e.getState().getPokemon(5).getPV()==0) {
                         if (e.getState().getPokemon(0).getPV()<=0 && e.getState().getPokemon(1).getPV()<=0) {
                             std::cout << "Défaite" << std::endl;
+                            //e.writeJSON(e.getPastCommands());
                             window.close();
                         }
                         r=1;
@@ -173,6 +180,7 @@ namespace client {
                         //std::cout << "Défaite" << std::endl;
                         if (e.getState().getPokemon(0).getPV()<=0 && e.getState().getPokemon(1).getPV()<=0) {
                             std::cout << "Défaite" << std::endl;
+                            //e.writeJSON(e.getPastCommands());
                             window.close();
                         }
                         r=1;
@@ -201,6 +209,7 @@ namespace client {
                         c=1;
                         if (e.getState().getPokemon(6).getPV()<=0 && e.getState().getPokemon(7).getPV()<=0) {
                             std::cout << "Victoire" << std::endl;
+                            //e.writeJSON(e.getPastCommands());
                             window.close();
                         }
                     }
@@ -230,6 +239,7 @@ namespace client {
                         c=1;
                         if (e.getState().getPokemon(6).getPV()<=0 && e.getState().getPokemon(7).getPV()<=0) {
                             std::cout << "Victoire" << std::endl;
+                            //e.writeJSON(e.getPastCommands());
                             window.close();
                         }
                     }
@@ -261,7 +271,7 @@ namespace client {
                 if(event.type == sf::Event::Closed) {
                     std::cout << "Vous avez fermer la fenetre" << endl;
                     
-                    e.writeJSON(e.getPastCommands());
+                    //e.writeJSON(e.getPastCommands());
                     window.close();
                     return;
                 }
@@ -291,6 +301,7 @@ namespace client {
                             if (ia3.check_pv(e,window,1)==1) return;
                         }
                         if (joueur.check_pv(e,window,0)==1 || ia1.check_pv(e,window,1)==1 || ia2.check_pv(e,window,1)==1 || ia3.check_pv(e,window,1)==1) {
+                            //e.writeJSON(e.getPastCommands());
                             return;
                         }
                         s.DrawRefresh(window, e.getState(),order);
@@ -372,8 +383,8 @@ namespace client {
         engine::Engine e;
         engine::Command command(0);
         s.draw(window);
-        int k=0;
-        std::thread t1(thread_engine, &e);
+        std::thread t1(thread_play, &e);
+
         while (window.isOpen()) {
             sf::Event event;
             s.DrawRefresh(window,e.getState(),order);
@@ -385,14 +396,13 @@ namespace client {
                     window.close();
                 }
             }
-            while(k<10){
-                command.readJSON(command);
-                e.addCommand(command);
-                r=2;
-                k++;/*
-                s.DrawRefresh(window,e.getState(),order);
-                s.initInterface(e.getState(),window,p);
-                window.display();*/
+            if(e.getState().getPokemon(6).getPV()==0 && e.getState().getPokemon(7).getPV()==0 && e.getState().getPokemon(8).getPV()==0 && e.getState().getPokemon(9).getPV()==0 && e.getState().getPokemon(10).getPV()==0 && e.getState().getPokemon(11).getPV()==0) {
+                cout << "IA adverse a perdu" << endl;
+                window.close();
+            }
+            if(e.getState().getPokemon(0).getPV()==0 && e.getState().getPokemon(1).getPV()==0 && e.getState().getPokemon(2).getPV()==0 && e.getState().getPokemon(3).getPV()==0 && e.getState().getPokemon(4).getPV()==0 && e.getState().getPokemon(5).getPV()==0) {
+                cout << "IA joueur a perdu" << endl;
+                window.close();
             }
             
         }

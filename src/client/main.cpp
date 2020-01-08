@@ -37,17 +37,28 @@ int main(int argc, char* argv[])
         else if (string(argv[1]) == "render") {
             cout << "Affichage d'un état" << endl;
             sf::RenderWindow window(sf::VideoMode(512, 512), "Fight");
-		    Scene scene1;
-            scene1.draw(window);
+		    Scene scene;
+            Engine e;
+            int p=0;
+            std::vector<int> order;
+            scene.draw(window);
+            scene.initInterface(e.getState(), window,p);
+            while (window.isOpen()) {
+                sf::Event event;
+                while (window.pollEvent(event)) {
+                    if(event.type == sf::Event::Closed) {
+                        std::cout << "Vous avez fermer la fenetre" << endl;
+                        window.close();
+                    }
+                }
+                window.display();
+            }
         }
         else if (string(argv[1]) == "engine") {
             cout << "Affichage de l'état initial" << endl;
             sf::RenderWindow window(sf::VideoMode(512, 512), "Fight");
             Scene scene;
-            Engine e;
-            std::vector<int> order;
             scene.draw(window,-1);
-            scene.run(window,e,-1,order);
         }
         else if (string(argv[1]) == "random_ai") {
             cout << "Affichage de l'état initial avec une IA random" << endl;
@@ -75,15 +86,15 @@ int main(int argc, char* argv[])
         }
         else if (string(argv[1]) == "play") {
             cout << "Affichage du jeu depuis un enregistrement de commandes" << endl;
-            
+            Client client;
+            client.play();
         }
     }
 
     else {
         cout << "Veuillez ajouté hello, render ou engine en argument" << endl;
+			
 
-			Client client;
-            client.play();
     }
     
     return 0;

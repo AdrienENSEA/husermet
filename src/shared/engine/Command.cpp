@@ -22,7 +22,7 @@ namespace engine {
         cerr << "Error : " << strerror(errno) << endl;
         
         command.toString();
-        cout << endl;
+        cout << "endl";
         
         //Create value
         Json::Value command_json;
@@ -41,11 +41,12 @@ namespace engine {
         file_json.close();
         
     }
-    void Command::readJSON (Command& command) {
+    void Command::readJSON (std::vector<Command>& vect_command) {
         static int nbstep = 0;
         // Open file
         fstream file_json;
         file_json.open("../res/command.json", fstream::in);
+        Command command(0);
         
         //Create value
         Json::Value command_json;
@@ -60,7 +61,8 @@ namespace engine {
         command.setAttack(          command_json["Command"+to_string(nbstep)]["Attack"].asInt());
         command.setPriority(        command_json["Command"+to_string(nbstep)]["Priority"].asInt());
         command.setCommandID(       command_json["Command"+to_string(nbstep)]["CommandID"].asInt());
-        toString();
+        command.toString();cout<<"read";
+        vect_command.push_back(command);
         
         nbstep++;
         // CLose file
@@ -76,7 +78,6 @@ namespace engine {
         if (commandID==3) {
             ChangePokemonCommand c(pokemon, pokemon_target);
             c.execute(state);
-            toString();
         }
         if (commandID==2) {
             AttackCommand a(pokemon, pokemon_target, attack);
