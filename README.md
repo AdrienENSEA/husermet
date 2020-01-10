@@ -73,3 +73,15 @@ Exécution des commandes enregistrées
 $ ./../bin/server record
 $ ./../bin/client play
 ```
+
+## 4.2 Modularisation
+Veillez installer la librarie libmicrohttpd-dev pour la suite
+
+API Web
+```console
+$ ./../bin/server listen
+```
+Ajouter un joueur, afficher la liste des joueurs puis retirer le joueur
+```console
+$ ./../bin/client network
+```
