@@ -41,6 +41,16 @@ void State::setTypeWeather (TypeWeather w) {
 Pokemon& State::getPokemon (int position){
     return battle.at(position);
 }
+void State::setTeam (int player, std::vector<Pokemon> pokemon) {
+    if (pokemon.size()!=6) {
+        std::cout << "L'équipe n'a pas 6 pokémon" << std::endl;
+        return;
+    }
+    for (uint i = 0; i<pokemon.size(); i++) {
+        battle.at(player*6+i)=pokemon.at(i);
+    }
+
+}
 /*
 void State::modifPP (int pp, int i) {
     pps.at(i) += pp;

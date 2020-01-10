@@ -89,11 +89,16 @@ int main(int argc, char* argv[])
             Client client;
             client.play();
         }
+        else if (string(argv[1]) == "network") {
+            cout << "Network" << endl;
+            
+        }
     }
 
     else {
         cout << "Veuillez ajouté hello, render ou engine en argument" << endl;
-			
+			Client client;
+            client.connect();
 
     }
     

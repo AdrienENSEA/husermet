@@ -4,7 +4,14 @@
 #include <unistd.h>
 #include <thread>
 
+// For json
+#include <json/json.h>
+#include <fstream>
+
 #include <SFML/Graphics.hpp>
+#include <SFML/Network.hpp>
+
+#define PORT 8080
 
 using namespace std;
 static int ai_type = 3;
@@ -384,6 +391,88 @@ namespace client {
             
         }
         t1.join();
+    }
+
+    void Client::connect() {
+
+        int id = 1, list_player = 1;
+        addPlayer();
+        while (list_player == 1) {
+            list_player = getPlayer(id);
+            id++;
+        }
+        sleep(5);
+        deletePlayer(id);
+    }
+
+    int Client::addPlayer() {
+        sf::Http http("http://localhost", PORT);
+        sf::Http::Response response;
+        sf::Http::Request req;
+        Json::Value User;
+        User["Pokemon1"] = 8;
+        User["Pokemon1"] = 11;
+        User["Pokemon1"] = 15;
+        User["Pokemon1"] = 3;
+        User["Pokemon1"] = 10;
+        User["Pokemon1"] = 17;
+        User["Player"] = 0;
+        req.setUri("/user");
+        req.setMethod(sf::Http::Request::Put);
+        req.setBody(User.toStyledString());
+        req.setField("Content-Type", "application/json");
+        req.setHttpVersion(1, 1);
+        response = http.sendRequest(req);
+        if (response.getStatus() == sf::Http::Response::Created) {
+            Json::Value root;
+            Json::Value players;
+            Json::Reader reader;
+            if (!reader.parse(response.getBody(), root, false))
+            {
+                cout << reader.getFormattedErrorMessages() << endl;
+            }
+            int id = root["id"].asInt();
+            if (id == -1)
+            {
+                cout << "Plus de place" << endl;
+                return -1;
+            }
+            else
+            {
+                return id;
+            }
+        }
+        else
+        {
+            cout << "Erreur: " << response.getStatus() << endl;
+            return -1;
+        }
+    }
+
+    void Client::deletePlayer(int id) {
+        sf::Http http("http://localhost",PORT);
+        sf::Http::Response response;
+        sf::Http::Request req;
+        req.setMethod(sf::Http::Request::Delete);
+        req.setUri("/user/" + std::to_string(id));
+        req.setField("Content-Type", "application/json");
+        req.setBody("");
+        response = http.sendRequest(req);
+    }
+
+    int Client::getPlayer(int id) {
+        sf::Http http("http://localhost", PORT);
+        sf::Http::Response response;
+        sf::Http::Request req("/user/"+to_string(id), sf::Http::Request::Get);
+        response = http.sendRequest(req);
+
+        if (response.getStatus() == sf::Http::Response::Ok) {
+            cout << response.getBody() << endl;
+            return 1;
+        }
+        else {
+            return 0;
+        }
     }
     
     // Setters and Getters

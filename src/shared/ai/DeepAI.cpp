@@ -115,7 +115,7 @@ namespace ai {
                         for (int target=player_target*6; target<2+player_target*6; target++) {
                             if (state.getPokemon(target).getPV()!=0 && find(target_done.begin(), target_done.end(), target)==target_done.end()) {
                                 engine::AttackCommand ac(pokemon, target, attack);
-                                int d=ac.damage(state);
+                                d=ac.damage(state);
                                 if (d > d_max) {
                                     d_max = d;
                                     attack_opt = attack;

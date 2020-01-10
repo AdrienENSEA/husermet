@@ -24,8 +24,11 @@ BOOST_AUTO_TEST_CASE(TestState)
     Item restes(ORBE_VIE, "Orbe vie", "description", effect_stats, NONE_S, NONE_T);
     StatsPokemon stats_pokemon = {0, 0, 0, 0, 0, 0};
     Pokemon groudon(GROUDON, "Groudon", restes , attacks, 1, type, NONE_S, stats_pokemon, 0,0);
-    std::vector <Pokemon> battle {groudon};
+    Pokemon p;
+    std::vector <Pokemon> battle{p,p,p,p,p,p,p,p,p,p,p,p};
     State s(battle, SUN, GRASSY);
+    std::vector<Pokemon> team {groudon, p,p,p,p,p};
+    s.setTeam(0,team);
     BOOST_CHECK_EQUAL(s.getTypeTerrain(), GRASSY);
     BOOST_CHECK_EQUAL(s.getTypeWeather(), SUN);
     BOOST_CHECK_EQUAL(s.getPokemon(0).getID(), GROUDON); 
