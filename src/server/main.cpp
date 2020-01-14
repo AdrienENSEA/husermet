@@ -144,7 +144,7 @@ int main(int argc, char* argv[])
             ofstream dst("../res/replay.txt", ios::binary);
             dst << src.rdbuf();
         }
-	    if (string(argv[1]) == "listen") {
+	    if (string(argv[1]) == "listen1") {
 		    cout << "Start of listen : " << endl;
 		    Server server;
 		    server.run();
@@ -154,7 +154,7 @@ int main(int argc, char* argv[])
 		    Server server1;
 		    server1.talkwith();
 	    }
-        if(!strcmp(argv[1], "listen1")){
+        if(!strcmp(argv[1], "listen")){
             cout << "starting" << endl;
             try {
                 ServicesManager servicesManager;
