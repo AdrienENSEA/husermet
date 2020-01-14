@@ -6,10 +6,10 @@ ServiceException::ServiceException (HttpStatus status, string msg)
     : httpStatus(status),msg(msg) {    
 }
 
-HttpStatus ServiceException::status () const {
+HttpStatus const ServiceException::status ()  {
     return httpStatus;
 }
 
-const char* ServiceException::what () const noexcept(false) {
+const char* const ServiceException::what () noexcept(false) {
     return msg.c_str();
 }

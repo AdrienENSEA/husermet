@@ -56,7 +56,7 @@ public:
         if (pp) MHD_destroy_post_processor (pp);
     }
 };
-
+/*
 // Détruit les données d'une requête
 static void
 request_completed (void *cls, struct MHD_Connection *connection,
@@ -160,11 +160,11 @@ int main(int argc, char* argv[])
             try {
                 ServicesManager servicesManager;
                 servicesManager.registerService(make_unique<VersionService>());
-        /*
-                UserDB userDB;
-                userDB.addUser(make_unique<User>(1,1,1,1));
-                servicesManager.registerService(make_unique<UserService>(std::ref(userDB)));
-        */
+        
+                //UserDB userDB;
+                //userDB.addUser(make_unique<User>(1,1,1,1));
+                //servicesManager.registerService(make_unique<UserService>(std::ref(userDB)));
+        
                 struct MHD_Daemon *d;
                 d = MHD_start_daemon(// MHD_USE_SELECT_INTERNALLY | MHD_USE_DEBUG | MHD_USE_POLL,
                         MHD_USE_SELECT_INTERNALLY | MHD_USE_DEBUG,
@@ -220,4 +220,5 @@ void automatic_run() {
     
     e.writeJSON(e.getPastCommands());
 }
+*/
 

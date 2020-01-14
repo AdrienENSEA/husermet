@@ -1,4 +1,5 @@
 #include "AbstractService.h"
+#include "ServiceException.h"
 using namespace std;
 using namespace server;
 
