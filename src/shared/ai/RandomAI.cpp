@@ -13,11 +13,11 @@ namespace ai {
                 action = rand() % 2;
                 if (action) {
                     do {
-                        srand (time(NULL));
+                        //srand (time(NULL));
                         att = rand()%4;
                     } while (state.getPokemon(i).getAttack(att).getPP()==0);
                     int player_target = 1-player;
-                    srand (time(NULL));
+                    //srand (time(NULL));
                     target = rand()%2+6*player_target;
                     if (state.getPokemon(target).getPV()!=0) target = 1-target;
                     engine::Command a(2);
@@ -30,7 +30,7 @@ namespace ai {
                 else {
                     engine::Command c(1);
                     do {
-                        srand (time(NULL));
+                        //srand (time(NULL));
                         target = rand()%4+2+6*player;
                     } while (state.getPokemon(target).getPV()==0);
                     c.setPriority(6);

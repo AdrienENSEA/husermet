@@ -158,26 +158,12 @@ int main(int argc, char* argv[])
             cout << "starting" << endl;
             try {
                 ServicesManager servicesManager;
-                //unique_ptr<VersionService> version_service;
-                //servicesManager.registerService(move(version_service));
-
                 servicesManager.registerService(unique_ptr<VersionService>(new VersionService()));
-        
-        /*
-        UserDB userDB;
-                unique_ptr<User> user(1,1,1,1);
-                userDB.addUser(move(user));
-                unique_ptr<UserService> user_service(std::ref(userDB));
-                servicesManager.registerService(move(user_service));
-                */
-                //userDB.addUser(unique_ptr<User>(new User(1,1,1,1)));
-                //servicesManager.registerService(make_unique<UserService>(std::ref(userDB)));
-        
+
                 UserDB userDB;
-                /*user = unique_ptr<User>(new User())
                 userDB.addUser(unique_ptr<User> (new User(1,1,1,1)));
                 servicesManager.registerService(unique_ptr<UserService>(new UserService(std::ref(userDB))));
-        */
+        
                 struct MHD_Daemon *d;
                 d = MHD_start_daemon(// MHD_USE_SELECT_INTERNALLY | MHD_USE_DEBUG | MHD_USE_POLL,
                         MHD_USE_SELECT_INTERNALLY | MHD_USE_DEBUG,

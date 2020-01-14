@@ -396,6 +396,7 @@ namespace client {
     void Client::connect() {
 
         int id = 1, list_player = 1;
+        //getPlayer(id);
         addPlayer();
         while (list_player == 1) {
             list_player = getPlayer(id);
@@ -410,12 +411,13 @@ namespace client {
         sf::Http::Response response;
         sf::Http::Request req;
         Json::Value User;
-        User["Pokemon1"] = 8;
-        User["Pokemon1"] = 11;
-        User["Pokemon1"] = 15;
-        User["Pokemon1"] = 3;
-        User["Pokemon1"] = 10;
-        User["Pokemon1"] = 17;
+        srand (time(NULL));
+        User["Pokemon1"] = rand() % 20;
+        User["Pokemon2"] = rand() % 20;
+        User["Pokemon3"] = rand() % 20;
+        User["Pokemon4"] = rand() % 20;
+        //User["Pokemon1"] = 10;
+        //User["Pokemon1"] = 17;
         User["Player"] = 0;
         req.setUri("/user");
         req.setMethod(sf::Http::Request::Put);
@@ -465,9 +467,11 @@ namespace client {
         sf::Http::Response response;
         sf::Http::Request req("/user/"+to_string(id), sf::Http::Request::Get);
         response = http.sendRequest(req);
+        cout << "ok";
 
         if (response.getStatus() == sf::Http::Response::Ok) {
             cout << response.getBody() << endl;
+            cout << "test" ;
             return 1;
         }
         else {
