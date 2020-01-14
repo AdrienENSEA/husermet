@@ -9,7 +9,6 @@
 using namespace std;
 using namespace server;
 
-User::User () //: orientation(orientation),currentLife(currentLife),x(x),y(y) 
-{
+User::User (int pokemon1, int pokemon2, int pokemon3, int pokemon4) : pokemon1 (pokemon1), pokemon2(pokemon2), pokemon3(pokemon3), pokemon4(pokemon4) {
     
 }

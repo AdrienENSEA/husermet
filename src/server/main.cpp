@@ -15,7 +15,6 @@
 #include "client.h"
 #include "ai.h"
 
-
 using namespace std;
 using namespace state;
 using namespace engine;
@@ -56,7 +55,7 @@ public:
         if (pp) MHD_destroy_post_processor (pp);
     }
 };
-/*
+
 // Détruit les données d'une requête
 static void
 request_completed (void *cls, struct MHD_Connection *connection,
@@ -159,12 +158,14 @@ int main(int argc, char* argv[])
             cout << "starting" << endl;
             try {
                 ServicesManager servicesManager;
-                servicesManager.registerService(make_unique<VersionService>());
+                unique_ptr<VersionService> version_service;
+                servicesManager.registerService(move(version_service));
         
-                //UserDB userDB;
-                //userDB.addUser(make_unique<User>(1,1,1,1));
-                //servicesManager.registerService(make_unique<UserService>(std::ref(userDB)));
-        
+//                UserDB userDB;
+                /*user = unique_ptr<User>(new User())
+                userDB.addUser(unique_ptr<User> (new User(1,1,1,1)));
+                servicesManager.registerService(unique_ptr<UserService>(new UserService(std::ref(userDB))));
+        */
                 struct MHD_Daemon *d;
                 d = MHD_start_daemon(// MHD_USE_SELECT_INTERNALLY | MHD_USE_DEBUG | MHD_USE_POLL,
                         MHD_USE_SELECT_INTERNALLY | MHD_USE_DEBUG,
@@ -220,5 +221,4 @@ void automatic_run() {
     
     e.writeJSON(e.getPastCommands());
 }
-*/
 

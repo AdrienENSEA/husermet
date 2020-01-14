@@ -6,10 +6,12 @@
  */
 
 #include "UserDB.hpp"
-using namespace std;
-using namespace server;
 #include <iostream>
 #include <string>
+
+using namespace std;
+using namespace server;
+
 
 UserDB::UserDB() : idseq(1) {
     
