@@ -44,8 +44,7 @@ HttpStatus UserService::put (Json::Value& out,const Json::Value& in) {
     int pokemon4 = in["pokemon4"].asInt();
     int pokemon1 = in["pokemon1"].asInt();
     int pokemon2 = in["pokemon2"].asInt();
-    std::unique_ptr<User> user;
-    out["id"] = userDB.addUser(move(user));//pokemon1,pokemon2,pokemon3,pokemon4));
+    out["id"] = userDB.addUser(std::unique_ptr<User> (new User(pokemon1,pokemon2,pokemon3,pokemon4)));
     return HttpStatus::CREATED;
 }
 

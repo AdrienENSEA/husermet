@@ -5,7 +5,7 @@
  * @copyright CNRS
  */
 
-#include "User.hpp"
+#include "User.h"
 using namespace std;
 using namespace server;
 
