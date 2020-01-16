@@ -23,12 +23,14 @@ Attack AttackFactory::createAttack(IdAttack id_attack) {
             stats_modif.setRoundLeft(5);
             stats_pokemon = {0, 0, 0, 0, 0, 0};
             stats_modif.setModifStats(stats_pokemon);
+            stats_modif.setWeather(RAIN);
             attack = new Attack(DANSE_PLUIE, "Danse Pluie", "Invoque de fortes pluies qui durent cinq tours, augmentant la puissance des capacités de type Eau et baissant celle des capacités de type Feu", WATER, stats_attack, stats_modif,5);
             break;
         case TOXIK :
             stats_attack = {10, 0, 0, 3, 0, 1};
             stats_pokemon = {0, 0, 0, 0, 0, 0};
             stats_modif.setModifStats(stats_pokemon);
+            stats_modif.setState(POISONED);
             attack = new Attack(TOXIK, "Toxik", "Empoisonne gravement l'ennemi. Les dégâts dûs au poison augmentent à chaque tour.", POISON, stats_attack, stats_modif,10);
             break;
         case ABRI :
@@ -117,6 +119,37 @@ Attack AttackFactory::createAttack(IdAttack id_attack) {
             stats_pokemon = {0, 0, 0, 0, 0, 0};
             stats_modif.setModifStats(stats_pokemon);
             attack = new Attack(DRACO_METEORE, "Draco Meteore", "", DRAGON, stats_attack, stats_modif,5);
+            break;
+        case BALL_OMBRE : 
+            stats_attack = {15, 80, 100, 2, 0, 1};
+            stats_pokemon = {0, 0, 0, 0, 0, 0};
+            stats_modif.setModifStats(stats_pokemon);
+            attack = new Attack(BALL_OMBRE, "Ball'Ombre", "", GHOST, stats_attack, stats_modif,15);
+            break;
+        case CRADOVAGUE : 
+            stats_attack = {10, 95, 100, 2, 0, 1};
+            stats_pokemon = {0, 0, 0, 0, 0, 0};
+            stats_modif.setModifStats(stats_pokemon);
+            attack = new Attack(CRADOVAGUE, "Cradovague", "", POISON, stats_attack, stats_modif,10);
+            break;
+        case EXPLOFORCE : 
+            stats_attack = {5, 120, 70, 2, 0, 1};
+            stats_pokemon = {0, 0, 0, 0, 0, 0};
+            stats_modif.setModifStats(stats_pokemon);
+            attack = new Attack(EXPLOFORCE, "Exploforce", "", FIGHT, stats_attack, stats_modif,5);
+            break;
+        case FEU_FOLLET : 
+            stats_attack = {15, 0, 85, 3, 0, -1};
+            stats_pokemon = {0, 0, 0, 0, 0, 0};
+            stats_modif.setModifStats(stats_pokemon);
+            stats_modif.setState(BURNED);
+            attack = new Attack(FEU_FOLLET, "Feu Follet", "", FIRE, stats_attack, stats_modif,15);
+            break;
+        case SEISME : 
+            stats_attack = {10, 100, 100, 1, 0, 3};
+            stats_pokemon = {0, 0, 0, 0, 0, 0};
+            stats_modif.setModifStats(stats_pokemon);
+            attack = new Attack(SEISME, "Seisme", "", GROUND, stats_attack, stats_modif,10);
             break;
         default:
             attack = new Attack();

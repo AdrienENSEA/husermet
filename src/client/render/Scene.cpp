@@ -16,7 +16,7 @@ namespace render {
 
     Scene::Scene () : height {512}, length {512} {
     }
-    Scene::Scene (uint heigth, uint length) : height(height), length(length) {
+    Scene::Scene (uint h, uint l) : height(h), length(l) {
     }
 
     static int p, a, r, c;
@@ -31,7 +31,6 @@ namespace render {
 
         tbackground.loadFromFile("../res/spritesheet_terrain.png", sf::IntRect(LENGTH_TERRAIN*(e.getState().getTypeTerrain()-1), 0, LENGTH_TERRAIN*e.getState().getTypeTerrain(), HEIGHT_TERRAIN));
 
-        
         background.setTexture(tbackground);
         background.setScale(2.1f,2.1f);    
         
@@ -87,7 +86,7 @@ namespace render {
                         while (r==0) {
                             while (window.pollEvent(event) && event.mouseButton.button == sf::Mouse::Left && event.mouseButton.x>390 && event.mouseButton.y>410 && e.getState().getPokemon(convertP(event.mouseButton.x,event.mouseButton.y)).getPV()!=0) {
                                 //std::cout << "while waitEvent" << e.getState().getPokemon(convertP(event.mouseButton.x,event.mouseButton.y)).getPV() << std::endl;
-                                setCommand(e.getState(),e,window,event.mouseButton.x,event.mouseButton.y, ai_type,order);
+                                setCommand(e.getState(),e,window,event.mouseButton.x,event.mouseButton.y, ai_type,order,target,1);
                                 e.runCommands(order);
                                 initInterface(e.getState(), window,p);
                                 DrawRefresh(window, e.getState(),order);
@@ -119,9 +118,9 @@ namespace render {
                     else {
                         while (r==0) {
                             while (window.pollEvent(event) && event.mouseButton.button == sf::Mouse::Left && event.mouseButton.x>390 && event.mouseButton.y>410 && e.getState().getPokemon(convertP(event.mouseButton.x,event.mouseButton.y)).getPV()!=0) {
-                                //std::cout << "while waitEvent" << e.getState().getPokemon(convertP(event.mouseButton.x,event.mouseButton.y)).getPV() << std::endl;
+                                //std::cout << "while waitEvent" << e.getState().getPokemon(convertP(event.mouseButton.x,event.mouseButton.y)).getPV() << std::endl
                                 p=1;
-                                setCommand(e.getState(),e,window,event.mouseButton.x,event.mouseButton.y, ai_type,order);
+                                setCommand(e.getState(),e,window,event.mouseButton.x,event.mouseButton.y, ai_type,order,target,1);
                                 e.runCommands(order);
                                 initInterface(e.getState(), window,p);
                                 DrawRefresh(window, e.getState(),order);
@@ -203,7 +202,7 @@ namespace render {
                 
                     while (window.pollEvent(event))
                     {
-                        DrawRefresh(window, e.getState(), order);
+                        
                         if(event.type == sf::Event::Closed) {
                             std::cout << "Vous avez fermer la fenetre" << endl;
                             window.close();
@@ -218,18 +217,21 @@ namespace render {
                                     e.runCommands(order);
                                     DrawRefresh(window, e.getState(),order);
                                     if (ia1.check_pv(e,window,1)==1) return;
+                                    DrawRefresh(window, e.getState(), order);
                                 }
                                 else if (ai_type==2 && ia2.check_pv(e, window, 1)==0) {
                                     ia2.run(e,e.getState(),1);
                                     e.runCommands(order);
                                     DrawRefresh(window, e.getState(),order);
                                     if (ia2.check_pv(e,window,1)==1) return;
+                                    DrawRefresh(window, e.getState(), order);
                                 }
                                 else if (ai_type==3 && ia3.check_pv(e, window, 1)==0) {
                                     ia3.run(e,e.getState(),1);
                                     e.runCommands(order);
                                     DrawRefresh(window, e.getState(),order);
                                     if (ia3.check_pv(e,window,1)==1) return;
+                                    DrawRefresh(window, e.getState(), order);
                                 }
                                 if (joueur.check_pv(e,window,0)==1) return;
                                 DrawRefresh(window, e.getState(),order);
@@ -269,8 +271,8 @@ namespace render {
                             if (event.mouseButton.button == sf::Mouse::Left) {
                                 x = event.mouseButton.x;
                                 y = event.mouseButton.y;
-                                std::cout << "mouse x: " << x << std::endl;
-                                std::cout << "mouse y: " << y << std::endl;
+                                //std::cout << "mouse x: " << x << std::endl;
+                                //std::cout << "mouse y: " << y << std::endl;
                                 if (y>380 && x<=390) {
                                     if (e.getState().getPokemon(p).getAttack(convertA(x, y)).getStatsAttack().scope==-1) {
                                         if (e.getState().getPokemon(p).getPV()==0) setCommand(e.getState(), e, window, x, y, ai_type,order, target);
@@ -283,7 +285,7 @@ namespace render {
                                     
                                 }
                                 if (x>390 && y>380) {
-                                    if (e.getState().getPokemon(p).getPV()!=0) setCommand(e.getState(), e, window, x, y, ai_type,order);
+                                    if (e.getState().getPokemon(p).getPV()!=0) setCommand(e.getState(), e, window, x, y, ai_type,order,target);
                                 }
                                 /*
                                 if (y>380 && x<=390) {
@@ -299,7 +301,7 @@ namespace render {
                             }
                             initInterface(e.getState(), window, p);
                         }
-                        initInterface(e.getState(), window, p);
+                        //initInterface(e.getState(), window, p);
                     }
                     initInterface(e.getState(), window, p);
                     window.display();
@@ -309,11 +311,11 @@ namespace render {
             if (ai_type==-1) {
                 ai_type = -2;
                 sleep(3);
-                setCommand(e.getState(), e, window, 425,430, 0,order);
+                setCommand(e.getState(), e, window, 425,430, 0,order,target);
                 DrawRefresh(window, e.getState(),order);
                 initInterface(e.getState(), window, p);
                 //std::cout << "Echange avec le 3e pokémon" << std::endl;
-                setCommand(e.getState(), e, window, 478,430, 0,order);
+                setCommand(e.getState(), e, window, 478,430, 0,order,target);
                 DrawRefresh(window, e.getState(),order);
                 initInterface(e.getState(), window, p);
                 //std::cout << "Echange avec le 4e pokémon" << std::endl;
@@ -382,17 +384,39 @@ namespace render {
         }
     }
 
-    void Scene::setCommand(state::State& state, engine::Engine& e, sf::RenderWindow& window, int x, int y, int ai_type, std::vector<int>& order, int target) {
+    void Scene::setCommand(state::State& state, engine::Engine& e, sf::RenderWindow& window, int x, int y, int ai_type, std::vector<int>& order, int target, int prio) {
         if (y>380 && x<=390) {
             int att = convertA(x,y);
             if (state.getPokemon(p).getAttack(att).getPP()==0) return;
             if (state.getPokemon(p).getPV()==0) return;
-            engine::Command a(2);
-            a.setPokemon(p);
-            a.setPokemon_target(target);
-            a.setAttack(att);
-            a.setPriority(state.getPokemon(p).getAttack(att).getStatsAttack().priority);
-            e.addCommand(a);
+            if (state.getPokemon(p).getAttack(att).getStatsAttack().scope==3) {
+                engine::Command a1(2);
+                a1.setPokemon(p);
+                a1.setPokemon_target(1-p);
+                a1.setAttack(att);
+                a1.setPriority(state.getPokemon(p).getAttack(att).getStatsAttack().priority);
+                e.addCommand(a1);
+                engine::Command a2(2);
+                a2.setPokemon(p);
+                a2.setPokemon_target(6);
+                a2.setAttack(att);
+                a2.setPriority(state.getPokemon(p).getAttack(att).getStatsAttack().priority);
+                e.addCommand(a2);
+                engine::Command a3(2);
+                a3.setPokemon(p);
+                a3.setPokemon_target(7);
+                a3.setAttack(att);
+                a3.setPriority(state.getPokemon(p).getAttack(att).getStatsAttack().priority);
+                e.addCommand(a3);
+            }
+            else {
+                engine::Command a(2);
+                a.setPokemon(p);
+                a.setPokemon_target(target);
+                a.setAttack(att);
+                a.setPriority(state.getPokemon(p).getAttack(att).getStatsAttack().priority);
+                e.addCommand(a);
+            }
             r++;
             p=1-p;
         }
@@ -418,11 +442,21 @@ namespace render {
         else if (y>380 && x> 390) {
             int poke = convertP(x,y);
             if (state.getPokemon(poke).getPV()==0) return;
-            engine::Command c(1);
-            c.setPokemon(p);
-            c.setPokemon_target(poke);
-            c.setPriority(6);
-            e.addCommand(c);
+            if (prio==1) {
+                engine::Command c(3);
+                c.setPokemon(p);
+                c.setPokemon_target(poke);
+                c.setPriority(6);
+                c.execute(state);
+                e.setPastCommands(c);
+            }
+            else {
+                engine::Command c(1);
+                c.setPokemon(p);
+                c.setPokemon_target(poke);
+                c.setPriority(6);
+                e.addCommand(c);
+            }
             r++;
             p=1-p;
         }
@@ -453,8 +487,6 @@ namespace render {
     void Scene::DrawRefresh(sf::RenderWindow& window, state::State& state, std::vector<int>& order) {
 
         //window.clear(sf::Color(255, 255, 255, 255));
-        sf::RectangleShape rectangle(sf::Vector2f(512, 385));
-        rectangle.setPosition(0,0);
         pokemon1.setTexture(state.getPokemon(0).getID(), 1);
         pokemon2.setTexture(state.getPokemon(1).getID(), 1);
         pokemon3.setTexture(state.getPokemon(6).getID(), 0);
@@ -472,7 +504,10 @@ namespace render {
         for (uint i=0; i<order.size(); i++) {
             switch(order.at(i)){
                 case 0:
+                    //interface.setText("test",10,400,20);
+                    //interface.drawText(window);
                     pokemon1.displayDamage(state, window, 0, 0);
+                    
                     break;
                 case 1:
                     pokemon2.displayDamage(state, window, 50, 1);

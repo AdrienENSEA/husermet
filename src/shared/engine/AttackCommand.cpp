@@ -32,14 +32,15 @@ namespace engine {
         sw_type = sw(state.getPokemon(pokemon).getAttack(attack).getType(),state.getPokemon(pokemon_target).getType()); // 0.5 si resistance + 1.5 si faiblesse
         coeff_stab = stab(state.getPokemon(pokemon).getAttack(attack).getType(),state.getPokemon(pokemon).getType());
         srand (time(NULL));
-        r = (rand()%38+217)*100/255;
+        r = (float)(rand()%38+217)/255;
         cc = crit();
         if (state.getPokemon(pokemon).getAttack(attack).getStatsAttack().category == 1) {
             //std::cout << "attaque physique" << std::endl;
             att = state.getPokemon(pokemon).getStats().attack;
             coeff = burn(state.getPokemon(pokemon).getState())*tvt(state.getPokemon(pokemon).getAttack(attack).getStatsAttack().scope)*weather(state.getPokemon(pokemon).getAttack(attack).getType(),state.getTypeWeather())*terrain(state.getPokemon(pokemon).getAttack(attack).getType(),state.getTypeTerrain());
             def = state.getPokemon(pokemon_target).getStats().defense;
-            d = (level*power*att/50/def*coeff+2)*cc*r/100*coeff_stab*sw_type;
+            d = (level*power*att/50/def*coeff+2)*cc*r*coeff_stab*sw_type;
+            //std::cout <<"level" << level << "power" << power << "att" << att << "def"<<def<<"coeff"<<coeff<<"cc"<<cc<<"r"<<r<<"coefstat"<<coeff_stab<<"sw"<<sw_type<<std::endl ;
             return d;
         }
         else if (state.getPokemon(pokemon).getAttack(attack).getStatsAttack().category == 2) {
@@ -47,7 +48,7 @@ namespace engine {
             att = state.getPokemon(pokemon).getStats().sp_attack;
             coeff = tvt(state.getPokemon(pokemon).getAttack(attack).getStatsAttack().scope)*weather(state.getPokemon(pokemon).getAttack(attack).getType(),state.getTypeWeather())*terrain(state.getPokemon(pokemon).getAttack(attack).getType(),state.getTypeTerrain());
             def = state.getPokemon(pokemon_target).getStats().sp_defense;
-            d = (level*power*att/50/def*coeff+2)*cc*r/100*coeff_stab*sw_type;
+            d = (level*power*att/50/def*coeff+2)*cc*r*coeff_stab*sw_type;
             return d;
         }
         else if (state.getPokemon(pokemon).getAttack(attack).getStatsAttack().category == 3) {
