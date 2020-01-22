@@ -170,10 +170,6 @@ namespace engine {
     
     Json::Value Engine::writeJSON1v1 () {
         static int nbcommand = 0;
-        // Open file
-        fstream file_json;
-        file_json.open("../res/commandAdv.json", fstream::out | fstream::in | fstream::app);
-        cerr << "Error : " << strerror(errno) << endl;
 
         //Create value
         Json::Value command_json;
@@ -227,6 +223,10 @@ namespace engine {
 
     std::vector<Command>& Engine::getPastCommands() {
         return past_commands;
+    }
+    
+    std::vector<Command>& Engine::getCommands() {
+        return commands;
     }
 
     void Engine::setPastCommands(Command command) {

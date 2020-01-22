@@ -423,8 +423,8 @@ namespace client {
             list_player = getPlayer(id);
             id++;
         }
-        sleep(10);
-        id1 = id;
+        cout << "id player is " << to_string(id1) << endl;
+        sleep(2);
         this->run1v1();
     }
 
@@ -470,6 +470,7 @@ namespace client {
                 cout << reader.getFormattedErrorMessages() << endl;
             }
             int id = root["id"].asInt();
+            id1 = id;
             if (id == -1)
             {
                 cout << "Plus de place" << endl;
@@ -514,28 +515,46 @@ namespace client {
     }
 
     void Client::commandAdv(engine::Engine& e) {
-        int id = id1;
+        
+        cout << "Command Adverse parsing " << endl;
         
         Json::Value command_json = e.writeJSON1v1();        
         sf::Http http("http://localhost",PORT);
         sf::Http::Response response;
         sf::Http::Request req;
-        req.setMethod(sf::Http::Request::Put);
+        req.setMethod(sf::Http::Request::Post);
         req.setBody(command_json.toStyledString());
-        req.setUri("/user/command/" + std::to_string(id));
+        req.setUri("/command");
         req.setField("Content-Type", "application/json");
+        cout << "Sending /command/" << to_string(id1) << endl;
         response = http.sendRequest(req);
+        while (response.getStatus() == sf::Http::Response::Accepted) {
+            sleep(2);
+            cout << "Waiting for the other player to play" << endl;
+            response = http.sendRequest(req);
+        }
+        if (response.getStatus() == sf::Http::Response::Created) {
+            Json::Value root;
+            Json::Value players;
+            Json::Reader reader;
+            if (!reader.parse(response.getBody(), root, false))
+            {
+                cout << reader.getFormattedErrorMessages() << endl;
+            }
+        }
         
         sleep(5);
         
         int id_adv;
-        if (id == 1) id_adv = 2;
-        else id_adv = 1;
+        if (id1 == 2) id_adv = 3;
+        else id_adv = 2;
         
         sf::Http::Response response_get;
-        sf::Http::Request req_get("/user/command/"+to_string(id_adv), sf::Http::Request::Get);
+        sf::Http::Request req_get("/command/"+to_string(id_adv), sf::Http::Request::Get);
         response_get = http.sendRequest(req_get);
 
+        cout << response_get.getStatus() << endl;
+        cout << response_get.getBody() << endl;
         if (response_get.getStatus() == sf::Http::Response::Ok)
             cout << response_get.getBody() << endl;
     }
@@ -683,36 +702,18 @@ void Client::run1v1() {
                     window.close();
                     return;
                 }
-
-                if(event.type == sf::Event::KeyPressed && ai_type<4 && ai_type>0) {
+                if(event.type == sf::Event::KeyPressed && ai_type<5 && ai_type>0) {
+                    if (a>=2) {
+                        //ia3.run(e,e.getState(),1);
+                        this->commandAdv(e); // Handle the commands of the 2 player
+                        r=2;
+                        a=0;
+                        s.DrawRefresh(window, e.getState(),order);
+                        if (joueur2.check_pv(e,window,1)==1) return;
+                    }
                     if(event.key.code == sf::Keyboard::Return) {
                         if (joueur.check_pv(e,window,0)==0) {
                             joueur.run(e, e.getState(),0);
-                        }
-                        if (ai_type==1 && ia1.check_pv(e, window, 1)==0) {
-                            ia1.run(e,e.getState(),1);
-                            r=2;
-                            s.DrawRefresh(window, e.getState(),order);
-                            if (ia1.check_pv(e,window,1)==1) return;
-                        }
-                        else if (ai_type==2 && ia2.check_pv(e, window, 1)==0) {
-                            ia2.run(e,e.getState(),1);
-                            r=2;
-                            s.DrawRefresh(window, e.getState(),order);
-                            if (ia2.check_pv(e,window,1)==1) return;
-                        }
-                        else if (ai_type==3 && ia3.check_pv(e, window, 1)==0) {
-                            ia3.run(e,e.getState(),1);
-                            r=2;
-                            s.DrawRefresh(window, e.getState(),order);
-                            if (ia3.check_pv(e,window,1)==1) return;
-                        }
-                        else if (ai_type==4 && joueur2.check_pv(e, window, 1)==0) {
-                            //ia3.run(e,e.getState(),1);
-                            this->commandAdv(e); // Handle the commands of the 2 player
-                            r=2;
-                            s.DrawRefresh(window, e.getState(),order);
-                            if (ia3.check_pv(e,window,1)==1) return;
                         }
                         if (joueur.check_pv(e,window,0)==1 || ia1.check_pv(e,window,1)==1 || ia2.check_pv(e,window,1)==1 || ia3.check_pv(e,window,1)==1) {
                             //e.writeJSON(e.getPastCommands());

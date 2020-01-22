@@ -52,6 +52,7 @@ main_handler (void *cls,
         if (*upload_data_size != 0) {
             request->data = upload_data;
             *upload_data_size = 0;
+            cout << "Request " << method << endl << "Body :" << endl << upload_data;
             return MHD_YES;
         }    
     }
