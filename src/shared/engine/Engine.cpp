@@ -167,6 +167,63 @@ namespace engine {
         file_json.close();
         //return vect_command;
     }
+    
+    Json::Value Engine::writeJSON1v1 () {
+        static int nbcommand = 0;
+        // Open file
+        fstream file_json;
+        file_json.open("../res/commandAdv.json", fstream::out | fstream::in | fstream::app);
+        cerr << "Error : " << strerror(errno) << endl;
+
+        //Create value
+        Json::Value command_json;
+        
+        // Command 1
+        for (uint i=0; i<this->commands.size(); i++) {
+            if (commands.at(i).getCommandID()!=0) {
+                command_json["Command"+to_string(i)]["Pokemon"]         = commands.at(i).getPokemon(); 
+                command_json["Command"+to_string(i)]["Pokemon_target"]  = commands.at(i).getPokemon_target();
+                command_json["Command"+to_string(i)]["Attack"]          = commands.at(i).getAttack();
+                command_json["Command"+to_string(i)]["Priority"]        = commands.at(i).getPriority();
+                command_json["Command"+to_string(i)]["CommandID"]       = commands.at(i).getCommandID();
+            }
+        }
+
+        return command_json;
+        
+    }
+
+    void Engine::readJSON1v1 (std::vector<Command>& vect_command) {
+        static int nbstep = 0;
+        // Open file
+        fstream file_json;
+        file_json.open("../res/commandAdv.json", fstream::in);
+
+        //Create value
+        Json::Value command_json;
+        Json::Reader reader;
+        engine::Command command(0);
+        
+        if(!reader.parse(file_json, command_json))
+            cout << "error parse" << endl;
+        
+        // Read all the 4 commands
+        for (uint i=0;i<21;i++) {
+            command.setPokemon(         command_json["Command"+to_string(i)]["Pokemon"].asInt());
+            command.setPokemon_target(  command_json["Command"+to_string(i)]["Pokemon_target"].asInt());
+            command.setAttack(          command_json["Command"+to_string(i)]["Attack"].asInt());
+            command.setPriority(        command_json["Command"+to_string(i)]["Priority"].asInt());
+            command.setCommandID(       command_json["Command"+to_string(i)]["CommandID"].asInt());
+            //command.toString();
+            if (command.getCommandID()!=0) vect_command.push_back(command);
+            else i=21;
+        }
+        
+        nbstep++;
+        // CLose file
+        file_json.close();
+        //return vect_command;
+    }
 
     std::vector<Command>& Engine::getPastCommands() {
         return past_commands;

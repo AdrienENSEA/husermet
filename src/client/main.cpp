@@ -92,14 +92,16 @@ int main(int argc, char* argv[])
         else if (string(argv[1]) == "network") {
             cout << "Un client se connecte" << endl;
             Client client;
-            client.connect();
+            client.connectTest();
             
         }
     }
 
     else {
         cout << "Veuillez ajouté hello, render ou engine en argument" << endl;
-        
+        cout << "Affichage de l'état initial avec une partie 1v1" << endl;
+        Client client;
+        client.connect();
     }
     
     return 0;

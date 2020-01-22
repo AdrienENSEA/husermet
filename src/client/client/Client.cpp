@@ -14,9 +14,10 @@
 #define PORT 8080
 
 using namespace std;
-static int ai_type = 3;
+static int ai_type = 4;
 static int p, a, r, c;
 static std::vector<int> order = {};
+static int id1;
 
 int convertP(int x, int y) {
     if (x< 450 && x> 390 && y<460 && y >420) return 2;
@@ -422,6 +423,21 @@ namespace client {
             list_player = getPlayer(id);
             id++;
         }
+        sleep(10);
+        id1 = id;
+        this->run1v1();
+    }
+
+
+    void Client::connectTest() {
+
+        int id = 1, list_player = 1;
+        //getPlayer(id);
+        addPlayer();
+        while (list_player == 1) {
+            list_player = getPlayer(id);
+            id++;
+        }
         sleep(5);
         deletePlayer(id);
     }
@@ -496,7 +512,266 @@ namespace client {
             return 0;
         }
     }
+
+    void Client::commandAdv(engine::Engine& e) {
+        int id = id1;
+        
+        Json::Value command_json = e.writeJSON1v1();        
+        sf::Http http("http://localhost",PORT);
+        sf::Http::Response response;
+        sf::Http::Request req;
+        req.setMethod(sf::Http::Request::Put);
+        req.setBody(command_json.toStyledString());
+        req.setUri("/user/command/" + std::to_string(id));
+        req.setField("Content-Type", "application/json");
+        response = http.sendRequest(req);
+        
+        sleep(5);
+        
+        int id_adv;
+        if (id == 1) id_adv = 2;
+        else id_adv = 1;
+        
+        sf::Http::Response response_get;
+        sf::Http::Request req_get("/user/command/"+to_string(id_adv), sf::Http::Request::Get);
+        response_get = http.sendRequest(req_get);
+
+        if (response_get.getStatus() == sf::Http::Response::Ok)
+            cout << response_get.getBody() << endl;
+    }
     
-    // Setters and Getters
+void Client::run1v1() {
+        sf::RenderWindow window(sf::VideoMode(512, 512), "Fight");
+        render::Scene s;
+        engine::Engine e;
+        ai::HeuristicAI joueur;
+        ai::HeuristicAI joueur2;
+        ai::RandomAI ia1;
+        ai::HeuristicAI ia2;
+        ai::DeepAI ia3;
+        int x, y;
+        s.draw(window);
+        std::thread t1(thread_engine, &e);
+        while (window.isOpen()) {
+            sf::Event event;
+            int target;
+            
+            if(e.getState().getPokemon(0).getPV()==0 && r==0) {
+                std::cout << e.getState().getPokemon(0).getName() << " est KO" << std::endl;
+                if (e.getState().getPokemon(2).getPV()==0 && e.getState().getPokemon(3).getPV()==0 && e.getState().getPokemon(4).getPV()==0 && e.getState().getPokemon(5).getPV()==0) {
+                    if (e.getState().getPokemon(0).getPV()<=0 && e.getState().getPokemon(1).getPV()<=0) {
+                        std::cout << "Défaite" << std::endl;
+                        //e.writeJSON(e.getPastCommands());
+                        window.close();
+                    }
+                    r=1;
+                    p=1;
+                }
+                else {
+                    while (r==0) {
+                        while (window.pollEvent(event) && event.mouseButton.button == sf::Mouse::Left && event.mouseButton.x>390 && event.mouseButton.y>410 && e.getState().getPokemon(convertP(event.mouseButton.x,event.mouseButton.y)).getPV()!=0) {
+                            setCommand(e.getState(),e,event.mouseButton.x,event.mouseButton.y, ai_type, target,1);
+                            r=1;
+                        }
+                    }
+                    r=0;
+                    p=0;
+                    a=0;
+                    s.initInterface(e.getState(), window,p);
+                    s.DrawRefresh(window, e.getState(),order);
+                    window.display();
+                }
+            }
+            if(e.getState().getPokemon(1).getPV()==0 && r==0) {
+                std::cout << e.getState().getPokemon(1).getName() << " est KO" << std::endl;
+                if (e.getState().getPokemon(2).getPV()==0 && e.getState().getPokemon(3).getPV()==0 && e.getState().getPokemon(4).getPV()==0 && e.getState().getPokemon(5).getPV()==0) {
+                    if (e.getState().getPokemon(0).getPV()<=0 && e.getState().getPokemon(1).getPV()<=0) {
+                        std::cout << "Défaite" << std::endl;
+                        //e.writeJSON(e.getPastCommands());
+                        window.close();
+                    }
+                    r=1;
+                    p=0;
+                }
+                else {
+                    while (r==0) {
+                        while (window.pollEvent(event) && event.mouseButton.button == sf::Mouse::Left && event.mouseButton.x>390 && event.mouseButton.y>410 && e.getState().getPokemon(convertP(event.mouseButton.x,event.mouseButton.y)).getPV()!=0) {
+                                p=1;
+                            setCommand(e.getState(),e,event.mouseButton.x,event.mouseButton.y, ai_type, target,1);
+                            r=1;
+                        }
+                    }
+                    r=0;
+                    p=0;
+                    a=0;
+                    s.initInterface(e.getState(), window,p);
+                    s.DrawRefresh(window, e.getState(),order);
+                    window.display();
+                }
+            }
+            if(e.getState().getPokemon(6).getPV()==0) {
+                if (c==0) std::cout << e.getState().getPokemon(6).getName() << " ennemi est KO" << std::endl;
+                if (e.getState().getPokemon(8).getPV()<=0 && e.getState().getPokemon(9).getPV()<=0 && e.getState().getPokemon(10).getPV()<=0 && e.getState().getPokemon(11).getPV()<=0) {
+                    c=1;
+                    if (e.getState().getPokemon(6).getPV()<=0 && e.getState().getPokemon(7).getPV()<=0) {
+                        std::cout << "Victoire" << std::endl;
+                        //e.writeJSON(e.getPastCommands());
+                        window.close();
+                        return;
+                    }
+                }
+                else {
+                    int i=8;
+                    while(e.getState().getPokemon(i).getPV()<=0) {
+                        if (i==11) {
+                            break;
+                        }
+                        i++;
+                    }
+                    engine::Command c(3);
+                    c.setPriority(6);
+                    c.setPokemon(6);
+                    c.setPokemon_target(i);
+                    e.addCommand(c); 
+                    r=2;
+                    p=0;
+                    a=0;
+                    s.DrawRefresh(window, e.getState(),order);
+                    window.display();
+                }
+            }
+            if(e.getState().getPokemon(7).getPV()==0) {
+                if (c==0) std::cout << e.getState().getPokemon(7).getName() << " ennemi est KO" << std::endl;
+                if (e.getState().getPokemon(8).getPV()==0 && e.getState().getPokemon(9).getPV()==0 && e.getState().getPokemon(10).getPV()==0 && e.getState().getPokemon(11).getPV()==0) {
+                    c=1;
+                    if (e.getState().getPokemon(6).getPV()<=0 && e.getState().getPokemon(7).getPV()<=0) {
+                        std::cout << "Victoire" << std::endl;
+                        //e.writeJSON(e.getPastCommands());
+                        window.close();
+                        return;
+                    }
+                }
+                else {
+                    int i=8;
+                    while(e.getState().getPokemon(i).getPV()<=0) {
+                        if (i==11) {
+                            break;
+                        }
+                        i++;
+                    }
+                    engine::Command c(3);
+                    c.setPriority(6);
+                    c.setPokemon(7);
+                    c.setPokemon_target(i);
+                    e.addCommand(c); 
+                    r=2;
+                    p=0;
+                    a=0;
+                    s.DrawRefresh(window, e.getState(),order);
+                    window.display();
+                }
+            }
+
+            if((e.getState().getPokemon(0).getPV() !=0 && e.getState().getPokemon(1).getPV()!=0 && e.getState().getPokemon(6).getPV()!=0 && e.getState().getPokemon(7).getPV()!=0) || c==1 || r==1) {
+                
+            while (window.pollEvent(event)) {
+                s.DrawRefresh(window, e.getState(),order);
+                if(event.type == sf::Event::Closed) {
+                    std::cout << "Vous avez fermer la fenetre" << endl;
+                    
+                    //e.writeJSON(e.getPastCommands());
+                    window.close();
+                    return;
+                }
+
+                if(event.type == sf::Event::KeyPressed && ai_type<4 && ai_type>0) {
+                    if(event.key.code == sf::Keyboard::Return) {
+                        if (joueur.check_pv(e,window,0)==0) {
+                            joueur.run(e, e.getState(),0);
+                        }
+                        if (ai_type==1 && ia1.check_pv(e, window, 1)==0) {
+                            ia1.run(e,e.getState(),1);
+                            r=2;
+                            s.DrawRefresh(window, e.getState(),order);
+                            if (ia1.check_pv(e,window,1)==1) return;
+                        }
+                        else if (ai_type==2 && ia2.check_pv(e, window, 1)==0) {
+                            ia2.run(e,e.getState(),1);
+                            r=2;
+                            s.DrawRefresh(window, e.getState(),order);
+                            if (ia2.check_pv(e,window,1)==1) return;
+                        }
+                        else if (ai_type==3 && ia3.check_pv(e, window, 1)==0) {
+                            ia3.run(e,e.getState(),1);
+                            r=2;
+                            s.DrawRefresh(window, e.getState(),order);
+                            if (ia3.check_pv(e,window,1)==1) return;
+                        }
+                        else if (ai_type==4 && joueur2.check_pv(e, window, 1)==0) {
+                            //ia3.run(e,e.getState(),1);
+                            this->commandAdv(e); // Handle the commands of the 2 player
+                            r=2;
+                            s.DrawRefresh(window, e.getState(),order);
+                            if (ia3.check_pv(e,window,1)==1) return;
+                        }
+                        if (joueur.check_pv(e,window,0)==1 || ia1.check_pv(e,window,1)==1 || ia2.check_pv(e,window,1)==1 || ia3.check_pv(e,window,1)==1) {
+                            //e.writeJSON(e.getPastCommands());
+                            return;
+                        }
+                        s.DrawRefresh(window, e.getState(),order);
+                        for (int i =0; i<2; i++) {
+                            if (e.getState().getPokemon(6+i).getPV()==0) std::cout << e.getState().getPokemon(6+i).getName() << " ennemi est KO" << endl;
+                            if (e.getState().getPokemon(i).getPV()==0) std::cout << e.getState().getPokemon(i).getName() << " est KO" << endl;
+                        }
+                        cout << "--------Prochain tour--------" << endl;
+                    }
+                    s.initInterface(e.getState(), window, p);
+                }
+                        
+                if(event.type == sf::Event::KeyPressed) {
+                    if(event.key.code == sf::Keyboard::Left) {
+                        if (a%2 ==1) {
+                            target = 6;
+                            a++;
+                            setCommand(e.getState(), e, x, y, ai_type, target);
+                        }
+                    }
+                    if(event.key.code == sf::Keyboard::Right) {
+                        if (a%2 ==1) {
+                            target = 7;
+                            a++ ;
+                            setCommand(e.getState(), e, x, y, ai_type, target);
+                        }
+                    }
+                }
+                if (event.type == sf::Event::MouseButtonPressed) {
+                    if (event.mouseButton.button == sf::Mouse::Left) {
+                        x = event.mouseButton.x;
+                        y = event.mouseButton.y;
+                        //std::cout << "mouse x: " << x << std::endl;
+                        //std::cout << "mouse y: " << y << std::endl;
+                        if (y>380 && x<=390) {
+                            if (e.getState().getPokemon(p).getAttack(convertA(x, y)).getStatsAttack().scope==-1) {
+                                if (e.getState().getPokemon(p).getPV()!=0) setCommand(e.getState(), e, x, y, ai_type, target);
+                            }
+                            else {
+                                if (a%2 == 0) a++;
+                                std::cout << "<- ou ->" << std::endl;
+                            }
+                            
+                        }
+                        if (x>390 && y>380) {
+                            if (e.getState().getPokemon(p).getPV()!=0) setCommand(e.getState(), e, x, y, ai_type, target);
+                        }
+                    }
+                }
+            }
+            s.initInterface(e.getState(), window, p);
+            window.display();
+            }
+        }
+        t1.join();
+    }
+
 
 };

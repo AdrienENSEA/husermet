@@ -474,6 +474,10 @@ namespace render {
                 ai::DeepAI ia;
                 ia.run(e,state,1);
             }
+            else if (ai_type==4) {
+                // Envoie JSON et r2cup Json puis lqnce;ent co;;qnd
+            }
+            
             e.runCommands(order);
             //setCommand_Adv(e, state);
             DrawRefresh(window, state,order);
