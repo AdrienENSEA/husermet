@@ -238,6 +238,10 @@ namespace engine {
         return past_commands;
     }
 
+    std::vector<Command>& Engine::getCommands() {
+        return commands;
+    }
+
     void Engine::setPastCommands(Command command) {
         past_commands.push_back(command);
     }

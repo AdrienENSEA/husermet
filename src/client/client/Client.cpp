@@ -436,6 +436,7 @@ namespace client {
             else list = {};
             sleep(3);
         }
+        this->run1v1(list, id1-2);
         
     }
 
@@ -559,7 +560,7 @@ namespace client {
                 nb_player ++;
             }
             else {
-                cout << "echec get " << i << response.getStatus() << endl;
+                cout << "echec get " << i << " " << response.getStatus() << endl;
             }
         }
         return nb_player;
@@ -574,7 +575,7 @@ namespace client {
         sf::Http::Response response;
         sf::Http::Request req;
         req.setMethod(sf::Http::Request::Post);
-        req.setBody(command_json.toStyledString());
+        //req.setBody(command_json.toStyledString());
         req.setUri("/command");
         req.setField("Content-Type", "application/json");
         cout << "Sending /command/" << to_string(id1) << endl;
@@ -590,7 +591,7 @@ namespace client {
             Json::Reader reader;
             if (!reader.parse(response.getBody(), root, false))
             {
-                cout << reader.getFormattedErrorMessages() << endl;
+                cout << "test"<<reader.getFormattedErrorMessages() << endl;
             }
         }
         

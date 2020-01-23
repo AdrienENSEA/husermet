@@ -163,6 +163,8 @@ int main(int argc, char* argv[])
                 UserDB userDB;
                 userDB.addUser(unique_ptr<User> (new User("serveur",-1,-1,-1,-1,-1,-1)));
                 servicesManager.registerService(unique_ptr<UserService>(new UserService(std::ref(userDB))));
+                
+                servicesManager.registerService(unique_ptr<CommandService>(new CommandService()));
         
                 struct MHD_Daemon *d;
                 d = MHD_start_daemon(// MHD_USE_SELECT_INTERNALLY | MHD_USE_DEBUG | MHD_USE_POLL,

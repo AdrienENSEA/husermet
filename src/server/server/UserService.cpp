@@ -24,6 +24,7 @@ HttpStatus const UserService::get (Json::Value& out, int id) {
 
 HttpStatus UserService::post (const Json::Value& in, int id) {
     const User* user = userDB.getUser(id);
+    cout << to_string(id) << endl;
     if (!user)
         throw ServiceException(HttpStatus::NOT_FOUND,"Invalid user id");
     unique_ptr<User> usermod (new User(*user));

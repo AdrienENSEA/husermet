@@ -46,14 +46,14 @@ HttpStatus ServicesManager::queryService (string& out, const string& in, const s
     }
     // Traite les différentes méthodes
     if (method == "GET") {
-        //cerr << "Requête GET " << pattern << " avec id=" << id << endl;
+        cerr << "Requête GET " << pattern << " avec id=" << id << endl;
         Json::Value jsonOut;
         HttpStatus status;
-        //cout << "serviceID"<<service->serviceID << endl;
+        cout << "serviceID"<<service->serviceID << endl;
         if (id == 3) connect = 1;
         if (id == 2 && connect == 1) connect = 2;
         if (connect <2) status = ((UserService*)service)->get(jsonOut,id);
-        //else status = ((CommandService*)service)->get(jsonOut,id);
+        else status = ((CommandService*)service)->get(jsonOut,id);
         out = jsonOut.toStyledString();
         return status;
     }
