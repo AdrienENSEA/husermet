@@ -17,6 +17,19 @@ namespace engine {
         std::vector <Command> past_commands = {};
     }
 
+    Engine::Engine (std::vector <int> list, state::TypeWeather weather, state::TypeTerrain terrain) {
+        std::vector<state::Pokemon> battle = {};
+        for (uint i=0; i<list.size();i++) {
+            state::Pokemon p = state::PokemonFactory::createPokemon((state::IdPokemon)list.at(i));
+            cout << "list" << p.getName() << p.getID();
+            battle.push_back(p);
+        }
+        state::State s(battle,weather,terrain);
+        this->state = s;
+        std::vector <Command> commands = {};
+        std::vector <Command> past_commands = {};
+    }
+
     void Engine::runCommands (std::vector<int>& order) {
         while (!commands.empty()) {
             
@@ -169,7 +182,7 @@ namespace engine {
     }
     
     Json::Value Engine::writeJSON1v1 () {
-        static int nbcommand = 0;
+        //static int nbcommand = 0;
 
         //Create value
         Json::Value command_json;
@@ -223,10 +236,6 @@ namespace engine {
 
     std::vector<Command>& Engine::getPastCommands() {
         return past_commands;
-    }
-    
-    std::vector<Command>& Engine::getCommands() {
-        return commands;
     }
 
     void Engine::setPastCommands(Command command) {

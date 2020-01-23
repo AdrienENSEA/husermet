@@ -112,7 +112,7 @@ Attack AttackFactory::createAttack(IdAttack id_attack) {
             stats_attack = {10, 90, 100, 2, 0, 1};
             stats_pokemon = {0, 0, 0, 0, 0, 0};
             stats_modif.setModifStats(stats_pokemon);
-            attack = new Attack(TELLURIFORCE, "Telluriforce", "", GROUND, stats_attack, stats_modif,15);
+            attack = new Attack(TELLURIFORCE, "Telluriforce", "", GROUND, stats_attack, stats_modif,10);
             break;
         case DRACO_METEORE :
             stats_attack = {5, 130, 90, 2, 0, 1};

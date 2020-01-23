@@ -19,7 +19,7 @@ namespace server {
 
     int UserDB::addUser (unique_ptr<User> user) {
         int id = idseq++;
-        if(id<=this->maxPlayers){
+        if(id<=maxPlayers){
             users.insert(std::make_pair(id,std::move(user)));
             return id;
         }

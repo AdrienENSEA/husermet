@@ -12,6 +12,7 @@
 #include <SFML/Network.hpp>
 
 #define PORT 8080
+#define URL "http://localhost"
 
 using namespace std;
 static int ai_type = 4;
@@ -166,7 +167,7 @@ namespace client {
         ai::HeuristicAI ia2;
         ai::DeepAI ia3;
         int x, y;
-        s.draw(window);
+        s.draw(e,window);
         std::thread t1(thread_engine, &e);
         while (window.isOpen()) {
             sf::Event event;
@@ -387,7 +388,7 @@ namespace client {
         render::Scene s;
         engine::Engine e;
         engine::Command command(0);
-        s.draw(window);
+        s.draw(e,window);
         std::thread t1(thread_play, &e);
 
         while (window.isOpen()) {
@@ -417,46 +418,59 @@ namespace client {
     void Client::connect() {
 
         int id = 1, list_player = 1;
-        //getPlayer(id);
-        addPlayer();
+        string name;
+        cout << "Enter your name: ";
+        cin >> name;
+        sf::Http http(URL, PORT);
+        addPlayer(http,name);
+        std::vector<int> list = {};
         while (list_player == 1) {
-            list_player = getPlayer(id);
+            list_player = getPlayer(http, id);
             id++;
         }
         cout << "id player is " << to_string(id1) << endl;
         sleep(2);
-        this->run1v1();
+        while (1) {
+            if (getListPokemon(http, list) == 2) 
+                this->run1v1(list, id1-2);
+            else list = {};
+            sleep(3);
+        }
+        
     }
 
 
     void Client::connectTest() {
 
         int id = 1, list_player = 1;
-        //getPlayer(id);
-        addPlayer();
+        string name;
+        cout << "Enter your name: ";
+        cin >> name;
+        sf::Http http(URL, PORT);
+        addPlayer(http,name);
         while (list_player == 1) {
-            list_player = getPlayer(id);
+            list_player = getPlayer(http, id);
             id++;
         }
         sleep(5);
         deletePlayer(id);
     }
 
-    int Client::addPlayer() {
-        sf::Http http("http://localhost", PORT);
+    int Client::addPlayer(sf::Http &http, string name) {
+       
         sf::Http::Response response;
         sf::Http::Request req;
-        Json::Value User;
-        srand (time(NULL));
-        User["Pokemon1"] = rand() % 20;
-        User["Pokemon2"] = rand() % 20;
-        User["Pokemon3"] = rand() % 20;
-        User["Pokemon4"] = rand() % 20;
-        //User["Pokemon1"] = 10;
-        //User["Pokemon1"] = 17;
-        User["Name"] = "Alice";
         req.setUri("/user");
         req.setMethod(sf::Http::Request::Put);
+        Json::Value User;
+        srand (time(NULL));
+        User["Pokemon1"] = rand() % 11;
+        User["Pokemon2"] = rand() % 11;
+        User["Pokemon3"] = rand() % 11;
+        User["Pokemon4"] = rand() % 11;
+        User["Pokemon5"] = rand() % 11;
+        User["Pokemon6"] = rand() % 11;
+        User["Name"] = name;
         req.setBody(User.toStyledString());
         req.setField("Content-Type", "application/json");
         req.setHttpVersion(1, 1);
@@ -471,6 +485,7 @@ namespace client {
             }
             int id = root["id"].asInt();
             id1 = id;
+            cout << "id" << id;
             if (id == -1)
             {
                 cout << "Plus de place" << endl;
@@ -489,7 +504,7 @@ namespace client {
     }
 
     void Client::deletePlayer(int id) {
-        sf::Http http("http://localhost",PORT);
+        sf::Http http(URL,PORT);
         sf::Http::Response response;
         sf::Http::Request req;
         req.setMethod(sf::Http::Request::Delete);
@@ -499,19 +514,55 @@ namespace client {
         response = http.sendRequest(req);
     }
 
-    int Client::getPlayer(int id) {
-        sf::Http http("http://localhost", PORT);
+    int Client::getPlayer(sf::Http &http, int id) {
         sf::Http::Response response;
         sf::Http::Request req("/user/"+to_string(id), sf::Http::Request::Get);
         response = http.sendRequest(req);
 
         if (response.getStatus() == sf::Http::Response::Ok) {
+            cout << "succes get" << response.getStatus() << endl;
             cout << response.getBody() << endl;
             return 1;
         }
         else {
+            cout << "echec get" << response.getStatus() << endl;
             return 0;
         }
+    }
+
+    int Client::getListPokemon(sf::Http &http, std::vector<int>& list) {
+        int nb_player = 0;
+        for (int i=2; i<4; i++) {
+            sf::Http::Response response;
+            sf::Http::Request req("/user/"+to_string(i), sf::Http::Request::Get);
+            response = http.sendRequest(req);
+
+            if (response.getStatus() == sf::Http::Response::Ok) {
+                Json::Value root;
+                Json::Reader reader;
+                if (!reader.parse(response.getBody(), root, false))
+                {
+                    cout << reader.getFormattedErrorMessages() << endl;
+                }
+                int pokemon1 = root["Pokemon1"].asInt();
+                int pokemon2 = root["Pokemon2"].asInt();
+                int pokemon3 = root["Pokemon3"].asInt();
+                int pokemon4 = root["Pokemon4"].asInt();
+                int pokemon5 = root["Pokemon5"].asInt();
+                int pokemon6 = root["Pokemon6"].asInt();
+                list.push_back(pokemon1);
+                list.push_back(pokemon2);
+                list.push_back(pokemon3);
+                list.push_back(pokemon4);
+                list.push_back(pokemon5);
+                list.push_back(pokemon6);
+                nb_player ++;
+            }
+            else {
+                cout << "echec get " << i << response.getStatus() << endl;
+            }
+        }
+        return nb_player;
     }
 
     void Client::commandAdv(engine::Engine& e) {
@@ -519,7 +570,7 @@ namespace client {
         cout << "Command Adverse parsing " << endl;
         
         Json::Value command_json = e.writeJSON1v1();        
-        sf::Http http("http://localhost",PORT);
+        sf::Http http(URL,PORT);
         sf::Http::Response response;
         sf::Http::Request req;
         req.setMethod(sf::Http::Request::Post);
@@ -557,28 +608,29 @@ namespace client {
         cout << response_get.getBody() << endl;
         if (response_get.getStatus() == sf::Http::Response::Ok)
             cout << response_get.getBody() << endl;
+        else cout <<"get" << response_get.getStatus();
     }
     
-void Client::run1v1() {
+void Client::run1v1(std::vector<int> list, int player) {
         sf::RenderWindow window(sf::VideoMode(512, 512), "Fight");
-        render::Scene s;
-        engine::Engine e;
+        render::Scene s(512,512,player);
+        engine::Engine e(list,state::NONE_W,state::GRASSY);
         ai::HeuristicAI joueur;
         ai::HeuristicAI joueur2;
         ai::RandomAI ia1;
         ai::HeuristicAI ia2;
         ai::DeepAI ia3;
         int x, y;
-        s.draw(window);
+        s.draw(e,window);
         std::thread t1(thread_engine, &e);
         while (window.isOpen()) {
             sf::Event event;
             int target;
             
-            if(e.getState().getPokemon(0).getPV()==0 && r==0) {
-                std::cout << e.getState().getPokemon(0).getName() << " est KO" << std::endl;
-                if (e.getState().getPokemon(2).getPV()==0 && e.getState().getPokemon(3).getPV()==0 && e.getState().getPokemon(4).getPV()==0 && e.getState().getPokemon(5).getPV()==0) {
-                    if (e.getState().getPokemon(0).getPV()<=0 && e.getState().getPokemon(1).getPV()<=0) {
+            if(e.getState().getPokemon(0+6*player).getPV()==0 && r==0) {
+                std::cout << e.getState().getPokemon(0+6*player).getName() << " est KO" << std::endl;
+                if (e.getState().getPokemon(2+6*player).getPV()==0 && e.getState().getPokemon(3+6*player).getPV()==0 && e.getState().getPokemon(4+6*player).getPV()==0 && e.getState().getPokemon(5+6*player).getPV()==0) {
+                    if (e.getState().getPokemon(0+6*player).getPV()<=0 && e.getState().getPokemon(1+6*player).getPV()<=0) {
                         std::cout << "Défaite" << std::endl;
                         //e.writeJSON(e.getPastCommands());
                         window.close();
@@ -601,10 +653,10 @@ void Client::run1v1() {
                     window.display();
                 }
             }
-            if(e.getState().getPokemon(1).getPV()==0 && r==0) {
-                std::cout << e.getState().getPokemon(1).getName() << " est KO" << std::endl;
-                if (e.getState().getPokemon(2).getPV()==0 && e.getState().getPokemon(3).getPV()==0 && e.getState().getPokemon(4).getPV()==0 && e.getState().getPokemon(5).getPV()==0) {
-                    if (e.getState().getPokemon(0).getPV()<=0 && e.getState().getPokemon(1).getPV()<=0) {
+            if(e.getState().getPokemon(1+6*player).getPV()==0 && r==0) {
+                std::cout << e.getState().getPokemon(1+6*player).getName() << " est KO" << std::endl;
+                if (e.getState().getPokemon(2+6*player).getPV()==0 && e.getState().getPokemon(3+6*player).getPV()==0 && e.getState().getPokemon(4+6*player).getPV()==0 && e.getState().getPokemon(5+6*player).getPV()==0) {
+                    if (e.getState().getPokemon(0+6*player).getPV()<=0 && e.getState().getPokemon(1+6*player).getPV()<=0) {
                         std::cout << "Défaite" << std::endl;
                         //e.writeJSON(e.getPastCommands());
                         window.close();

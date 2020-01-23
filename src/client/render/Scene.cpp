@@ -14,19 +14,18 @@ using namespace sf;
 
 namespace render {
 
-    Scene::Scene () : height {512}, length {512} {
+    Scene::Scene () : height {512}, length {512}, player(0){
     }
-    Scene::Scene (uint h, uint l) : height(h), length(l) {
+    Scene::Scene (uint h, uint l, int player) : height(h), length(l), player(player){
     }
 
     static int p, a, r, c;
 
-    void Scene::draw (sf::RenderWindow& window, int ai_type) {
+    void Scene::draw (engine::Engine& e, sf::RenderWindow& window, int ai_type) {
         p=0;
         a=0;
         r=0;
         c=0;
-        engine::Engine e;
         std::vector<int> order = {};
 
         tbackground.loadFromFile("../res/spritesheet_terrain.png", sf::IntRect(LENGTH_TERRAIN*(e.getState().getTypeTerrain()-1), 0, LENGTH_TERRAIN*e.getState().getTypeTerrain(), HEIGHT_TERRAIN));
@@ -69,10 +68,10 @@ namespace render {
             int target;
             //window.setVerticalSyncEnabled(false);
             
-                if(e.getState().getPokemon(0).getPV()==0 && r==0) {
-                    std::cout << e.getState().getPokemon(0).getName() << " est KO" << std::endl;
-                    if (e.getState().getPokemon(2).getPV()==0 && e.getState().getPokemon(3).getPV()==0 && e.getState().getPokemon(4).getPV()==0 && e.getState().getPokemon(5).getPV()==0) {
-                        if (e.getState().getPokemon(0).getPV()<=0 && e.getState().getPokemon(1).getPV()<=0) {
+                if(e.getState().getPokemon(0+6*player).getPV()==0 && r==0) {
+                    std::cout << e.getState().getPokemon(0+6*player).getName() << " est KO" << std::endl;
+                    if (e.getState().getPokemon(2+6*player).getPV()==0 && e.getState().getPokemon(3+6*player).getPV()==0 && e.getState().getPokemon(4+6*player).getPV()==0 && e.getState().getPokemon(5+6*player).getPV()==0) {
+                        if (e.getState().getPokemon(0+6*player).getPV()<=0 && e.getState().getPokemon(1+6*player).getPV()<=0) {
                             std::cout << "Défaite" << std::endl;
                             window.close();
                         }
@@ -101,11 +100,11 @@ namespace render {
                         window.display();
                     }
                 }
-                if(e.getState().getPokemon(1).getPV()==0 && r==0) {
-                    std::cout << e.getState().getPokemon(1).getName() << " est KO" << std::endl;
-                    if (e.getState().getPokemon(2).getPV()==0 && e.getState().getPokemon(3).getPV()==0 && e.getState().getPokemon(4).getPV()==0 && e.getState().getPokemon(5).getPV()==0) {
+                if(e.getState().getPokemon(1+6*player).getPV()==0 && r==0) {
+                    std::cout << e.getState().getPokemon(1+6*player).getName() << " est KO" << std::endl;
+                    if (e.getState().getPokemon(2+6*player).getPV()==0 && e.getState().getPokemon(3+6*player+6*player).getPV()==0 && e.getState().getPokemon(4+6*player).getPV()==0 && e.getState().getPokemon(5+6*player).getPV()==0) {
                         //std::cout << "Défaite" << std::endl;
-                        if (e.getState().getPokemon(0).getPV()<=0 && e.getState().getPokemon(1).getPV()<=0) {
+                        if (e.getState().getPokemon(0+6*player).getPV()<=0 && e.getState().getPokemon(1+6*player).getPV()<=0) {
                             std::cout << "Défaite" << std::endl;
                             window.close();
                         }
@@ -135,26 +134,26 @@ namespace render {
                         window.display();
                     }
                 }
-                if(e.getState().getPokemon(6).getPV()==0) {
-                    if (c==0) std::cout << e.getState().getPokemon(6).getName() << " ennemi est KO" << std::endl;
-                    if (e.getState().getPokemon(8).getPV()<=0 && e.getState().getPokemon(9).getPV()<=0 && e.getState().getPokemon(10).getPV()<=0 && e.getState().getPokemon(11).getPV()<=0) {
+                if(e.getState().getPokemon(6-6*player).getPV()==0) {
+                    if (c==0) std::cout << e.getState().getPokemon(6-6*player).getName() << " ennemi est KO" << std::endl;
+                    if (e.getState().getPokemon(8-6*player).getPV()<=0 && e.getState().getPokemon(9-6*player).getPV()<=0 && e.getState().getPokemon(10-6*player).getPV()<=0 && e.getState().getPokemon(11-6*player).getPV()<=0) {
                         c=1;
-                        if (e.getState().getPokemon(6).getPV()<=0 && e.getState().getPokemon(7).getPV()<=0) {
+                        if (e.getState().getPokemon(6-6*player).getPV()<=0 && e.getState().getPokemon(7-6*player).getPV()<=0) {
                             std::cout << "Victoire" << std::endl;
                             window.close();
                         }
                     }
                     else {
-                        int i=8;
+                        int i=8-6*player;
                         while(e.getState().getPokemon(i).getPV()<=0) {
-                            if (i==11) {
+                            if (i==11-6*player) {
                                 break;
                             }
                             i++;
                         }
                         engine::Command c(3);
                         c.setPriority(6);
-                        c.setPokemon(6);
+                        c.setPokemon(6-6*player);
                         c.setPokemon_target(i);
                         e.addCommand(c); 
                         e.runCommands(order); 
@@ -166,26 +165,26 @@ namespace render {
                         window.display();
                     }
                 }
-                if(e.getState().getPokemon(7).getPV()==0) {
-                    if (c==0) std::cout << e.getState().getPokemon(7).getName() << " ennemi est KO" << std::endl;
-                    if (e.getState().getPokemon(8).getPV()==0 && e.getState().getPokemon(9).getPV()==0 && e.getState().getPokemon(10).getPV()==0 && e.getState().getPokemon(11).getPV()==0) {
+                if(e.getState().getPokemon(7-6*player).getPV()==0) {
+                    if (c==0) std::cout << e.getState().getPokemon(7-6*player).getName() << " ennemi est KO" << std::endl;
+                    if (e.getState().getPokemon(8-6*player).getPV()==0 && e.getState().getPokemon(9-6*player).getPV()==0 && e.getState().getPokemon(10-6*player).getPV()==0 && e.getState().getPokemon(11-6*player).getPV()==0) {
                         c=1;
-                        if (e.getState().getPokemon(6).getPV()<=0 && e.getState().getPokemon(7).getPV()<=0) {
+                        if (e.getState().getPokemon(6-6*player).getPV()<=0 && e.getState().getPokemon(7-6*player).getPV()<=0) {
                             std::cout << "Victoire" << std::endl;
                             window.close();
                         }
                     }
                     else {
-                        int i=8;
+                        int i=8-6*player;
                         while(e.getState().getPokemon(i).getPV()<=0) {
-                            if (i==11) {
+                            if (i==11-6*player) {
                                 break;
                             }
                             i++;
                         }
                         engine::Command c(3);
                         c.setPriority(6);
-                        c.setPokemon(7);
+                        c.setPokemon(7-6*player);
                         c.setPokemon_target(i);
                         e.addCommand(c); 
                         e.runCommands(order); 
@@ -325,20 +324,20 @@ namespace render {
     }
     
     void Scene::initPokemon(state::State& state) {
-        pokemon1.setTexture(state.getPokemon(0).getID(), 1);
-        pokemon1.setInfo(state.getPokemon(0));
+        pokemon1.setTexture(state.getPokemon(0+6*player).getID(), 1);
+        pokemon1.setInfo(state.getPokemon(0+6*player));
         pokemon1.setSprite(0);
         
-        pokemon2.setTexture(state.getPokemon(1).getID(), 1);
-        pokemon2.setInfo(state.getPokemon(1));
+        pokemon2.setTexture(state.getPokemon(1+6*player).getID(), 1);
+        pokemon2.setInfo(state.getPokemon(1+6*player));
         pokemon2.setSprite(1);
         
-        pokemon3.setTexture(state.getPokemon(6).getID(), 0);
-        pokemon3.setInfo(state.getPokemon(6));
+        pokemon3.setTexture(state.getPokemon(6-6*player).getID(), 0);
+        pokemon3.setInfo(state.getPokemon(6-6*player));
         pokemon3.setSprite(2);
         
-        pokemon4.setTexture(state.getPokemon(7).getID(), 0);
-        pokemon4.setInfo(state.getPokemon(7));
+        pokemon4.setTexture(state.getPokemon(7-6*player).getID(), 0);
+        pokemon4.setInfo(state.getPokemon(7-6*player));
         pokemon4.setSprite(3);
         
     }
@@ -349,11 +348,11 @@ namespace render {
 
         // Affichage des pokémon de l'équipe
         for (int i=0; i<6; i++) {
-            if (state.getPokemon(i).getID() != 0) {
+            if (state.getPokemon(i+6*player).getID() != 0) {
                 
-                interface.setIdPokemon(state.getPokemon(i).getID());
+                interface.setIdPokemon(state.getPokemon(i+6*player).getID());
                 interface.setTPokemon("../res/spritesheet2.png");
-                if (state.getPokemon(i).getPV()==0) interface.setPokemon(LENGTH_WINDOW-110+(i%2)*50, 370+(i/2)*40, 1);
+                if (state.getPokemon(i+6*player).getPV()==0) interface.setPokemon(LENGTH_WINDOW-110+(i%2)*50, 370+(i/2)*40, 1);
                 else interface.setPokemon(LENGTH_WINDOW-110+(i%2)*50, 370+(i/2)*40);
                 interface.drawPokemon(window);
             }
@@ -491,14 +490,14 @@ namespace render {
     void Scene::DrawRefresh(sf::RenderWindow& window, state::State& state, std::vector<int>& order) {
 
         //window.clear(sf::Color(255, 255, 255, 255));
-        pokemon1.setTexture(state.getPokemon(0).getID(), 1);
-        pokemon2.setTexture(state.getPokemon(1).getID(), 1);
-        pokemon3.setTexture(state.getPokemon(6).getID(), 0);
-        pokemon4.setTexture(state.getPokemon(7).getID(), 0);
-        pokemon1.setInfo(state.getPokemon(0));
-        pokemon2.setInfo(state.getPokemon(1));
-        pokemon3.setInfo(state.getPokemon(6),1);
-        pokemon4.setInfo(state.getPokemon(7),1);
+        pokemon1.setTexture(state.getPokemon(0+6*player).getID(), 1);
+        pokemon2.setTexture(state.getPokemon(1+6*player).getID(), 1);
+        pokemon3.setTexture(state.getPokemon(6-6*player).getID(), 0);
+        pokemon4.setTexture(state.getPokemon(7-6*player).getID(), 0);
+        pokemon1.setInfo(state.getPokemon(0+6*player));
+        pokemon2.setInfo(state.getPokemon(1+6*player));
+        pokemon3.setInfo(state.getPokemon(6-6*player),1);
+        pokemon4.setInfo(state.getPokemon(7-6*player),1);
         
         window.draw(background);
         pokemon1.drawP(window);
@@ -510,17 +509,17 @@ namespace render {
                 case 0:
                     //interface.setText("test",10,400,20);
                     //interface.drawText(window);
-                    pokemon1.displayDamage(state, window, 0, 0);
+                    pokemon1.displayDamage(state, window, 0, 0+6*player);
                     
                     break;
                 case 1:
-                    pokemon2.displayDamage(state, window, 50, 1);
+                    pokemon2.displayDamage(state, window, 50, 1+6*player);
                     break;
                 case 6:
-                    pokemon3.displayDamage(state, window, 50, 6);
+                    pokemon3.displayDamage(state, window, 50, 6-6*player);
                     break;
                 case 7:
-                    pokemon4.displayDamage(state, window, 50, 7);
+                    pokemon4.displayDamage(state, window, 50, 7-6*player);
                     break;
                 default:
                     break;

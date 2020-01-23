@@ -3,7 +3,7 @@
 
 using namespace std;
 using namespace server;
-
+static int connect = 0;
 void ServicesManager::registerService (unique_ptr<AbstractService> service) {
     services.push_back(std::move(service));
 }
@@ -46,9 +46,14 @@ HttpStatus ServicesManager::queryService (string& out, const string& in, const s
     }
     // Traite les différentes méthodes
     if (method == "GET") {
-        cerr << "Requête GET " << pattern << " avec id=" << id << endl;
+        //cerr << "Requête GET " << pattern << " avec id=" << id << endl;
         Json::Value jsonOut;
-        HttpStatus status = service->get(jsonOut,id);
+        HttpStatus status;
+        //cout << "serviceID"<<service->serviceID << endl;
+        if (id == 3) connect = 1;
+        if (id == 2 && connect == 1) connect = 2;
+        if (connect <2) status = ((UserService*)service)->get(jsonOut,id);
+        //else status = ((CommandService*)service)->get(jsonOut,id);
         out = jsonOut.toStyledString();
         return status;
     }
@@ -58,7 +63,7 @@ HttpStatus ServicesManager::queryService (string& out, const string& in, const s
         Json::Value jsonIn;
         if (!jsonReader.parse(in,jsonIn))
             throw ServiceException(HttpStatus::BAD_REQUEST,"Données invalides: "+jsonReader.getFormattedErrorMessages());
-        return service->post(jsonIn,id);
+        return ((CommandService*)service)->post(jsonIn,id);
     }
     else if (method == "PUT") {
         cerr << "Requête PUT " << pattern << " avec contenu: " << in << endl;

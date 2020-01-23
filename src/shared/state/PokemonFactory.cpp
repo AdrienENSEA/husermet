@@ -43,8 +43,6 @@ Pokemon PokemonFactory::createPokemon(IdPokemon id_pokemon) {
             stats_pokemon = {324, 249, 269, 299, 269, 329};
             pokemon = new Pokemon(STAROSS, "Staross", none, HYDROCANON, TONNERRE, EBULLITION, LASER_GLACE, 1, types, NONE_S, stats_pokemon, 0,stats_pokemon.pv);
             break;
-        case GARDEVOIR :
-            break;
         case NOACIER :
             types.push_back(STEEL);
             types.push_back(GRASS);
@@ -58,6 +56,10 @@ Pokemon PokemonFactory::createPokemon(IdPokemon id_pokemon) {
             pokemon = new Pokemon(HEATRAN, "Heatran", none, DEFLAGRATION, FRAPPE_ATLAS, LUMINOCANON, TELLURIFORCE, 1, types, NONE_S, stats_pokemon, 0,stats_pokemon.pv);
             break;
         default:
+            types.push_back(STEEL);
+            types.push_back(FIRE);
+            stats_pokemon = {386, 279, 311, 359, 311, 253};
+            pokemon = new Pokemon(HEATRAN, "Heatran", none, DEFLAGRATION, FRAPPE_ATLAS, LUMINOCANON, TELLURIFORCE, 1, types, NONE_S, stats_pokemon, 0,stats_pokemon.pv);
             break;
     }
 

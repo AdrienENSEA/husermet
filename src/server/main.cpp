@@ -161,7 +161,7 @@ int main(int argc, char* argv[])
                 servicesManager.registerService(unique_ptr<VersionService>(new VersionService()));
 
                 UserDB userDB;
-                userDB.addUser(unique_ptr<User> (new User(1,1,1,1)));
+                userDB.addUser(unique_ptr<User> (new User("serveur",-1,-1,-1,-1,-1,-1)));
                 servicesManager.registerService(unique_ptr<UserService>(new UserService(std::ref(userDB))));
         
                 struct MHD_Daemon *d;
