@@ -11,7 +11,6 @@ CommandService::CommandService () : AbstractService("/command"){
 }
 
 HttpStatus const CommandService::get (Json::Value& out, int id) {
-    cout << "get command" << endl;
     if(post1 && post2) {
         vector<engine::Command> commands = engine.getCommands();
         for (uint i=0; i<commands.size(); i++) {
@@ -23,19 +22,17 @@ HttpStatus const CommandService::get (Json::Value& out, int id) {
                 out["Command"+to_string(i)]["CommandID"]       = commands.at(i).getCommandID();
             }
         }
-        if (id%2) {
-        post1 = false;
-        get1 = true; }
-        else {
+        if (id%2) get1 = true;
+        else get2 = true;
+        if (get1 && get2) {
         post2 = false;
-        get2 = true; }
+        post1 = false; }
         return HttpStatus::OK;
     }
-    else return HttpStatus::OK;//ACCEPTED;
+    else return HttpStatus::ACCEPTED;
 }
 
 HttpStatus CommandService::post (const Json::Value& in, int id) {
-    cout << "post command" << endl;
     if(get1 && get2) {
         engine::Command command(0);
         int i = 0;
@@ -48,12 +45,11 @@ HttpStatus CommandService::post (const Json::Value& in, int id) {
             i++;
         }
         engine.addCommand(command);
-        if (id%2) {
-        post1 = true;
-        get1 = false; }
-        else { 
-        post2 = true;
-        get2 = false; }        
+        if (id%2) post1 = true;
+        else post2 = true;
+        if (post1 && post2) {
+        get2 = false;
+        get1 = false; }   
         return HttpStatus::CREATED;
     }
     else return HttpStatus::ACCEPTED;

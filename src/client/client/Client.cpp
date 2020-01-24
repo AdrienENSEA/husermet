@@ -410,6 +410,9 @@ namespace client {
                 ai::DeepAI ia;
                 ia.run(e,state,1);
             }
+            else if (ai_type==4) {
+                this->commandAdv(e); // Handle the commands of the 2 player
+            }
             r=0;
             a=0;
             p=0;
@@ -575,41 +578,32 @@ namespace client {
         sf::Http::Response response;
         sf::Http::Request req;
         req.setMethod(sf::Http::Request::Post);
-        //req.setBody(command_json.toStyledString());
+        req.setBody(command_json.toStyledString());
         req.setUri("/command");
         req.setField("Content-Type", "application/json");
-        cout << "Sending /command/" << to_string(id1) << endl;
+        cout << "Sending /command" << endl;
         response = http.sendRequest(req);
         while (response.getStatus() == sf::Http::Response::Accepted) {
             sleep(2);
             cout << "Waiting for the other player to play" << endl;
             response = http.sendRequest(req);
         }
-        if (response.getStatus() == sf::Http::Response::Created) {
-            Json::Value root;
-            Json::Value players;
-            Json::Reader reader;
-            if (!reader.parse(response.getBody(), root, false))
-            {
-                cout << "test"<<reader.getFormattedErrorMessages() << endl;
-            }
-        }
         
-        sleep(5);
-        
+        e.undoCommand();
         int id_adv;
         if (id1 == 2) id_adv = 3;
         else id_adv = 2;
         
         sf::Http::Response response_get;
         sf::Http::Request req_get("/command/"+to_string(id_adv), sf::Http::Request::Get);
-        response_get = http.sendRequest(req_get);
-
+        
+        do {
+            sleep(2);
+            response_get = http.sendRequest(req_get);
+        }
+        while(response.getStatus() != sf::Http::Response::Ok);
         cout << response_get.getStatus() << endl;
         cout << response_get.getBody() << endl;
-        if (response_get.getStatus() == sf::Http::Response::Ok)
-            cout << response_get.getBody() << endl;
-        else cout <<"get" << response_get.getStatus();
     }
     
     void Client::run1v1(std::vector<int> list, int player) {
@@ -756,14 +750,6 @@ namespace client {
                     return;
                 }
                 if(event.type == sf::Event::KeyPressed && ai_type<5 && ai_type>0) {
-                    if (a>=2) {
-                        //ia3.run(e,e.getState(),1);
-                        this->commandAdv(e); // Handle the commands of the 2 player
-                        r=2;
-                        a=0;
-                        s.DrawRefresh(window, e.getState(),order);
-                        if (joueur2.check_pv(e,window,1)==1) return;
-                    }
                     if(event.key.code == sf::Keyboard::Return) {
                         if (joueur.check_pv(e,window,0)==0) {
                             joueur.run(e, e.getState(),0);

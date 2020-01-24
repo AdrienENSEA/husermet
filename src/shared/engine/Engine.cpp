@@ -183,8 +183,6 @@ namespace engine {
     }
     
     Json::Value Engine::writeJSON1v1 () {
-        //static int nbcommand = 0;
-
         //Create value
         Json::Value command_json;
         
@@ -203,36 +201,23 @@ namespace engine {
         
     }
 
-    void Engine::readJSON1v1 (std::vector<Command>& vect_command) {
-        static int nbstep = 0;
-        // Open file
-        fstream file_json;
-        file_json.open("../res/commandAdv.json", fstream::in);
-
+    void Engine::readJSON1v1 () {
         //Create value
         Json::Value command_json;
         Json::Reader reader;
         engine::Command command(0);
         
-        if(!reader.parse(file_json, command_json))
-            cout << "error parse" << endl;
-        
+        int i = 0;
         // Read all the 4 commands
-        for (uint i=0;i<21;i++) {
+        while(command_json.isMember("Command" + to_string(i))) {
             command.setPokemon(         command_json["Command"+to_string(i)]["Pokemon"].asInt());
             command.setPokemon_target(  command_json["Command"+to_string(i)]["Pokemon_target"].asInt());
             command.setAttack(          command_json["Command"+to_string(i)]["Attack"].asInt());
             command.setPriority(        command_json["Command"+to_string(i)]["Priority"].asInt());
             command.setCommandID(       command_json["Command"+to_string(i)]["CommandID"].asInt());
-            //command.toString();
-            if (command.getCommandID()!=0) vect_command.push_back(command);
-            else i=21;
+            if (command.getCommandID()!=0) this->commands.push_back(command);
+            i++;
         }
-        
-        nbstep++;
-        // CLose file
-        file_json.close();
-        //return vect_command;
     }
 
     std::vector<Command>& Engine::getPastCommands() {

@@ -49,17 +49,10 @@ HttpStatus ServicesManager::queryService (string& out, const string& in, const s
         cerr << "Requête GET " << pattern << " avec id=" << id << endl;
         Json::Value jsonOut;
         HttpStatus status;
-        /*
-        if (connect>1) connect++;
-        if (id == 2 && connect == 1) connect = 2;
-        if (id == 3 && connect == 0) connect = 1;
-        */
-        if (pattern == "/command") 
-        //if (connect == 6) 
+        if (pattern == "/command")  
             status = ((CommandService*)service)->get(jsonOut,id);
         else
             status = ((UserService*)service)->get(jsonOut,id);
-        //cout << "connect" << connect << endl;
         out = jsonOut.toStyledString();
         return status;
     }

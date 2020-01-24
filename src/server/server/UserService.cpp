@@ -9,7 +9,6 @@ UserService::UserService (UserDB& userDB) : AbstractService("/user"),
 }
 
 HttpStatus const UserService::get (Json::Value& out, int id) {
-    cout << "get user" << endl;
     const User* user = userDB.getUser(id);
     if (!user)
         throw ServiceException(HttpStatus::NOT_FOUND,"Invalid user id");
