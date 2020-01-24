@@ -69,19 +69,19 @@ namespace engine {
         file_json.close();
         //return nbstep;
     }
-    void Command::execute (state::State& state) {
+    void Command::execute (state::State& state, int player) {
         //writeJSON(*this);
         if (commandID==1) {
             ChangePokemonCommand c(pokemon, pokemon_target);
-            c.execute(state);
+            c.execute(state, player);
         }
         if (commandID==3) {
             ChangePokemonCommand c(pokemon, pokemon_target);
-            c.execute(state);
+            c.execute(state, player);
         }
         if (commandID==2) {
             AttackCommand a(pokemon, pokemon_target, attack);
-            a.execute(state);
+            a.execute(state, player);
         }
     }
 

@@ -30,16 +30,17 @@ namespace engine {
         std::vector <Command> past_commands = {};
     }
 
-    void Engine::runCommands (std::vector<int>& order) {
+    void Engine::runCommands (std::vector<int>& order, int player) {
         while (!commands.empty()) {
             
             if (state.getPokemon(commands.at(0).getPokemon()).getPV()!=0) {
                 if (commands.at(0).getCommandID()==2) order.push_back(commands.at(0).getPokemon_target());
-                commands.at(0).execute(state);
+                commands.at(0).execute(state, player);
+                cout << "target" << commands.at(0).getPokemon_target() << endl;
                 past_commands.push_back(commands.at(0));
             }
             if (commands.at(0).getCommandID()==3  /*|| (state.getPokemon(commands.at(0).getPokemon()).getPV()==0 && commands.at(0).getCommandID()==1)*/) {
-                commands.at(0).execute(state);
+                commands.at(0).execute(state, player);
                 past_commands.push_back(commands.at(0));
                 if (commands.size()>1) {
                     for (uint i =1; i<commands.size(); i++) {

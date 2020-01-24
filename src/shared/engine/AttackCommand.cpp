@@ -12,7 +12,7 @@ namespace engine {
         this->attack = attack;
     }
     
-    void AttackCommand::execute (state::State& state) {
+    void AttackCommand::execute (state::State& state, int player) {
         state::Pokemon p = state.getPokemon(pokemon);
         state::Pokemon p_t = state.getPokemon(pokemon_target);
         state::Attack a = state.getPokemon(pokemon).getAttack(attack);
@@ -20,8 +20,10 @@ namespace engine {
 
         state.getPokemon(pokemon).getAttack(attack).modifPP(-1);
         state.getPokemon(pokemon_target).modifPV(-d);
-        if (pokemon<6) std::cout << p.getName() << " attaque " << a.getName() << " sur " << p_t.getName() << " ennemi " << std::endl;
-        if (pokemon>5) std::cout << p.getName() << " ennemi attaque " << a.getName() << " sur " << p_t.getName() << std::endl;
+        if (player==0 && pokemon<6) std::cout << p.getName() << " attaque " << a.getName() << " sur " << p_t.getName() << " ennemi " << std::endl;
+        if (player==1 && pokemon>5) std::cout << p.getName() << " attaque " << a.getName() << " sur " << p_t.getName() << " ennemi " << std::endl;
+        if (player==0 && pokemon>5) std::cout << p.getName() << " ennemi attaque " << a.getName() << " sur " << p_t.getName() << std::endl;
+        if (player==1 && pokemon<6) std::cout << p.getName() << " ennemi attaque " << a.getName() << " sur " << p_t.getName() << std::endl;
     }
     
     int AttackCommand::damage(state::State &state) {

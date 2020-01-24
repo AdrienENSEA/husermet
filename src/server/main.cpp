@@ -39,7 +39,7 @@ void thread_engine(void* ptr){
         //joueur.run(*ptr, ptr->getState(),window,0);
         engine::Engine* ptr_e=(engine::Engine*)ptr;
 
-        ptr_e->runCommands(order);
+        ptr_e->runCommands(order,0);
         usleep(5000);
         r=0;
         i++;

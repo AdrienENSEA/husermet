@@ -107,7 +107,7 @@ namespace ai {
                     c.setPriority(6);
                     c.setPokemon(6*player+i);
                     c.setPokemon_target(target);
-                    c.execute(e.getState());
+                    c.execute(e.getState(),player);
                     e.setPastCommands(c);
                 }
             }

@@ -42,7 +42,7 @@ int main(int argc, char* argv[])
             int p=0;
             std::vector<int> order;
             scene.draw(e,window);
-            scene.initInterface(e.getState(), window,p);
+            scene.initInterface(e.getState(), window,p,0);
             while (window.isOpen()) {
                 sf::Event event;
                 while (window.pollEvent(event)) {
