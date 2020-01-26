@@ -39,6 +39,8 @@ void State::setTypeWeather (TypeWeather w) {
     weather = w;
 }
 Pokemon& State::getPokemon (int position){
+    if (position < 0) position = 0;
+    if (position > 12) position = 6;
     return battle.at(position);
 }
 void State::setTeam (int player, std::vector<Pokemon> pokemon) {

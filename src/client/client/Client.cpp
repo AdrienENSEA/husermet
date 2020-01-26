@@ -21,10 +21,57 @@ static std::vector<int> order = {};
 static int id1;
 static int player;
 
+void commandAdv(engine::Engine& e) {
+
+        cout << "Command Adverse parsing " << endl;
+
+        int id_adv;
+        if (id1 == 2) id_adv = 3;
+        else id_adv = 2;
+
+        Json::Value command_json = e.writeJSON1v1();
+        sf::Http http(URL,PORT);
+        sf::Http::Response response;
+        sf::Http::Request req;
+        req.setMethod(sf::Http::Request::Post);
+        req.setBody(command_json.toStyledString());
+        req.setUri("/command/"+to_string(id_adv));
+        req.setField("Content-Type", "application/json");
+        Json::FastWriter fastwriter;
+        string output = fastwriter.write(command_json);
+        cout << "Sending /command : " << endl << output << endl;
+        response = http.sendRequest(req);
+        while (response.getStatus() == sf::Http::Response::Accepted) {
+            sleep(2);
+            cout << "Waiting for the other player to play" << endl;
+            response = http.sendRequest(req);
+        }
+
+        e.undoCommand();
+        e.undoCommand();
+
+        sf::Http::Response response_get;
+        sf::Http::Request req_get("/command/"+to_string(id_adv), sf::Http::Request::Get);
+        cout << "Getting /command" << endl;
+        do {
+            sleep(2);
+            response_get = http.sendRequest(req_get);
+        }
+        while(response_get.getStatus() != sf::Http::Response::Ok);
+        Json::Value root;
+        Json::Reader reader;
+        if (!reader.parse(response_get.getBody(), root, false))
+        {
+            cout << reader.getFormattedErrorMessages() << endl;
+        }
+        e.readJSON1v1(root);
+    }
+
 void thread_engine(void* ptr){
     engine::Engine* ptr_e=(engine::Engine*)ptr;
-    while (1) { 
+    while (1) {
         if (r==2) {
+            commandAdv(*ptr_e);
             ptr_e->runCommands(order, player);
             r=0;
         }
@@ -62,7 +109,7 @@ namespace client {
         while (window.isOpen()) {
             sf::Event event;
             int target;
-            
+
             if(e.getState().getPokemon(0).getPV()==0 && r==0) {
                 std::cout << e.getState().getPokemon(0).getName() << " est KO" << std::endl;
                 if (e.getState().getPokemon(2).getPV()==0 && e.getState().getPokemon(3).getPV()==0 && e.getState().getPokemon(4).getPV()==0 && e.getState().getPokemon(5).getPV()==0) {
@@ -139,7 +186,7 @@ namespace client {
                     c.setPriority(6);
                     c.setPokemon(6);
                     c.setPokemon_target(i);
-                    e.addCommand(c); 
+                    e.addCommand(c);
                     r=2;
                     p=0;
                     a=0;
@@ -170,7 +217,7 @@ namespace client {
                     c.setPriority(6);
                     c.setPokemon(7);
                     c.setPokemon_target(i);
-                    e.addCommand(c); 
+                    e.addCommand(c);
                     r=2;
                     p=0;
                     a=0;
@@ -180,12 +227,12 @@ namespace client {
             }
 
             if((e.getState().getPokemon(0).getPV() !=0 && e.getState().getPokemon(1).getPV()!=0 && e.getState().getPokemon(6).getPV()!=0 && e.getState().getPokemon(7).getPV()!=0) || c==1 || r==1) {
-                
+
             while (window.pollEvent(event)) {
                 s.DrawRefresh(window, e.getState(),order);
                 if(event.type == sf::Event::Closed) {
                     std::cout << "Vous avez fermer la fenetre" << endl;
-                    
+
                     //e.writeJSON(e.getPastCommands());
                     window.close();
                     return;
@@ -227,7 +274,7 @@ namespace client {
                     }
                     s.initInterface(e.getState(), window, p,r);
                 }
-                        
+
                 if(event.type == sf::Event::KeyPressed) {
                     if(event.key.code == sf::Keyboard::Left) {
                         if (a%2 ==1) {
@@ -258,7 +305,7 @@ namespace client {
                                 if (a%2 == 0) a++;
                                 std::cout << "<- ou ->" << std::endl;
                             }
-                            
+
                         }
                         if (x>390 && y>380) {
                             if (e.getState().getPokemon(p).getPV()!=0) setCommand(e.getState(), e, x, y, ai_type, target);
@@ -300,7 +347,7 @@ namespace client {
                 cout << "IA joueur a perdu" << endl;
                 window.close();
             }
-            
+
         }
         t1.join();
     }
@@ -357,7 +404,7 @@ namespace client {
             r++;
             p=1-p;
         }
-        
+
         else if (x< 450 && x> 390 && y<420 && y >380) {
             if (p==1) {
                 p = 0;
@@ -410,9 +457,6 @@ namespace client {
                 ai::DeepAI ia;
                 ia.run(e,state,1);
             }
-            else if (ai_type==4) {
-                this->commandAdv(e); // Handle the commands of the 2 player
-            }
             r=0;
             a=0;
             p=0;
@@ -460,7 +504,7 @@ namespace client {
     }
 
     int Client::addPlayer(sf::Http &http, string name) {
-       
+
         sf::Http::Response response;
         sf::Http::Request req;
         req.setUri("/user");
@@ -569,43 +613,7 @@ namespace client {
         return nb_player;
     }
 
-    void Client::commandAdv(engine::Engine& e) {
-        
-        cout << "Command Adverse parsing " << endl;
-        
-        Json::Value command_json = e.writeJSON1v1();        
-        sf::Http http(URL,PORT);
-        sf::Http::Response response;
-        sf::Http::Request req;
-        req.setMethod(sf::Http::Request::Post);
-        req.setBody(command_json.toStyledString());
-        req.setUri("/command");
-        req.setField("Content-Type", "application/json");
-        cout << "Sending /command" << endl;
-        response = http.sendRequest(req);
-        while (response.getStatus() == sf::Http::Response::Accepted) {
-            sleep(2);
-            cout << "Waiting for the other player to play" << endl;
-            response = http.sendRequest(req);
-        }
-        
-        e.undoCommand();
-        int id_adv;
-        if (id1 == 2) id_adv = 3;
-        else id_adv = 2;
-        
-        sf::Http::Response response_get;
-        sf::Http::Request req_get("/command/"+to_string(id_adv), sf::Http::Request::Get);
-        
-        do {
-            sleep(2);
-            response_get = http.sendRequest(req_get);
-        }
-        while(response.getStatus() != sf::Http::Response::Ok);
-        cout << response_get.getStatus() << endl;
-        cout << response_get.getBody() << endl;
-    }
-    
+
     void Client::run1v1(std::vector<int> list, int player) {
         sf::RenderWindow window(sf::VideoMode(512, 512), "Fight");
         render::Scene s(512,512,player);
@@ -621,7 +629,7 @@ namespace client {
         while (window.isOpen()) {
             sf::Event event;
             int target;
-            
+
             if(e.getState().getPokemon(0+6*player).getPV()==0 && r==0) {
                 std::cout << e.getState().getPokemon(0+6*player).getName() << " est KO" << std::endl;
                 if (e.getState().getPokemon(2+6*player).getPV()==0 && e.getState().getPokemon(3+6*player).getPV()==0 && e.getState().getPokemon(4+6*player).getPV()==0 && e.getState().getPokemon(5+6*player).getPV()==0) {
@@ -698,7 +706,7 @@ namespace client {
                     c.setPriority(6);
                     c.setPokemon(6);
                     c.setPokemon_target(i);
-                    e.addCommand(c); 
+                    e.addCommand(c);
                     r=2;
                     p=0;
                     a=0;
@@ -729,7 +737,7 @@ namespace client {
                     c.setPriority(6);
                     c.setPokemon(7);
                     c.setPokemon_target(i);
-                    e.addCommand(c); 
+                    e.addCommand(c);
                     r=2;
                     p=0;
                     a=0;
@@ -739,12 +747,12 @@ namespace client {
             }
 
             if((e.getState().getPokemon(0).getPV() !=0 && e.getState().getPokemon(1).getPV()!=0 && e.getState().getPokemon(6).getPV()!=0 && e.getState().getPokemon(7).getPV()!=0) || c==1 || r==1) {
-                
+
             while (window.pollEvent(event)) {
                 s.DrawRefresh(window, e.getState(),order);
                 if(event.type == sf::Event::Closed) {
                     std::cout << "Vous avez fermer la fenetre" << endl;
-                    
+
                     //e.writeJSON(e.getPastCommands());
                     window.close();
                     return;
@@ -767,7 +775,7 @@ namespace client {
                     }
                     s.initInterface(e.getState(), window, p,r);
                 }
-                        
+
                 if(event.type == sf::Event::KeyPressed) {
                     if(event.key.code == sf::Keyboard::Left) {
                         if (a%2 ==1) {
@@ -798,7 +806,7 @@ namespace client {
                                 if (a%2 == 0) a++;
                                 std::cout << "<- ou ->" << std::endl;
                             }
-                            
+
                         }
                         if (x>390 && y>380) {
                             if (e.getState().getPokemon(p).getPV()!=0) setCommand(e.getState(), e, x, y, ai_type, target);

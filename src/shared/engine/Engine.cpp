@@ -32,14 +32,26 @@ namespace engine {
 
     void Engine::runCommands (std::vector<int>& order, int player) {
         while (!commands.empty()) {
-            
+
             if (state.getPokemon(commands.at(0).getPokemon()).getPV()!=0) {
                 if (commands.at(0).getCommandID()==2) order.push_back(commands.at(0).getPokemon_target());
+                cout << "command attack : "
+                << endl << "Pokemon         = " << commands.at(0).getPokemon()
+                << endl << "Pokemon_target  = " << commands.at(0).getPokemon_target()
+                << endl << "Attack          = " << commands.at(0).getAttack()
+                << endl << "Priority        = " << commands.at(0).getPriority()
+                << endl << "CommandID       = " << commands.at(0).getCommandID() << endl;
                 commands.at(0).execute(state, player);
                 cout << "target" << commands.at(0).getPokemon_target() << endl;
                 past_commands.push_back(commands.at(0));
             }
             if (commands.at(0).getCommandID()==3  /*|| (state.getPokemon(commands.at(0).getPokemon()).getPV()==0 && commands.at(0).getCommandID()==1)*/) {
+                cout << "command change : "
+                << endl << "Pokemon         = " << commands.at(0).getPokemon()
+                << endl << "Pokemon_target  = " << commands.at(0).getPokemon_target()
+                << endl << "Attack          = " << commands.at(0).getAttack()
+                << endl << "Priority        = " << commands.at(0).getPriority()
+                << endl << "CommandID       = " << commands.at(0).getCommandID() << endl;
                 commands.at(0).execute(state, player);
                 past_commands.push_back(commands.at(0));
                 if (commands.size()>1) {
@@ -102,9 +114,9 @@ namespace engine {
             }
         }
         //std::cout << "size fin" << commands.size() << std::endl;
-        
+
     }
-    
+
     void Engine::updateState(state::State& state) {
         this->state = state;
     }
@@ -113,8 +125,8 @@ namespace engine {
         commands.clear();
     }
     // Setters and Getters
-    
-     
+
+
     void Engine::writeJSON (std::vector<Command> vect_command) {
         static int nbcommand = 0;
         // Open file
@@ -133,11 +145,11 @@ namespace engine {
         //Create value
         Json::Value command_json;
         Json::StyledWriter styledwriter;
-        
+
         // Command 1
         for (uint i=0; i<vect_command.size(); i++) {
             if (vect_command.at(i).getCommandID()!=0) {
-                command_json["Command"+to_string(i)]["Pokemon"]         = vect_command.at(i).getPokemon(); 
+                command_json["Command"+to_string(i)]["Pokemon"]         = vect_command.at(i).getPokemon();
                 command_json["Command"+to_string(i)]["Pokemon_target"]  = vect_command.at(i).getPokemon_target();
                 command_json["Command"+to_string(i)]["Attack"]          = vect_command.at(i).getAttack();
                 command_json["Command"+to_string(i)]["Priority"]        = vect_command.at(i).getPriority();
@@ -148,7 +160,7 @@ namespace engine {
         file_json << styledwriter.write(command_json);
         nbcommand++;
         file_json.close();
-        
+
     }
 
     void Engine::readJSON (std::vector<Command>& vect_command) {
@@ -161,10 +173,10 @@ namespace engine {
         Json::Value command_json;
         Json::Reader reader;
         engine::Command command(0);
-        
+
         if(!reader.parse(file_json, command_json))
             cout << "error parse" << endl;
-        
+
         // Read all the 4 commands
         for (uint i=0;i<21;i++) {
             command.setPokemon(         command_json["Command"+to_string(i)]["Pokemon"].asInt());
@@ -175,38 +187,33 @@ namespace engine {
             //command.toString();
             if (command.getCommandID()!=0) vect_command.push_back(command);
         }
-        
+
         nbstep++;
         // CLose file
         file_json.close();
         //return vect_command;
     }
-    
+
     Json::Value Engine::writeJSON1v1 () {
         //Create value
         Json::Value command_json;
-        
         // Command 1
         for (uint i=0; i<this->commands.size(); i++) {
             if (commands.at(i).getCommandID()!=0) {
-                command_json["Command"+to_string(i)]["Pokemon"]         = commands.at(i).getPokemon(); 
+                command_json["Command"+to_string(i)]["Pokemon"]         = commands.at(i).getPokemon();
                 command_json["Command"+to_string(i)]["Pokemon_target"]  = commands.at(i).getPokemon_target();
                 command_json["Command"+to_string(i)]["Attack"]          = commands.at(i).getAttack();
                 command_json["Command"+to_string(i)]["Priority"]        = commands.at(i).getPriority();
                 command_json["Command"+to_string(i)]["CommandID"]       = commands.at(i).getCommandID();
             }
         }
-
         return command_json;
-        
+
     }
 
-    void Engine::readJSON1v1 () {
-        //Create value
-        Json::Value command_json;
-        Json::Reader reader;
+    void Engine::readJSON1v1 (Json::Value command_json) {
         engine::Command command(0);
-        
+
         int i = 0;
         // Read all the 4 commands
         while(command_json.isMember("Command" + to_string(i))) {
@@ -215,9 +222,16 @@ namespace engine {
             command.setAttack(          command_json["Command"+to_string(i)]["Attack"].asInt());
             command.setPriority(        command_json["Command"+to_string(i)]["Priority"].asInt());
             command.setCommandID(       command_json["Command"+to_string(i)]["CommandID"].asInt());
-            if (command.getCommandID()!=0) this->commands.push_back(command);
+            if (command.getCommandID()!=0)
+            {this->commands.push_back(command); cout << "command pushed : "
+            << endl << "Pokemon         = " << command.getPokemon()
+            << endl << "Pokemon_target  = " << command.getPokemon_target()
+            << endl << "Attack          = " << command.getAttack()
+            << endl << "Priority        = " << command.getPriority()
+            << endl << "CommandID       = " << command.getCommandID() << endl;}
             i++;
         }
+        cout << "1 = " << commands.size() << endl;
     }
 
     std::vector<Command>& Engine::getPastCommands() {
