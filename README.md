@@ -9,6 +9,7 @@ $ cd build
 $ cmake ..
 $ make
 ```
+## Jeu automatisé avec 2 IA
 Dans un premier terminal, lancez le serveur avec 
 ```console
 $ ./../bin/server listen
