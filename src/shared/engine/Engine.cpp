@@ -42,7 +42,7 @@ namespace engine {
                 << endl << "Priority        = " << commands.at(0).getPriority()
                 << endl << "CommandID       = " << commands.at(0).getCommandID() << endl;
                 commands.at(0).execute(state, player);
-                cout << "target" << commands.at(0).getPokemon_target() << endl;
+                //cout << "target" << commands.at(0).getPokemon_target() << endl;
                 past_commands.push_back(commands.at(0));
             }
             if (commands.at(0).getCommandID()==3  /*|| (state.getPokemon(commands.at(0).getPokemon()).getPV()==0 && commands.at(0).getCommandID()==1)*/) {

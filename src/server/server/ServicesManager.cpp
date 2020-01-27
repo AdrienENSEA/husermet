@@ -3,7 +3,6 @@
 
 using namespace std;
 using namespace server;
-static int connect = 0;
 void ServicesManager::registerService (unique_ptr<AbstractService> service) {
     services.push_back(std::move(service));
 }
@@ -46,10 +45,10 @@ HttpStatus ServicesManager::queryService (string& out, const string& in, const s
     }
     // Traite les différentes méthodes
     if (method == "GET") {
-        cerr << "Requête GET " << pattern << " avec id=" << id << endl;
+        //cerr << "Requête GET " << pattern << " avec id=" << id << endl;
         Json::Value jsonOut;
         HttpStatus status;
-        if (pattern == "/command")  
+        if (pattern == "/command")
             status = ((CommandService*)service)->get(jsonOut,id);
         else
             status = ((UserService*)service)->get(jsonOut,id);

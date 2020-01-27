@@ -108,7 +108,7 @@ namespace client {
         std::thread t1(thread_engine, &e);
         while (window.isOpen()) {
             sf::Event event;
-            int target;
+            int target=0;
 
             if(e.getState().getPokemon(0).getPV()==0 && r==0) {
                 std::cout << e.getState().getPokemon(0).getName() << " est KO" << std::endl;
@@ -352,6 +352,45 @@ namespace client {
         t1.join();
     }
 
+    void Client::inverseConvertP(int p, int& x, int& y) {
+        switch (p) {
+            case 2 :
+                x = 400;
+                y = 450;
+                break;
+            case 3 :
+                x = 480;
+                y = 450;
+                break;
+            case 4 :
+                x = 400;
+                y = 470;
+                break;
+            case 5 :
+                x = 480;
+                y = 470;
+                break;
+            case 8 :
+                x = 400;
+                y = 450;
+                break;
+            case 9 :
+                x = 480;
+                y = 450;
+                break;
+            case 10 :
+                x = 400;
+                y = 470;
+                break;
+            case 11 :
+                x = 480;
+                y = 470;
+                break;
+            default : 
+                break;
+        }
+    }
+
     int Client::convertP(int x, int y) {
         if (x< 450 && x> 390 && y<460 && y >420) return 2;
         else if (x< 510 && x> 450 && y<460 && y >420) return 3;
@@ -511,12 +550,12 @@ namespace client {
         req.setMethod(sf::Http::Request::Put);
         Json::Value User;
         srand (time(NULL));
-        User["Pokemon1"] = rand() % 6+6;
-        User["Pokemon2"] = rand() % 6+6;
-        User["Pokemon3"] = rand() % 11;
-        User["Pokemon4"] = rand() % 11;
-        User["Pokemon5"] = rand() % 11;
-        User["Pokemon6"] = rand() % 11;
+        User["Pokemon1"] = rand() % 19 +1;
+        User["Pokemon2"] = rand() % 19 +1;
+        User["Pokemon3"] = rand() % 19 +1;
+        User["Pokemon4"] = rand() % 19 +1;
+        User["Pokemon5"] = rand() % 19 +1;
+        User["Pokemon6"] = rand() % 19 +1;
         User["Name"] = name;
         req.setBody(User.toStyledString());
         req.setField("Content-Type", "application/json");
@@ -615,7 +654,7 @@ namespace client {
 
 
     void Client::run1v1(std::vector<int> list, int player) {
-        sf::RenderWindow window(sf::VideoMode(512, 512), "Fight");
+        sf::RenderWindow window(sf::VideoMode(512, 512), "Fight id" + to_string(player+2));
         render::Scene s(512,512,player);
         engine::Engine e(list,state::NONE_W,state::GRASSY);
         ai::HeuristicAI joueur;
@@ -628,7 +667,7 @@ namespace client {
         std::thread t1(thread_engine, &e);
         while (window.isOpen()) {
             sf::Event event;
-            int target;
+            int target=0;
             s.initInterface(e.getState(), window, p,r); // Ca clignote moins avec ça
             window.display();// Ca clignote moins avec ça
 
@@ -644,10 +683,10 @@ namespace client {
                     p=1;
                 }
                 else {
-                    while (r==0) {
-                        while (window.pollEvent(event) && event.mouseButton.button == sf::Mouse::Left && event.mouseButton.x>390 && event.mouseButton.y>410 && e.getState().getPokemon(s.convertP(event.mouseButton.x,event.mouseButton.y)).getPV()!=0) {
-                            setCommand(e.getState(),e,event.mouseButton.x,event.mouseButton.y, ai_type, target,1);
-                            r=1;
+                    for (int p =2+6*player; p<6; p++) {
+                        if (e.getState().getPokemon(p).getPV()!=0) {
+                            inverseConvertP(p,x,y);
+                            setCommand(e.getState(),e,x,y, ai_type, target,1);
                         }
                     }
                     r=0;
@@ -670,11 +709,10 @@ namespace client {
                     p=0;
                 }
                 else {
-                    while (r==0) {
-                        while (window.pollEvent(event) && event.mouseButton.button == sf::Mouse::Left && event.mouseButton.x>390 && event.mouseButton.y>410 && e.getState().getPokemon(s.convertP(event.mouseButton.x,event.mouseButton.y)).getPV()!=0) {
-                            p=1;
-                            setCommand(e.getState(),e,event.mouseButton.x,event.mouseButton.y, ai_type, target,1);
-                            r=1;
+                    for (int p =2+6*player; p<6; p++) {
+                        if (e.getState().getPokemon(p).getPV()!=0) {
+                            inverseConvertP(p,x,y);
+                            setCommand(e.getState(),e,x,y, ai_type, target,1);
                         }
                     }
                     r=0;
@@ -753,7 +791,7 @@ namespace client {
             if((e.getState().getPokemon(0).getPV() !=0 && e.getState().getPokemon(1).getPV()!=0 && e.getState().getPokemon(6).getPV()!=0 && e.getState().getPokemon(7).getPV()!=0) || c==1 || r==1) {
                 if (r==0) {
                 joueur.run(e, e.getState(),0);
-                cout << "r = " << r << endl;
+                //cout << "r = " << r << endl;
                 r = 2;
                 }
                 window.pollEvent(event);
