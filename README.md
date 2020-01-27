@@ -9,8 +9,22 @@ $ cd build
 $ cmake ..
 $ make
 ```
+Dans un premier terminal, lancez le serveur avec 
+```console
+$ ./../bin/server listen
+```
+Dans un second terminal, lancez un premier client qui sera une IA heuristique
+```console
+$ ./../bin/client network
+```
+Dans un troisième terminal, lancez un deuxième client qui sera aussi une IA heuristique
+```console
+$ ./../bin/client network
+```
+
 S'il y a des problèmes avec OpenGL, il faut désactiver l'accélération 3D dans les paramètres d’affichage de la VM. <br>
 <br>
+
 
 ## 1.1 Présentation générale
 Prise en main de c++
