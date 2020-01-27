@@ -629,6 +629,8 @@ namespace client {
         while (window.isOpen()) {
             sf::Event event;
             int target;
+            s.initInterface(e.getState(), window, p,r); // Ca clignote moins avec ça
+            window.display();// Ca clignote moins avec ça
 
             if(e.getState().getPokemon(0+6*player).getPV()==0 && r==0) {
                 std::cout << e.getState().getPokemon(0+6*player).getName() << " est KO" << std::endl;
@@ -644,7 +646,6 @@ namespace client {
                 else {
                     while (r==0) {
                         while (window.pollEvent(event) && event.mouseButton.button == sf::Mouse::Left && event.mouseButton.x>390 && event.mouseButton.y>410 && e.getState().getPokemon(s.convertP(event.mouseButton.x,event.mouseButton.y)).getPV()!=0) {
-                            cout << "1" << endl;
                             setCommand(e.getState(),e,event.mouseButton.x,event.mouseButton.y, ai_type, target,1);
                             r=1;
                         }
@@ -652,8 +653,8 @@ namespace client {
                     r=0;
                     p=0;
                     a=0;
-                    s.initInterface(e.getState(), window,p,r);
                     s.DrawRefresh(window, e.getState(),order);
+                    s.initInterface(e.getState(), window,p,r);
                     window.display();
                 }
             }
@@ -671,7 +672,6 @@ namespace client {
                 else {
                     while (r==0) {
                         while (window.pollEvent(event) && event.mouseButton.button == sf::Mouse::Left && event.mouseButton.x>390 && event.mouseButton.y>410 && e.getState().getPokemon(s.convertP(event.mouseButton.x,event.mouseButton.y)).getPV()!=0) {
-                            cout << "2" << endl;
                             p=1;
                             setCommand(e.getState(),e,event.mouseButton.x,event.mouseButton.y, ai_type, target,1);
                             r=1;
@@ -680,8 +680,8 @@ namespace client {
                     r=0;
                     p=0;
                     a=0;
-                    s.initInterface(e.getState(), window,p,r);
                     s.DrawRefresh(window, e.getState(),order);
+                    s.initInterface(e.getState(), window,p,r);
                     window.display();
                 }
             }
@@ -713,6 +713,7 @@ namespace client {
                     p=0;
                     a=0;
                     s.DrawRefresh(window, e.getState(),order);
+                    s.initInterface(e.getState(), window,p,r);
                     window.display();
                 }
             }
@@ -744,6 +745,7 @@ namespace client {
                     p=0;
                     a=0;
                     s.DrawRefresh(window, e.getState(),order);
+                    s.initInterface(e.getState(), window,p,r);
                     window.display();
                 }
             }
