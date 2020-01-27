@@ -96,16 +96,16 @@ int main(int argc, char* argv[])
         else if (string(argv[1]) == "network") {
             cout << "Un client se connecte" << endl;
             Client client;
-            client.connectTest();
+            cout << "connect launch" << endl;
+            client.connect();
             
         }
     }
 
     else {
-        cout << "Veuillez ajouté hello, render ou engine en argument" << endl;
+        cout << "Veuillez ajouté :" << endl 
+        << "hello, state, render, engine, random_ai, heuristic_ai, deep_ai, play, thread ou network en argument" << endl;
         cout << "Affichage de l'état initial avec une partie 1v1" << endl;
-        Client client;
-        client.connect();
     }
     
     return 0;
